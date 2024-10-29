@@ -2,14 +2,16 @@
   "name": "oferte-ganhe-qq7",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "backend/server.js",
   "scripts": {
+    "start": "nodemon backend/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "express": "^4.21.1",
     "pg": "^8.13.1"
   },
   "devDependencies": {
