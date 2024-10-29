@@ -9,7 +9,7 @@ router.get('/login', (req, res) => {
 
 // Rota para a página inicial / dashboard
 router.get('/dashboard', (req, res) => {
-  res.sendFile(path.join(__dirname, '../../frontend/public/views/main.html'));
+  res.sendFile(path.join(__dirname, '../../frontend/views/main.html'));
 });
 
 module.exports = router;
