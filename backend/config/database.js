@@ -9,11 +9,13 @@ const pool = new Pool({
     port: 5432,
 });
 
-//teste a conexão ao banco de dados
+//testa a conexão ao banco de dados
 pool.connect((err, client, release) => {
     if(err) {
         return console.error('Erro ao conectar ao banco de dados');
-    }else {
-        console.log('Conexão realizada com sucesso!'); 
     }
+    console.log('Conexão realizada com sucesso!');
+    release(); 
 })
+
+module.exports = pool;
