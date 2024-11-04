@@ -10,6 +10,8 @@ const stockRoutes = require('../backend/routes/stockRoutes.js');
 const storeRoutes = require('../backend/routes/storeRoutes.js');
 const reportRoutes = require('../backend/routes/reportRoutes.js');
 const moduleRoutes = require('../backend/routes/moduleRoutes.js');
+const sendingRoutes = require('../backend/routes/sendingRoutes.js');
+const receivingRoutes = require('../backend/routes/receivingRoutes.js');
 
 const app = express();
 
@@ -28,6 +30,8 @@ app.use('/api', stockRoutes);
 app.use('/api', storeRoutes);
 app.use('/api', reportRoutes);
 app.use('/api', moduleRoutes);
+app.use('/api', sendingRoutes);
+app.use('/api', receivingRoutes);
 
 
 // Definir uma rota padrão para redirecionar para o login
