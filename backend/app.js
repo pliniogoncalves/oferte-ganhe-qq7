@@ -12,6 +12,9 @@ const reportRoutes = require('../backend/routes/reportRoutes.js');
 
 const app = express();
 
+// Middleware para processar JSON
+app.use(express.json());
+
 // Middleware para servir arquivos estáticos
 app.use(express.static(path.join(__dirname, '../frontend/public')));
 

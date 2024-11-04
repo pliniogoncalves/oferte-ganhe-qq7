@@ -7,7 +7,7 @@ const { insertUser } = require('../services/userService.js')
 router.get('/users', userController.getUserPage);
 
 // Rota para cadastrar um novo Usuário
-router.post('/rusers', async (req, res) => {
+router.post('/users', async (req, res) => {
     const {nome, matricula, email, senha, loja, perfil} = req.body;
 
     try{
