@@ -1,5 +1,7 @@
 const express = require('express');
 const path = require('path');
+
+//importando rotas
 const viewRoutes = require('../backend/routes/viewRoutes.js');
 const userRoutes = require('../backend/routes/userRoutes.js');
 const profileRoutes = require('../backend/routes/profileRoutes.js'); 
