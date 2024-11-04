@@ -1,9 +1,9 @@
 const pool = require('../config/database');
 
 // Função para inserir um novo Talão
-async function inserTalao(remessa, quantidade, status, estoque) {
+async function insertTalao(remessa, quantidade, status, estoque) {
     const query = `
-        INSERT INTO postgres."oferte-ganhe".Usuario (remessa, quantidade_talao, status_talao, id_estoque)
+        INSERT INTO postgres."oferte-ganhe".Talao (remessa, quantidade_talao, status_talao, id_estoque)
         VALUES ($1, $2, $3, 
             (SELECT id_estoque FROM postgres."oferte-ganhe".Estoque WHERE id_loja = $4))
         RETURNING *;
@@ -20,4 +20,4 @@ async function inserTalao(remessa, quantidade, status, estoque) {
     }
 }
 
-module.exports = { inserTalao };
+module.exports = { insertTalao };
