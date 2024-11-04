@@ -1,6 +1,6 @@
 const pool = require('../config/database');
 
-// Função para inserir um novo Usuário
+// Função para inserir um novo Perfil
 async function insertProfile(nome, modulo = 'admin') {
     const query = `
         INSERT INTO postgres."oferte-ganhe".Perfil (nome_perfil, id_modulo)
