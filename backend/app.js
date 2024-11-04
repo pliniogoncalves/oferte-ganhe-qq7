@@ -9,6 +9,7 @@ const talaoRoutes = require('../backend/routes/talaoRoutes.js');
 const stockRoutes = require('../backend/routes/stockRoutes.js');
 const storeRoutes = require('../backend/routes/storeRoutes.js');
 const reportRoutes = require('../backend/routes/reportRoutes.js');
+const moduleRoutes = require('../backend/routes/moduleRoutes.js');
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use('/api', talaoRoutes);
 app.use('/api', stockRoutes);
 app.use('/api', storeRoutes);
 app.use('/api', reportRoutes);
+app.use('/api', moduleRoutes);
 
 
 // Definir uma rota padrão para redirecionar para o login

@@ -14,7 +14,7 @@ async function insertStore(nome, numero) {
         const result = await pool.query(query, values);
         return result.rows[0];
     } catch (err) {
-        console.error('Erro ao inserir perfil:', err);
+        console.error('Erro ao inserir loja:', err);
         throw err;
     }
 }
