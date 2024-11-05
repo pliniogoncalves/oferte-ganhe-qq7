@@ -8,10 +8,10 @@ router.get('/receiving', receivingController.getUserPage);
 
 // Rota para cadastrar um novo recebimento
 router.post('/receiving', async (req, res) => {
-    const {quantidade, data, usuario, talao, loja} = req.body;
+    const {data, quantidade, usuario, talao, loja} = req.body;
 
     try{
-        const newReceiving = await insertReceiving(quantidade, data, usuario, talao, loja);
+        const newReceiving = await insertReceiving(data, quantidade, usuario, talao, loja);
         res.status(201).json({ message: 'Recebimento cadastrado com sucesso!', receiving: newReceiving});
     }catch(erro){
         res.status(500).json({ message: 'Erro ao cadastrar Recebimento', erro: erro.message});

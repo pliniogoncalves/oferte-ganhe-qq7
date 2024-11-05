@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const stockController = require('../controllers/stockController.js');
-const insertStock = require('../services/stockService.js');
+const { insertStock } = require('../services/stockService.js');
 
 // Rota para a página de Estoque
 router.get('/stock', stockController.getUserPage);

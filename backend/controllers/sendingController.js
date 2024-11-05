@@ -6,4 +6,4 @@ const sendingController = {
 
 };
 
-module.exports = sendingControllerController;
+module.exports = sendingController;

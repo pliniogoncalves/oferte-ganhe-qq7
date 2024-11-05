@@ -5,7 +5,8 @@ async function insertTalao(remessa, quantidade, status, estoque) {
     const query = `
         INSERT INTO postgres."oferte-ganhe".Talao (remessa, quantidade_talao, status_talao, id_estoque)
         VALUES ($1, $2, $3, 
-            (SELECT id_estoque FROM postgres."oferte-ganhe".Estoque WHERE id_loja = $4))
+            (SELECT id_estoque FROM postgres."oferte-ganhe".Estoque WHERE id_loja = $4)
+        )
         RETURNING *;
     `;
 

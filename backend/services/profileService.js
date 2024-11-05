@@ -6,6 +6,7 @@ async function insertProfile(nome, modulo = 'admin') {
         INSERT INTO postgres."oferte-ganhe".Perfil (nome_perfil, id_modulo)
         VALUES ($1, 
             (SELECT id_modulo FROM postgres."oferte-ganhe".Modulo WHERE nome_modulo = $2)
+        )
         RETURNING *;
     `;
 

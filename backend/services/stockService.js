@@ -5,7 +5,8 @@ async function insertStock(quantidade_minima, quantidade_recomendada, quantidade
     const query = `
         INSERT INTO postgres."oferte-ganhe".Estoque (quantidade_minima, quantidade_recomendada, quantidade_atual, id_loja)
         VALUES ($1, $2, $3, 
-            (SELECT id_loja FROM postgres."oferte-ganhe".Loja WHERE id_loja = $4))
+            (SELECT id_loja FROM postgres."oferte-ganhe".Loja WHERE nome_loja = $4)
+        )
         RETURNING *;
     `;
 
