@@ -3,6 +3,11 @@ const router = express.Router();
 const userController = require('../controllers/userController.js');
 const { insertUser } = require('../services/userService.js')
 
+//Rota de depuração para verificar se o 'api/users' está ativa
+router.get('/', (req, res) =>{
+    res.send('Rota de Usuário ativa');
+});
+
 // Rota para a página de usuários
 router.get('/users', userController.getUserPage);
 

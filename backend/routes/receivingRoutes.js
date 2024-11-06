@@ -3,6 +3,11 @@ const router = express.Router();
 const receivingController = require('../controllers/receivingController.js');
 const { insertReceiving } = require('../services/receivingService.js')
 
+//Rota de depuração para verificar se o 'api/receiving' está ativa
+router.get('/', (req, res) =>{
+    res.send('Rota de Recebimento de talão ativa');
+});
+
 // Rota para a página de recebimentos
 router.get('/receiving', receivingController.getUserPage);
 

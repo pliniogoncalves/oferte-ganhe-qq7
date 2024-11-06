@@ -3,6 +3,11 @@ const router = express.Router();
 const stockController = require('../controllers/stockController.js');
 const { insertStock } = require('../services/stockService.js');
 
+//Rota de depuração para verificar se o 'api/stock' está ativa
+router.get('/', (req, res) =>{
+    res.send('Rota de Estoque ativa');
+});
+
 // Rota para a página de Estoque
 router.get('/stock', stockController.getUserPage);
 

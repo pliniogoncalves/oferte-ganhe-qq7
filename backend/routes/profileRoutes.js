@@ -3,6 +3,11 @@ const router = express.Router();
 const profileController = require('../controllers/profileController.js');
 const { insertProfile } = require('../services/profileService.js')
 
+//Rota de depuração para verificar se o 'api/profile' está ativa
+router.get('/', (req, res) =>{
+    res.send('Rota de Perfil ativa');
+});
+
 // Rota para a página de Perfil
 router.get('/profiles', profileController.getUserPage);
 

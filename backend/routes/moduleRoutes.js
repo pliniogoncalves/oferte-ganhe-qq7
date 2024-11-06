@@ -3,6 +3,11 @@ const router = express.Router();
 const moduleController = require('../controllers/moduleController.js');
 const { insertModule } = require('../services/moduleService.js')
 
+//Rota de depuração para verificar se o 'api/module' está ativa
+router.get('/', (req, res) =>{
+    res.send('Rota de Modulo ativa');
+});
+
 // Rota para a página de Modulos
 router.get('/module', moduleController.getUserPage);
 

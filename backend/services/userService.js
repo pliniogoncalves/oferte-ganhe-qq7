@@ -13,12 +13,26 @@ async function insertUser(nome, matricula, email, senha, loja='0', perfil = 'adm
 
     const values = [nome, matricula, email, senha, loja, perfil];
 
-    try {
+    try{
         const result = await pool.query(query, values);
         return result.rows[0];
-    } catch (err) {
+    }catch(err){
         console.error('Erro ao inserir usuário:', err);
         throw err;
+    }
+}
+
+//Função para consultar todos os usuários
+async function searchUser() {
+    const query =`
+        SELECT * FROM postgres."oferte-ganhe".Usuario;
+    `;
+
+    try{
+        const result = await pool.query(query);
+        return result.rows;
+    }catch(err){
+        console.error('Erro ao consultar usuário:', err);
     }
 }
 

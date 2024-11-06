@@ -3,6 +3,11 @@ const router = express.Router();
 const storeController = require('../controllers/storeController.js');
 const { insertStore } = require('../services/storeService.js')
 
+//Rota de depuração para verificar se o 'api/store' está ativa
+router.get('/', (req, res) =>{
+    res.send('Rota de Loja ativa');
+});
+
 // Rota para a página de Lojas
 router.get('/store', storeController.getUserPage);
 

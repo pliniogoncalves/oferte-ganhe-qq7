@@ -3,6 +3,11 @@ const router = express.Router();
 const talaoController = require('../controllers/talaoController.js');
 const { insertTalao } = require('../services/talaoService.js')
 
+//Rota de depuração para verificar se o 'api/taloes' está ativa
+router.get('/', (req, res) =>{
+    res.send('Rota de Talão ativa');
+});
+
 // Rota para a página de Talões
 router.get('/taloes', talaoController.getUserPage);
 

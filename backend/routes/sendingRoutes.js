@@ -3,6 +3,11 @@ const router = express.Router();
 const sendingController = require('../controllers/sendingController.js');
 const { insertSending } = require('../services/sendingService.js')
 
+//Rota de depuração para verificar se o 'api/sending' está ativa
+router.get('/', (req, res) =>{
+    res.send('Rota de Envio de Talão ativa');
+});
+
 // Rota para a página de envios
 router.get('/sending', sendingController.getUserPage);
 
