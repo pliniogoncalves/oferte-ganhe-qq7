@@ -38,7 +38,7 @@ async function searchStoreNumber(numero) {
     const query = `
          SELECT 
             Loja.nome_loja, 
-            Loja.numero_loja, 
+            Loja.numero_loja 
         FROM postgres."oferte-ganhe".Loja
         WHERE Loja.numero_loja = $1::varchar;
     `;
