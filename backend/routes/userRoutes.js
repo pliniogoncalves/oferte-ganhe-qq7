@@ -9,7 +9,7 @@ router.get('/', (req, res) =>{
 });
 
 // Rota para a página de usuários
-router.get('/users', userController.getUserPage);
+router.get('/users/page', userController.getUserPage);
 
 // Rota para cadastrar um novo Usuário
 router.post('/users', async (req, res) => {
@@ -24,7 +24,7 @@ router.post('/users', async (req, res) => {
 });
 
 // Rota para Buscar Todos os Usuários
-app.get('/users', async (req, res) => {
+router.get('/users/list', async (req, res) => {
     try {
         const users = await searchUser();
         res.status(200).json(users);
@@ -34,7 +34,7 @@ app.get('/users', async (req, res) => {
 });
 
 // Rota para Buscar um usuário pela matricula
-app.get('/users/:matricula', async (req, res) => {
+router.get('/users/list/:matricula', async (req, res) => {
     const { matricula } = req.params;
 
     try {
@@ -52,10 +52,10 @@ app.get('/users/:matricula', async (req, res) => {
 // Rota para editar um usuário existente
 router.put('/users/edit/:matricula', async (req, res) =>{
     const { matricula } = req.params;
-    const { nome, email, senha, loja, perfil } = req.body;
+    const { nome, novaMatricula, email, senha, loja, perfil } = req.body;
 
     try{
-        const updateUser = await editUser(nome, matricula, email, senha, loja, perfil);
+        const updateUser = await editUser(nome, novaMatricula, email, senha, loja, perfil, matricula);
         if (updateUser) {
             res.status(200).json({ message: 'Usuário atualizado com sucesso!', user: updateUser });
         } else {
