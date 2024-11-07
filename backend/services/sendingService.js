@@ -19,7 +19,7 @@ async function insertSending(data, quantidade, usuario, talao, loja) {
         const result = await pool.query(query, values);
         return result.rows[0];
     } catch (err) {
-        console.error('Erro ao inserir usuário:', err);
+        console.error('Erro ao inserir Envio:', err);
         throw err;
     }
 }
