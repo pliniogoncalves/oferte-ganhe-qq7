@@ -26,8 +26,8 @@ router.post('/store/register', async (req, res) => {
 // Rota para Buscar Todos as Lojas
 router.get('/store/list', async (req, res) => {
     try {
-        const users = await searchStore();
-        res.status(200).json(users);
+        const store = await searchStore();
+        res.status(200).json(store);
     } catch (err) {
         res.status(500).json({ message: 'Erro ao buscar todas as lojas', error: err.message });
     }
