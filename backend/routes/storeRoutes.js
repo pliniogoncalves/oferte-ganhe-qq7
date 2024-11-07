@@ -9,10 +9,10 @@ router.get('/', (req, res) =>{
 });
 
 // Rota para a página de Lojas
-router.get('/store', storeController.getUserPage);
+router.get('/store/page', storeController.getUserPage);
 
 // Rota para cadastrar uma nova Loja
-router.post('/store', async (req, res) => {
+router.post('/store/register', async (req, res) => {
     const {nome, numero} = req.body;
 
     try{

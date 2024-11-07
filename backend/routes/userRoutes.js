@@ -12,7 +12,7 @@ router.get('/', (req, res) =>{
 router.get('/users/page', userController.getUserPage);
 
 // Rota para cadastrar um novo Usuário
-router.post('/users', async (req, res) => {
+router.post('/users/register', async (req, res) => {
     const {nome, matricula, email, senha, loja, perfil} = req.body;
 
     try{
