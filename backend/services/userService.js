@@ -33,9 +33,9 @@ async function searchUser() {
             Usuario.senha_usuario,
             Loja.numero_loja, 
             Perfil.nome_perfil
-        FROM "oferte-ganhe".Usuario
-        JOIN "oferte-ganhe".Loja ON Usuario.id_loja = Loja.id_loja
-        JOIN "oferte-ganhe".Perfil ON Usuario.id_perfil = Perfil.id_perfil
+        FROM postgres."oferte-ganhe".Usuario
+        JOIN postgres."oferte-ganhe".Loja ON Usuario.id_loja = Loja.id_loja
+        JOIN postgres."oferte-ganhe".Perfil ON Usuario.id_perfil = Perfil.id_perfil
     `;
 
     try{
@@ -57,9 +57,9 @@ async function searchUserMatricula(matricula) {
             Usuario.senha_usuario,
             Loja.numero_loja, 
             Perfil.nome_perfil
-        FROM "oferte-ganhe".Usuario
-        JOIN "oferte-ganhe".Loja ON Usuario.id_loja = Loja.id_loja
-        JOIN "oferte-ganhe".Perfil ON Usuario.id_perfil = Perfil.id_perfil
+        FROM postgres."oferte-ganhe".Usuario
+        JOIN postgres."oferte-ganhe".Loja ON Usuario.id_loja = Loja.id_loja
+        JOIN postgres."oferte-ganhe".Perfil ON Usuario.id_perfil = Perfil.id_perfil
         WHERE Usuario.matricula_usuario = $1::varchar;
     `;
 
