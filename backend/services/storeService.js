@@ -1,95 +1,94 @@
 const pool = require('../config/database');
 
-// Função para inserir um nova Loja
-async function insertStore(nome, numero) {
+// Function to insert a new Store
+async function insertStore(name, number) {
     const query = `
-        INSERT INTO postgres."oferte-ganhe".Loja (nome_loja, numero_loja)
+        INSERT INTO postgres."oferte-ganhe".Store (name_store, number_store)
         VALUES ($1, $2)
         RETURNING *;
     `;
 
-    const values = [nome, numero];
+    const values = [name, number];
 
-    try {
+    try{
         const result = await pool.query(query, values);
         return result.rows[0];
-    } catch (err) {
-        console.error('Erro ao inserir loja:', err);
+    }catch(err){
+        console.error('Error inserting store:', err);
         throw err;
     }
 }
 
-//Função para consultar todas as lojas
+//Function to query all stores
 async function searchStore() {
     const query =`
-        SELECT * FROM postgres."oferte-ganhe".Loja;
+        SELECT * FROM postgres."oferte-ganhe".Store;
     `;
 
     try{
         const result = await pool.query(query);
         return result.rows;
     }catch(err){
-        console.error('Erro ao consultar Loja:', err);
+        console.error('Error when querying Store:', err);
     }
 }
 
-//Função para buscar loja por numero
-async function searchStoreNumber(numero) {
+//Function to search for store by number
+async function searchStoreNumber(number) {
     const query = `
          SELECT 
-            Loja.nome_loja, 
-            Loja.numero_loja 
-        FROM postgres."oferte-ganhe".Loja
-        WHERE Loja.numero_loja = $1::varchar;
+            Store.name_store, 
+            Store.number_store 
+        FROM postgres."oferte-ganhe".Store
+        WHERE Store.number_store = $1::varchar;
     `;
 
-    const values = [numero];
+    const values = [number];
 
-    try {
-        const result = await pool.query(query, values);
-        return result.rows[0];
-    } catch (err) {
-        console.error('Erro ao buscar loja por numero:', err);
-        throw err;
-    }
-}
-
-//Função para editar uma loja
-async function editStore(nome, novoNumero, numero) {
-    const query = `
-        UPDATE postgres."oferte-ganhe".Loja
-        SET nome_loja = $1, numero_loja = $2
-        WHERE numero_loja = $3::varchar
-        RETURNING *;
-    `;
-
-    const values = [nome, novoNumero, numero];
-
-    try {
+    try{
         const result = await pool.query(query, values);
         return result.rows[0];
     }catch(err){
-        console.error('Erro ao editar loja:', err);
+        console.error('Error searching for store by number:', err);
         throw err;
     }
 }
 
-//Função para excluir uma loja
-async function removeStore(numero) {
+//Function to edit a store
+async function editStore(name, newNumber, number) {
     const query = `
-        DELETE FROM postgres."oferte-ganhe".Loja
-        WHERE numero_loja = $1::varchar
+        UPDATE postgres."oferte-ganhe".Store
+        SET name_store = $1, number_store = $2
+        WHERE number_store = $3::varchar
+        RETURNING *;
+    `;
+
+    const values = [name, newNumber, number];
+
+    try{
+        const result = await pool.query(query, values);
+        return result.rows[0];
+    }catch(err){
+        console.error('Error editing store:', err);
+        throw err;
+    }
+}
+
+//Function to delete a store
+async function removeStore(number) {
+    const query = `
+        DELETE FROM postgres."oferte-ganhe".Store
+        WHERE number_store = $1::varchar
         RETURNING *;
     `;
 
     try{
-        const result = await pool.query(query, [numero]);
+        const result = await pool.query(query, [number]);
         return result.rows[0];
-    }catch (err){
-        console.error('Erro ao deletar loja:', err);
+    }catch(err){
+        console.error('Error deleting store:', err);
         throw err;
     }
 }
-
 
 module.exports = { insertStore, searchStore, searchStoreNumber, editStore, removeStore };
