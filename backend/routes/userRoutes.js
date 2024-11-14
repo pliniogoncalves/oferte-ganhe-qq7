@@ -19,4 +19,3 @@ router.put('/users/edit/:matricula', userController.editUser);
 router.delete('/users/delete/:matricula', userController.removeUser);
 
 module.exports = router;
-
