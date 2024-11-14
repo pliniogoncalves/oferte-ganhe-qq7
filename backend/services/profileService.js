@@ -1,102 +1,90 @@
 const pool = require('../config/database');
 
-// Função para inserir um novo Perfil
-async function insertProfile(nome, modulo = 'admin') {
+//Function to insert a new Profile
+async function insertProfile(name) {
     const query = `
-        INSERT INTO postgres."oferte-ganhe".Perfil (nome_perfil, id_modulo)
-        VALUES ($1, 
-            (SELECT id_modulo FROM postgres."oferte-ganhe".Modulo WHERE nome_modulo = $2)
-        )
+        INSERT INTO postgres."oferte-ganhe".Profile (name_profile)
+        VALUES $1
         RETURNING *;
     `;
 
-    const values = [nome, modulo];
+    const values = [name];
 
-    try {
+    try{
         const result = await pool.query(query, values);
         return result.rows[0];
-    } catch (err) {
-        console.error('Erro ao inserir perfil:', err);
+    }catch(err){
+        console.error('Error inserting profile:', err);
         throw err;
     }
 }
 
-//Função para consultar todos os perfis
+//Function to query all Profiles
 async function searchProfile() {
     const query =`
-        SELECT 
-            Perfil.id_perfil, 
-            Perfil.nome_perfil, 
-            Modulo.nome_modulo
-        FROM postgres."oferte-ganhe".Perfil
-        JOIN postgres."oferte-ganhe".Modulo ON Perfil.id_modulo = Modulo.id_modulo
+        SELECT * FROM postgres."oferte-ganhe".Profile;
     `;
 
     try{
         const result = await pool.query(query);
         return result.rows;
     }catch(err){
-        console.error('Erro ao consultar Perfil:', err);
+        console.error('Error when querying Profile:', err);
     }
 }
 
-//Função para buscar Perfil por nome
-async function searchProfileName(nome) {
+//Function to search Profile by name
+async function searchProfileName(name) {
     const query = `
-        SELECT 
-            Perfil.id_perfil, 
-            Perfil.nome_perfil, 
-            Modulo.nome_modulo
-        FROM postgres."oferte-ganhe".Perfil
-        JOIN postgres."oferte-ganhe".Modulo ON Perfil.id_modulo = Modulo.id_modulo
-        WHERE Perfil.nome_perfil = $1::varchar;
+        SELECT Profile.id_profile, profile.name_profile 
+        FROM postgres."oferte-ganhe".Profile
+        WHERE Profile.name_profile = $1::varchar;
     `;
 
-    const values = [nome];
+    const values = [name];
 
     try {
         const result = await pool.query(query, values);
         return result.rows[0]; 
     } catch (err) {
-        console.error('Erro ao buscar Perfil por nome:', err);
+        console.error('Error searching for Profile by name:', err);
         throw err;
     }
 }
 
-//Função para editar um Perfil
-async function editProfile(novoNome, modulo, nome) {
+//Function to edit a Profile
+async function editProfile(newName, name) {
     const query = `
-        UPDATE postgres."oferte-ganhe".Perfil
-        SET nome_perfil = $1,
-            id_modulo = (SELECT id_modulo FROM postgres."oferte-ganhe".Modulo WHERE nome_modulo = $2)
-        WHERE nome_perfil = $3::varchar
+        UPDATE postgres."oferte-ganhe".Profile
+        SET name_profile = $1,
+        WHERE name_profile = $2::varchar
         RETURNING *;
     `;
 
-    const values = [novoNome, modulo, nome];
+    const values = [newName, name];
 
     try {
         const result = await pool.query(query, values);
         return result.rows[0];
     }catch(err){
-        console.error('Erro ao editar perfil:', err);
+        console.error('Error editing profile:', err);
         throw err;
     }
 }
 
-//Função para excluir um perfil
-async function removeProfile(nome) {
+//Function to delete a profile
+async function removeProfile(name) {
     const query = `
-        DELETE FROM postgres."oferte-ganhe".Perfil
-        WHERE nome_perfil = $1::varchar
+        DELETE FROM postgres."oferte-ganhe".Profile
+        WHERE name_profile = $1::varchar
         RETURNING *;
     `;
 
     try{
-        const result = await pool.query(query, [nome]);
+        const result = await pool.query(query, [name]);
         return result.rows[0];
     }catch (err){
-        console.error('Erro ao deletar Perfil:', err);
+        console.error('Error deleting Profile:', err);
         throw err;
     }
 }
