@@ -30,11 +30,11 @@ const userController = {
     },
 
     // Function to search for a user by registration number
-    searchUserMatricula : async (req, res) => {
+    searchUserRegistration : async (req, res) => {
         const { registration } = req.params;
 
         try {
-            const result = await userService.searchUserMatricula(registration);
+            const result = await userService.searchUserRegistration(registration);
             if(result){
                 res.status(200).json(result);
             }else{

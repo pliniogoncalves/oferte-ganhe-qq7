@@ -1,107 +1,87 @@
 const pool = require('../config/database');
 
-// Função para inserir um novo Estoque
-async function insertStock(quantidade_minima, quantidade_recomendada, quantidade_atual, loja) {
+//Function to insert a new stock
+async function insertStock(storeId, talonId, currentStock, minStock, recommendedStock, stockStatus) {
     const query = `
-        INSERT INTO postgres."oferte-ganhe".Estoque (quantidade_minima, quantidade_recomendada, quantidade_atual, id_loja)
-        VALUES ($1, $2, $3, 
-            (SELECT id_loja FROM postgres."oferte-ganhe".Loja WHERE numero_loja = $4)
-        )
+        INSERT INTO postgres."oferte-ganhe".Stock 
+            (id_store, id_talon, current_stock, minimum_stock, recommended_stock, status_stock)
+        VALUES ($1, $2, $3, $4, $5, $6)
         RETURNING *;
     `;
-
-    const values = [quantidade_minima, quantidade_recomendada, quantidade_atual, loja];
-
+    const values = [storeId, talonId, currentStock, minStock, recommendedStock, stockStatus];
+    
     try {
         const result = await pool.query(query, values);
         return result.rows[0];
     } catch (err) {
-        console.error('Erro ao inserir usuário:', err);
+        console.error('Error inserting stock:', err);
         throw err;
     }
 }
 
-//Função para consultar todos os Estoques
-async function searchStock() {
-    const query =`
-        SELECT 
-            Estoque.id_estoque, 
-            Estoque.quantidade_minima, 
-            Estoque.quantidade_recomendada, 
-            Estoque.quantidade_atual, 
-            Loja.numero_loja
-        FROM postgres."oferte-ganhe".Estoque
-        JOIN postgres."oferte-ganhe".Loja ON Estoque.id_loja = Loja.id_loja
-    `;
-
-    try{
+// Function to search for all stock
+async function searchStocks() {
+    const query = `SELECT * FROM postgres."oferte-ganhe".Stock;`;
+    
+    try {
         const result = await pool.query(query);
         return result.rows;
-    }catch(err){
-        console.error('Erro ao consultar Estoque:', err);
+    } catch (err) {
+        console.error('Error fetching stocks:', err);
+        throw err;
     }
 }
 
-//Função para buscar estoque por loja
-async function searchStockByStore(loja) {
+//Function to search for a stock by ID
+async function searchStockById(stockId) {
+    const query = `SELECT * FROM postgres."oferte-ganhe".Stock WHERE id_stock = $1;`;
+    
+    try {
+        const result = await pool.query(query, [stockId]);
+        return result.rows[0];
+    } catch (err) {
+        console.error('Error fetching stock by ID:', err);
+        throw err;
+    }
+}
+
+//Function to update a stock
+async function editStock(stockId, storeId, talonId, currentStock, minStock, recommendedStock, stockStatus) {
     const query = `
-        SELECT 
-            Estoque.id_estoque, 
-            Estoque.quantidade_minima, 
-            Estoque.quantidade_recomendada, 
-            Estoque.quantidade_atual, 
-            Loja.numero_loja
-        FROM postgres."oferte-ganhe".Estoque
-        JOIN postgres."oferte-ganhe".Loja ON Estoque.id_loja = Loja.id_loja
-        WHERE Loja.numero_loja = $1::varchar;
+        UPDATE postgres."oferte-ganhe".Stock
+        SET id_store = $1, id_talon = $2, current_stock = $3, minimum_stock = $4, 
+            recommended_stock = $5, status_stock = $6
+        WHERE id_stock = $7
+        RETURNING *;
     `;
-
-    const values = [loja];
-
+    const values = [storeId, talonId, currentStock, minStock, recommendedStock, stockStatus, stockId];
+    
     try {
         const result = await pool.query(query, values);
         return result.rows[0];
     } catch (err) {
-        console.error('Erro ao buscar Estoque por Loja:', err);
+        console.error('Error updating stock:', err);
         throw err;
     }
 }
 
-//Função para editar um estoque
-async function editStock(quantidade_minima, quantidade_recomendada, quantidade_atual, loja) {
-    const query = `
-        UPDATE postgres."oferte-ganhe".Estoque
-        SET quantidade_minima = $1, quantidade_recomendada = $2, quantidade_atual = $3
-        WHERE id_loja = (SELECT id_loja FROM postgres."oferte-ganhe".Loja WHERE numero_loja = $4::varchar)
-        RETURNING *;
-    `;
-
-    const values = [quantidade_minima, quantidade_recomendada, quantidade_atual, loja];
-
+// Function to delete a stock
+async function removeStock(stockId) {
+    const query = `DELETE FROM postgres."oferte-ganhe".Stock WHERE id_stock = $1 RETURNING *;`;
+    
     try {
-        const result = await pool.query(query, values);
+        const result = await pool.query(query, [stockId]);
         return result.rows[0];
-    }catch(err){
-        console.error('Erro ao editar Estoque:', err);
+    } catch (err) {
+        console.error('Error deleting stock:', err);
         throw err;
     }
 }
 
-//Função para excluir um Estoque
-async function removeStock(loja) {
-    const query = `
-        DELETE FROM postgres."oferte-ganhe".Estoque
-        WHERE id_loja = (SELECT id_loja FROM postgres."oferte-ganhe".Loja WHERE numero_loja = $1::varchar)
-        RETURNING *;
-    `;
-
-    try{
-        const result = await pool.query(query, [loja]);
-        return result.rows[0]; 
-    }catch (err){
-        console.error('Erro ao deletar Estoque:', err);
-        throw err;
-    }
-}
-
-module.exports = { insertStock, searchStock, searchStockByStore, editStock, removeStock };
+module.exports = { 
+    insertStock, 
+    searchStocks, 
+    searchStockById, 
+    editStock, 
+    removeStock 
+};

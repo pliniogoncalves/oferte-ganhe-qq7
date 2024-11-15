@@ -13,7 +13,7 @@ router.get('/users/page', userController.getUserPage);
 //Define the routes and trigger the controller
 router.post('/users/register', userController.insertUser);
 router.get('/users/list', userController.searchUser);
-router.get('/users/list/:registration', userController.searchUserMatricula);
+router.get('/users/list/:registration', userController.searchUserRegistration);
 router.put('/users/edit/:registration', userController.editUser);
 router.delete('/users/delete/:registration', userController.removeUser);
 

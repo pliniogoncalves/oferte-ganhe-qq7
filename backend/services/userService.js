@@ -48,7 +48,7 @@ async function searchUser() {
 }
 
 //Function to search for user by registration number
-async function searchUserMatricula(registration) {
+async function searchUserRegistration(registration) {
     const query = `
          SELECT 
             Users.id_users, 
@@ -122,6 +122,6 @@ async function removeUser(registration) {
 module.exports = { 
     insertUser, 
     searchUser, 
-    searchUserMatricula, 
+    searchUserRegistration, 
     editUser, 
     removeUser };
