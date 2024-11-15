@@ -30,11 +30,11 @@ const talonController = {
     },
 
     //Function to search for Talon by ID
-    searchTalonById: async (req, res) => {
+    searchTalonId: async (req, res) => {
         const { id } = req.params;
     
         try{
-            const talon = await talonService.searchTalonById(id);
+            const talon = await talonService.searchTalonId(id);
             if(talon){
                 res.status(200).json(talon);
             }else{

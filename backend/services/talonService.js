@@ -35,7 +35,7 @@ async function searchTalons() {
 }
 
 //Function to search for Talon by ID
-async function searchTalonById(talonId) {
+async function searchTalonId(talonId) {
     const query = `SELECT * FROM postgres."oferte-ganhe".Talon WHERE id_talon = $1;`;
     
     try {
@@ -84,7 +84,7 @@ async function removeTalon(talonId) {
 module.exports = { 
     insertTalon, 
     searchTalons, 
-    searchTalonById, 
+    searchTalonId, 
     updateTalon, 
     removeTalon 
 };

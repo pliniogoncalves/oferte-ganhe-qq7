@@ -13,7 +13,7 @@ router.get('/talons/page', talonController.getTalonPage);
 //Define the routes and trigger the controller
 router.post('/talons/register', talonController.insertTalon);
 router.get('/talons/list', talonController.searchTalons);
-router.get('/talons/list/:id', talonController.searchTalonById);
+router.get('/talons/list/:id', talonController.searchTalonId);
 router.put('/talons/update/:id', talonController.updateTalon);
 router.delete('/talons/delete/:id', talonController.removeTalon);
 
