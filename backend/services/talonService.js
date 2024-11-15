@@ -1,123 +1,90 @@
 const pool = require('../config/database');
 
-// Function to insert a new Talon
-async function insertTalao(store, date_send, user_send, date_received, user_received, quantity, status) {
+//Function to insert a new Talon
+async function insertTalon(store = 1, dateSend, userSend, quantity, status = 'Enviado') {
     const query = `
-        INSERT INTO postgres."oferte-ganhe".Talon (
-            id_store,
-            date_send, 
-            user_send, 
-            date_received, 
-            user_received, 
-            quantity_talon,
-            status_talon
-        )
+        INSERT INTO postgres."oferte-ganhe".Talon (id_store, date_send, user_send, quantity_talon, status_talon)
         VALUES (
-            (SELECT id_store FROM postgres."oferte-ganhe".Store WHERE id_store = $1),
-            $2, $3, $4, $5, $6, $7
+            COALESCE((SELECT id_store FROM postgres."oferte-ganhe".Store WHERE id_store = $1), 1),
+            $2, $3, $4, $5
         )
         RETURNING *;
     `;
-
-    const values = [store, date_send, user_send, date_received, user_received, quantity, status];
-
+    const values = [store, dateSend, userSend, quantity, status];
+    
     try {
         const result = await pool.query(query, values);
         return result.rows[0];
     } catch (err) {
-        console.error('Erro ao inserir usuário:', err);
+        console.error('Error inserting talon:', err);
         throw err;
     }
 }
 
-//Função para consultar todos os Talões
-async function searchTalao() {
-    const query =`
-        SELECT 
-            Talao.remessa, 
-            Talao.quantidade_talao, 
-            Talao.status_talao,  
-            Loja.numero_loja
-        FROM postgres."oferte-ganhe".Talao
-        JOIN postgres."oferte-ganhe".Estoque ON Talao.id_estoque = Estoque.id_estoque
-        JOIN postgres."oferte-ganhe".Loja ON Estoque.id_loja = Loja.id_loja;
-    `;
-
-    try{
+// Function to search for all Talons
+async function getTalons() {
+    const query = `SELECT * FROM postgres."oferte-ganhe".Talon;`;
+    
+    try {
         const result = await pool.query(query);
         return result.rows;
-    }catch(err){
-        console.error('Erro ao consultar Talao:', err);
+    } catch (err) {
+        console.error('Error fetching talons:', err);
+        throw err;
     }
 }
 
-//Função para buscar Talao por loja
-async function searchTalaoByStore(loja) {
+//Function to search for Talon by ID
+async function getTalonById(talonId) {
+    const query = `SELECT * FROM postgres."oferte-ganhe".Talon WHERE id_talon = $1;`;
+    
+    try {
+        const result = await pool.query(query, [talonId]);
+        return result.rows[0];
+    } catch (err) {
+        console.error('Error fetching talon by ID:', err);
+        throw err;
+    }
+}
+
+//Function to update a Talon
+async function updateTalon(talonId, dateReceived, userReceived, status = 'Recebido') {
     const query = `
-        SELECT 
-            Talao.remessa, 
-            Talao.quantidade_talao, 
-            Talao.status_talao,  
-            Loja.numero_loja
-        FROM postgres."oferte-ganhe".Talao
-        JOIN postgres."oferte-ganhe".Estoque ON Talao.id_estoque = Estoque.id_estoque
-        JOIN postgres."oferte-ganhe".Loja ON Estoque.id_loja = Loja.id_loja
-        WHERE Loja.numero_loja = $1::varchar;
+        UPDATE postgres."oferte-ganhe".Talon
+        SET date_received = $1, user_received = $2, status_talon = $3
+        WHERE id_talon = $4
+        RETURNING *;
     `;
-
-    const values = [loja];
-
+    const values = [dateReceived, userReceived, status, talonId];
+    
     try {
         const result = await pool.query(query, values);
         return result.rows[0];
     } catch (err) {
-        console.error('Erro ao buscar Talao por Loja:', err);
+        console.error('Error updating talon:', err);
         throw err;
     }
 }
 
-//Função para editar um Talao
-async function editTalao(remessa, quantidade, status, loja) {
-    const query = `
-        UPDATE postgres."oferte-ganhe".Talao
-        SET remessa = $1, quantidade_talao = $2, status_talao = $3
-        WHERE id_estoque = (
-            SELECT id_estoque FROM postgres."oferte-ganhe".Estoque 
-            WHERE id_loja = (SELECT id_loja FROM postgres."oferte-ganhe".Loja WHERE numero_loja = $4::varchar)
-        )
-        RETURNING *;
-    `;
-
-    const values = [remessa, quantidade, status, loja];
-
+//Function to remove a stub
+async function deleteTalon(talonId) {
+    const query = `DELETE FROM postgres."oferte-ganhe".Talon 
+    WHERE id_talon = $1 
+    RETURNING *;`;
+    
     try {
-        const result = await pool.query(query, values);
+        const result = await pool.query(query, [talonId]);
         return result.rows[0];
-    }catch(err){
-        console.error('Erro ao editar Talao:', err);
+    } catch (err) {
+        console.error('Error deleting talon:', err);
         throw err;
     }
 }
 
-//Função para excluir um Talao
-async function removeTalao(loja) {
-    const query = `
-        DELETE FROM postgres."oferte-ganhe".Talao
-        WHERE id_estoque = (
-            SELECT id_estoque 
-            FROM postgres."oferte-ganhe".Estoque 
-            WHERE id_loja = (SELECT id_loja FROM postgres."oferte-ganhe".Loja WHERE numero_loja = $1::varchar)
-        )
-        RETURNING *;
-    `;
-
-    try{
-        const result = await pool.query(query, [loja]);
-        return result.rows[0]; 
-    }catch (err){
-        console.error('Erro ao deletar Talao:', err);
-        throw err;
-    }
-}
-
-module.exports = { insertTalao, searchTalao, searchTalaoByStore, editTalao, removeTalao };
+module.exports = { 
+    insertTalon, 
+    getTalons, 
+    getTalonById, 
+    updateTalon, 
+    deleteTalon 
+};
