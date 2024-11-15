@@ -5,14 +5,12 @@ const path = require('path');
 const viewRoutes = require('../backend/routes/viewRoutes.js');
 const userRoutes = require('../backend/routes/userRoutes.js');
 const profileRoutes = require('../backend/routes/profileRoutes.js');
-const permissionRoutes = require('../backend/routes/permissionRoutes.js'); 
+const permissionRoutes = require('../backend/routes/permissionRoutes.js');
+const profilePermission = require('../backend/routes/profilePermissionRoutes.js'); 
 const talaoRoutes = require('../backend/routes/talaoRoutes.js');
 const stockRoutes = require('../backend/routes/stockRoutes.js');
 const storeRoutes = require('../backend/routes/storeRoutes.js');
-const reportRoutes = require('../backend/routes/reportRoutes.js');
-const moduleRoutes = require('../backend/routes/moduleRoutes.js');
-const sendingRoutes = require('../backend/routes/sendingRoutes.js');
-const receivingRoutes = require('../backend/routes/receivingRoutes.js');
+
 
 const app = express();
 
@@ -27,14 +25,10 @@ app.use('/', viewRoutes);
 app.use('/api', userRoutes);
 app.use('/api', profileRoutes);
 app.use('/api', permissionRoutes);
+app.use('/api', profilePermission);
 app.use('/api', talaoRoutes);
 app.use('/api', stockRoutes);
 app.use('/api', storeRoutes);
-app.use('/api', reportRoutes);
-app.use('/api', moduleRoutes);
-app.use('/api', sendingRoutes);
-app.use('/api', receivingRoutes);
-
 
 // Definir uma rota padrão para redirecionar para o login
 app.get('/', (req, res) => {
