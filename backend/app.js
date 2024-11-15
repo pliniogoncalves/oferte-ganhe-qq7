@@ -4,7 +4,8 @@ const path = require('path');
 //importando rotas
 const viewRoutes = require('../backend/routes/viewRoutes.js');
 const userRoutes = require('../backend/routes/userRoutes.js');
-const profileRoutes = require('../backend/routes/profileRoutes.js'); 
+const profileRoutes = require('../backend/routes/profileRoutes.js');
+const permissionRoutes = require('../backend/routes/permissionRoutes.js'); 
 const talaoRoutes = require('../backend/routes/talaoRoutes.js');
 const stockRoutes = require('../backend/routes/stockRoutes.js');
 const storeRoutes = require('../backend/routes/storeRoutes.js');
@@ -25,6 +26,7 @@ app.use(express.static(path.join(__dirname, '../frontend/public')));
 app.use('/', viewRoutes);
 app.use('/api', userRoutes);
 app.use('/api', profileRoutes);
+app.use('/api', permissionRoutes);
 app.use('/api', talaoRoutes);
 app.use('/api', stockRoutes);
 app.use('/api', storeRoutes);
