@@ -8,7 +8,7 @@ router.get('/', (req, res) =>{
 });
 
 // Route to Permission page
-router.get('/permissions/page', permissionController.getUserPage);
+router.get('/permissions/page', permissionController.getPermissionPage);
 
 //Define the routes and trigger the controller
 router.post('/permissions/register', permissionController.insertPermission);

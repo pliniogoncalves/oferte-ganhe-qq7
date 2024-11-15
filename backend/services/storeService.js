@@ -91,4 +91,10 @@ async function removeStore(number) {
     }
 }
 
-module.exports = { insertStore, searchStore, searchStoreNumber, editStore, removeStore };
+module.exports = { 
+    insertStore, 
+    searchStore, 
+    searchStoreNumber, 
+    editStore, 
+    removeStore 
+};

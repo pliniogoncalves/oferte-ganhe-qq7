@@ -113,4 +113,9 @@ async function removeUser(matricula) {
     }
 }
 
-module.exports = { insertUser, searchUser, searchUserMatricula, editUser, removeUser };
+module.exports = { 
+    insertUser, 
+    searchUser, 
+    searchUserMatricula, 
+    editUser, 
+    removeUser };

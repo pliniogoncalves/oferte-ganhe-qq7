@@ -89,5 +89,11 @@ async function removePermission(name) {
     }
 }
 
-module.exports = { insertPermission, searchPermission, searchPermissionName, editPermission, removePermission };
+module.exports = { 
+    insertPermission, 
+    searchPermission, 
+    searchPermissionName, 
+    editPermission, 
+    removePermission 
+};
 

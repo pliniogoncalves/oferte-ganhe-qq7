@@ -3,7 +3,7 @@ const permissionService = require('../services/permissionService.js')
 //Controller for the permission page
 const permissionController = {
     
-    getUserPage: (req, res) => {
+    getPermissionPage: (req, res) => {
         res.send("Página das Permissões");
     },
 

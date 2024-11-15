@@ -8,7 +8,7 @@ router.get('/', (req, res) =>{
 });
 
 // Route to the Stores page
-router.get('/store/page', storeController.getUserPage);
+router.get('/store/page', storeController.getStorePage);
 
 //Define the routes and trigger the controller
 router.post('/store/register', storeController.insertStore);

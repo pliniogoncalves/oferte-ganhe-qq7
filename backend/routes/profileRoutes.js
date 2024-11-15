@@ -8,7 +8,7 @@ router.get('/', (req, res) =>{
 });
 
 // Route to Profile page
-router.get('/profiles/page', profileController.getUserPage);
+router.get('/profiles/page', profileController.getProfilePage);
 
 //Define the routes and trigger the controller
 router.post('/profiles/register', profileController.insertProfile);

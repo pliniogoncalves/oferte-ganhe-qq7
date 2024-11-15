@@ -3,7 +3,7 @@ const profileService = require('../services/profileService.js')
 //Controller for the profile page
 const profileController = {
     
-    getUserPage: (req, res) => {
+    getProfilePage: (req, res) => {
         res.send("Página dos Perfis");
     },
 

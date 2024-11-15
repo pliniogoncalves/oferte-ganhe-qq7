@@ -3,7 +3,7 @@ const storeService = require('../services/storeService.js')
 //Controller for the Stores page
 const storeController = {
     
-    getUserPage: (req, res) => {
+    getStorePage: (req, res) => {
         res.send("Página das Lojas");
     },
 

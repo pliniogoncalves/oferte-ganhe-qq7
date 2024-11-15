@@ -89,5 +89,11 @@ async function removeProfile(name) {
     }
 }
 
-module.exports = { insertProfile, searchProfile, searchProfileName, editProfile, removeProfile };
+module.exports = { 
+    insertProfile, 
+    searchProfile, 
+    searchProfileName, 
+    editProfile, 
+    removeProfile 
+};
 
