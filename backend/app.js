@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 
-//importando rotas
+//importing routes
 const viewRoutes = require('../backend/routes/viewRoutes.js');
 const userRoutes = require('../backend/routes/userRoutes.js');
 const profileRoutes = require('../backend/routes/profileRoutes.js');
@@ -10,17 +10,18 @@ const profilePermission = require('../backend/routes/profilePermissionRoutes.js'
 const talonRoutes = require('../backend/routes/talonRoutes.js');
 const stockRoutes = require('../backend/routes/stockRoutes.js');
 const storeRoutes = require('../backend/routes/storeRoutes.js');
+const transactionRoutes = require('../backend/routes/transactionRoutes');
 
 
 const app = express();
 
-// Middleware para processar JSON
+//Middleware to process JSON
 app.use(express.json());
 
-// Middleware para servir arquivos estáticos
+//Middleware for serving static files
 app.use(express.static(path.join(__dirname, '../frontend/public')));
 
-// Usar as rotas de visualização
+//Use view routes
 app.use('/', viewRoutes);
 app.use('/api', userRoutes);
 app.use('/api', profileRoutes);
@@ -29,10 +30,11 @@ app.use('/api', profilePermission);
 app.use('/api', talonRoutes);
 app.use('/api', stockRoutes);
 app.use('/api', storeRoutes);
+app.use('/api', transactionRoutes);
 
-// Definir uma rota padrão para redirecionar para o login
+//Set a default route to redirect to login
 app.get('/', (req, res) => {
-    res.redirect('/login'); // Redireciona para a página de login
+    res.redirect('/login');
 });
 
 module.exports = app;
