@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const talaoController = require('../controllers/talaoController.js');
-const { insertTalao, searchTalao, searchTalaoByStore, editTalao, removeTalao } = require('../services/talaoService.js')
+const talaoController = require('../controllers/talonController.js');
+const { insertTalao, searchTalao, searchTalaoByStore, editTalao, removeTalao } = require('../services/talonService.js')
 
 //Rota de depuração para verificar se o 'api/taloes' está ativa
 router.get('/', (req, res) =>{

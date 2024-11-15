@@ -7,7 +7,7 @@ const userRoutes = require('../backend/routes/userRoutes.js');
 const profileRoutes = require('../backend/routes/profileRoutes.js');
 const permissionRoutes = require('../backend/routes/permissionRoutes.js');
 const profilePermission = require('../backend/routes/profilePermissionRoutes.js'); 
-const talaoRoutes = require('../backend/routes/talaoRoutes.js');
+const talonRoutes = require('../backend/routes/talonRoutes.js');
 const stockRoutes = require('../backend/routes/stockRoutes.js');
 const storeRoutes = require('../backend/routes/storeRoutes.js');
 
@@ -26,7 +26,7 @@ app.use('/api', userRoutes);
 app.use('/api', profileRoutes);
 app.use('/api', permissionRoutes);
 app.use('/api', profilePermission);
-app.use('/api', talaoRoutes);
+app.use('/api', talonRoutes);
 app.use('/api', stockRoutes);
 app.use('/api', storeRoutes);
 
