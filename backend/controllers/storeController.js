@@ -7,7 +7,7 @@ const storeController = {
         res.send("Página das Lojas");
     },
 
-    //Route to register a new Store
+    //Function to register a new Store
     insertStore: async (req, res) => {
         const {name, number} = req.body;
 
@@ -19,7 +19,7 @@ const storeController = {
         }
     },
 
-    //Route to Search All Stores
+    //Function to Search All Stores
     searchStore: async (req, res) => {
         try{
             const store = await storeService.searchStore();
@@ -29,7 +29,7 @@ const storeController = {
         }
     },
 
-    //Route to find a store by number
+    //Function to find a store by number
     searchStoreNumber: async (req, res) => {
         const { number } = req.params;
 
@@ -45,7 +45,7 @@ const storeController = {
         }
     },
 
-    // Route to edit an existing store
+    // Function to edit an existing store
     editStore: async (req, res) =>{
         const { number } = req.params;
         const { name, newNumber } = req.body;
@@ -62,7 +62,7 @@ const storeController = {
         }
     },
 
-    //Route to delete a store
+    //Function to delete a store
     removeStore: async (req, res) => {
         const { number } = req.params;
 

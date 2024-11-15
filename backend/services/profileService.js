@@ -3,8 +3,8 @@ const pool = require('../config/database');
 //Function to insert a new Profile
 async function insertProfile(name) {
     const query = `
-        INSERT INTO postgres."oferte-ganhe".Profile (name_profile)
-        VALUES $1
+        INSERT INTO postgres."oferte-ganhe".Profile (name_profile) 
+        VALUES ($1)
         RETURNING *;
     `;
 
@@ -56,7 +56,7 @@ async function searchProfileName(name) {
 async function editProfile(newName, name) {
     const query = `
         UPDATE postgres."oferte-ganhe".Profile
-        SET name_profile = $1,
+        SET name_profile = $1
         WHERE name_profile = $2::varchar
         RETURNING *;
     `;
