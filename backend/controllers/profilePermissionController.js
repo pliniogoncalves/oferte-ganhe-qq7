@@ -21,11 +21,11 @@ const profilePermissionController = {
     },
 
     //Function to search for permissions associated with a specific profile 
-    getPermissionsByProfile: async (req, res) => {
+    searchPermissionsByProfile: async (req, res) => {
         const { id_profile } = req.params;
 
         try {
-            const permissions = await profilePermissionService.getPermissionsByProfile(id_profile);
+            const permissions = await profilePermissionService.searchPermissionsByProfile(id_profile);
             if (permissions.length) {
                 res.status(200).json(permissions);
             } else {
@@ -37,9 +37,9 @@ const profilePermissionController = {
     },
 
     //Function to list all profiles with their permissions
-    getAllProfilesWithPermissions: async (req, res) => {
+    searchAllProfilesWithPermissions: async (req, res) => {
         try {
-            const profilesWithPermissions = await profilePermissionService.getAllProfilesWithPermissions();
+            const profilesWithPermissions = await profilePermissionService.searchAllProfilesWithPermissions();
             res.status(200).json(profilesWithPermissions);
         } catch (err) {
             res.status(500).json({ message: 'Error fetching all profiles with permissions', error: err.message });

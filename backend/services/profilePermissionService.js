@@ -21,7 +21,7 @@ async function insertProfilePermission(id_profile, id_permission) {
 
 
 //Function to search for all permissions associated with a specific profile
-async function getPermissionsByProfile(id_profile) {
+async function searchPermissionsByProfile(id_profile) {
     const query = `
         SELECT Permission.id_permission, Permission.name_permission
         FROM postgres."oferte-ganhe".Profile_Permission
@@ -39,7 +39,7 @@ async function getPermissionsByProfile(id_profile) {
 }
 
 //Function to search for all profiles and their associated permissions
-async function getAllProfilesWithPermissions() {
+async function searchAllProfilesWithPermissions() {
     const query = `
         SELECT Profile.id_profile, Profile.name_profile, Permission.id_permission, Permission.name_permission
         FROM postgres."oferte-ganhe".Profile
@@ -77,7 +77,7 @@ async function removePermissionFromProfile(id_profile, id_permission) {
 
 module.exports = {
     insertProfilePermission,
-    getPermissionsByProfile,
-    getAllProfilesWithPermissions,
+    searchPermissionsByProfile,
+    searchAllProfilesWithPermissions,
     removePermissionFromProfile
 };
