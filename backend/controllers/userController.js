@@ -1,80 +1,80 @@
 const userService = require('../services/userService.js')
 
-// Controlador para a página de usuários
+//Controller for the users page
 const userController = {
-    //Função para exibir a pagina de usuario
+    //Function to display the user page
     getUserPage: (req, res) => {
         res.send("Página dos Usuários");
     },
 
-    // Funçao para cadastrar um novo Usuário
+    //Function to register a new User
     insertUser: async (req, res) => {
-        const {nome, matricula, email, senha, loja, perfil} = req.body;
+        const {name, registration, email, password, profile, store} = req.body;
 
         try{
-            const newUser = await userService.insertUser(nome, matricula, email, senha, loja, perfil);
-            res.status(201).json({ message: 'Usuário cadastrado com sucesso!', user: newUser});
+            const newUser = await userService.insertUser(name, registration, email, password, profile, store);
+            res.status(201).json({ message: 'User registered successfully!', user: newUser});
         }catch(erro){
-            res.status(500).json({ message: 'Erro ao cadastrar usuário', erro: erro.message});
+            res.status(500).json({ message: 'Error registering user', erro: erro.message});
         }
     },
 
-    // Função para Buscar Todos os Usuários
+    //Function to Search All Users
     searchUser : async (req, res) => {
         try {
             const users = await userService.searchUser();
             res.status(200).json(users);
         }catch(err){
-            res.status(500).json({ message: 'Erro ao buscar todos os usuários', error: err.message });
+            res.status(500).json({ message: 'Error fetching all users', error: err.message });
         }
     },
 
-    // Função para Buscar um usuário pela matricula
+    // Function to search for a user by registration number
     searchUserMatricula : async (req, res) => {
-        const { matricula } = req.params;
+        const { registration } = req.params;
 
         try {
-            const result = await userService.searchUserMatricula(matricula);
+            const result = await userService.searchUserMatricula(registration);
             if(result){
                 res.status(200).json(result);
             }else{
-                res.status(404).json({ message: 'Usuário não encontrado' });
+                res.status(404).json({ message: 'User not found' });
             }
         }catch(err) {
-            res.status(500).json({ message: 'Erro ao buscar usuário', error: err.message });
+            res.status(500).json({ message: 'Error searching for user', error: err.message });
         }
     },
 
     // Função para editar um usuário existente
     editUser : async (req, res) =>{
-        const { matricula } = req.params;
-        const { nome, novaMatricula, email, senha, loja, perfil } = req.body;
+        const { registration } = req.params;
+        const { name, newRegistration, email, password, profile, store } = req.body;
 
         try{
-            const updateUser = await userService.editUser(nome, novaMatricula, email, senha, loja, perfil, matricula);
+            const updateUser = await userService.editUser(name, newRegistration, email, password, profile, store, registration);
             if (updateUser) {
-                res.status(200).json({ message: 'Usuário atualizado com sucesso!', user: updateUser });
+                res.status(200).json({ message: 'User updated successfully!', user: updateUser });
             }else{
-                res.status(404).json({ message: 'Usuário não encontrado.' });
+                res.status(404).json({ message: 'User not found.' });
             }
         }catch(erro){
-            res.status(500).json({ message: 'Erro ao editar usuário', error: erro.message });
+            res.status(500).json({ message: 'Error editing user', error: erro.message });
         }
     },
 
-    // Função para excluir um usuário
+    //Function to delete a user
     removeUser : async (req, res) => {
-        const { matricula } = req.params;
+        const { registration } = req.params;
 
         try{
-            const removedUser = await userService.removeUser(matricula);
+            const removedUser = await userService.removeUser(registration);
             if(removedUser){
-                res.status(200).json({ message: 'Usuário excluído com sucesso!', user: removedUser });
+                res.status(200).json({ message: 'User deleted successfully!', user: removedUser });
             }else{
-                res.status(404).json({ message: 'Usuário não encontrado.' });
+                res.status(404).json({ message: 'User not found.' });
             }
         }catch(erro){
-            res.status(500).json({ message: 'Erro ao excluir usuário', error: erro.message });
+            res.status(500).json({ message: 'Error deleting user', error: erro.message });
         }
     }
 };

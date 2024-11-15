@@ -1,114 +1,120 @@
 const pool = require('../config/database');
 
-// Função para inserir um novo Usuário
-async function insertUser(nome, matricula, email, senha, loja='0', perfil = 'admin') {
+// Function to insert a new user
+async function insertUser(name, registration, email, password, profile = '1', store = '1') {
     const query = `
-        INSERT INTO postgres."oferte-ganhe".Usuario (nome_usuario, matricula_usuario, email_usuario, senha_usuario, id_loja, id_perfil)
+        INSERT INTO postgres."oferte-ganhe".Users (name_users, registration_users, email_users, password_users, id_profile, id_store)
         VALUES ($1, $2, $3, $4, 
-            (SELECT id_loja FROM postgres."oferte-ganhe".Loja WHERE numero_loja = $5), 
-            (SELECT id_perfil FROM postgres."oferte-ganhe".Perfil WHERE nome_perfil = $6)
+            COALESCE((SELECT id_profile FROM postgres."oferte-ganhe".Profile WHERE name_profile = $5), 1), 
+            COALESCE((SELECT id_store FROM postgres."oferte-ganhe".Store WHERE number_store = $6), 1)
         )
         RETURNING *;
     `;
 
-    const values = [nome, matricula, email, senha, loja, perfil];
+    const values = [name, registration, email, password, profile || '1', store || '1'];
 
-    try{
+    try {
         const result = await pool.query(query, values);
         return result.rows[0];
-    }catch(err){
-        console.error('Erro ao inserir usuário:', err);
+    } catch (err) {
+        console.error('Error inserting user:', err);
         throw err;
     }
 }
 
-//Função para consultar todos os usuários
+
+//Function to query all users
 async function searchUser() {
     const query =`
         SELECT 
-            Usuario.id_usuario, 
-            Usuario.nome_usuario, 
-            Usuario.matricula_usuario, 
-            Usuario.email_usuario, 
-            Usuario.senha_usuario,
-            Loja.numero_loja, 
-            Perfil.nome_perfil
-        FROM postgres."oferte-ganhe".Usuario
-        JOIN postgres."oferte-ganhe".Loja ON Usuario.id_loja = Loja.id_loja
-        JOIN postgres."oferte-ganhe".Perfil ON Usuario.id_perfil = Perfil.id_perfil
+            Users.id_users, 
+            Users.name_users, 
+            Users.registration_users, 
+            Users.email_users, 
+            Users.password_users,
+            Profile.name_profile,
+            Store.number_store 
+        FROM postgres."oferte-ganhe".Users
+        JOIN postgres."oferte-ganhe".Profile ON Users.id_profile = Profile.id_profile
+        JOIN postgres."oferte-ganhe".Store ON Users.id_store = Store.id_store
     `;
 
     try{
         const result = await pool.query(query);
         return result.rows;
     }catch(err){
-        console.error('Erro ao consultar usuário:', err);
+        console.error('Error querying user:', err);
     }
 }
 
-//Função para buscar usuário por matricula
-async function searchUserMatricula(matricula) {
+//Function to search for user by registration number
+async function searchUserMatricula(registration) {
     const query = `
          SELECT 
-            Usuario.id_usuario, 
-            Usuario.nome_usuario, 
-            Usuario.matricula_usuario, 
-            Usuario.email_usuario, 
-            Usuario.senha_usuario,
-            Loja.numero_loja, 
-            Perfil.nome_perfil
-        FROM postgres."oferte-ganhe".Usuario
-        JOIN postgres."oferte-ganhe".Loja ON Usuario.id_loja = Loja.id_loja
-        JOIN postgres."oferte-ganhe".Perfil ON Usuario.id_perfil = Perfil.id_perfil
-        WHERE Usuario.matricula_usuario = $1::varchar;
+            Users.id_users, 
+            Users.name_users, 
+            Users.registration_users, 
+            Users.email_users, 
+            Users.password_users,
+            Perfil.name_profile,
+            Store.number_store 
+        FROM postgres."oferte-ganhe".Users
+        JOIN postgres."oferte-ganhe".Profile ON Users.id_profile = Profile.id_profile
+        JOIN postgres."oferte-ganhe".Store ON Users.id_store = Store.id_store
+        WHERE Users.registration_users = $1::varchar;
     `;
 
-    const values = [matricula];
+    const values = [registration];
 
-    try {
+    try{
         const result = await pool.query(query, values);
-        return result.rows[0]; // Retorna o usuário encontrado
-    } catch (err) {
-        console.error('Erro ao buscar usuário por matrícula:', err);
+        return result.rows[0];
+    }catch(err) {
+        console.error('Error searching for user by registration number:', err);
         throw err;
     }
 }
 
-//Função para editar um usuário
-async function editUser(nome, novaMatricula, email, senha, loja, perfil, matricula) {
+//Function to edit a user
+async function editUser(name, newRegistration, email, password, profile, store, registration) {
     const query = `
-        UPDATE postgres."oferte-ganhe".Usuario
-        SET nome_usuario = $1, matricula_usuario = $2, email_usuario = $3, senha_usuario = $4,
-            id_loja = (SELECT id_loja FROM postgres."oferte-ganhe".Loja WHERE numero_loja = $5),
-            id_perfil = (SELECT id_perfil FROM postgres."oferte-ganhe".Perfil WHERE nome_perfil = $6)
-        WHERE matricula_usuario = $7::varchar
-        RETURNING *;
+        UPDATE postgres."oferte-ganhe".Users
+            SET name_users = $1, 
+            registration_users = $2, 
+            email_users = $3, 
+            password_users = $4,
+            id_profile = COALESCE(
+                (SELECT id_profile FROM postgres."oferte-ganhe".Profile WHERE name_profile = $5 LIMIT 1), 1),
+            id_store = COALESCE(
+                (SELECT id_store FROM postgres."oferte-ganhe".Store WHERE number_store = $6 LIMIT 1), 1)
+            WHERE registration_users = $7::varchar
+            RETURNING *;
     `;
 
-    const values = [nome, novaMatricula, email, senha, loja, perfil, matricula];
+    const values = [name, newRegistration, email, password, profile, store, registration];
 
-    try {
+    try{
         const result = await pool.query(query, values);
-        return result.rows[0]; // Retorna o usuário atualizado
+        return result.rows[0];
     }catch(err){
-        console.error('Erro ao editar usuário:', err);
+        console.error('Error editing user:', err);
         throw err;
     }
 }
 
-//Função para excluir um usuário
-async function removeUser(matricula) {
+//Function to delete a user
+async function removeUser(registration) {
     const query = `
-        DELETE FROM postgres."oferte-ganhe".Usuario
-        WHERE matricula_usuario = $1::varchar
+        DELETE FROM postgres."oferte-ganhe".Users
+        WHERE registration_users = $1::varchar
         RETURNING *;
     `;
 
     try{
-        const result = await pool.query(query, [matricula]);
-        return result.rows[0]; // Retorna o usuário excluído, ou undefined se não encontrado
+        const result = await pool.query(query, [registration]);
+        return result.rows[0];
     }catch (err){
-        console.error('Erro ao deletar usuário:', err);
+        console.error('Error deleting user:', err);
         throw err;
     }
 }
