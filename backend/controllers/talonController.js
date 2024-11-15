@@ -20,9 +20,9 @@ const talonController = {
     },
 
     // Function to search for all Talons
-    getTalons: async (req, res) => {
+    searchTalons: async (req, res) => {
         try{
-            const talons = await talonService.getTalons();
+            const talons = await talonService.searchTalons();
             res.status(200).json(talons);
         }catch(err){
             res.status(500).json({ message: 'Error fetching talons', error: err.message });
@@ -30,11 +30,11 @@ const talonController = {
     },
 
     //Function to search for Talon by ID
-    getTalonById: async (req, res) => {
+    searchTalonById: async (req, res) => {
         const { id } = req.params;
     
         try{
-            const talon = await talonService.getTalonById(id);
+            const talon = await talonService.searchTalonById(id);
             if(talon){
                 res.status(200).json(talon);
             }else{
@@ -63,11 +63,11 @@ const talonController = {
     },
 
     // Function to remove a stub
-    deleteTalon: async (req, res) => {
+    removeTalon: async (req, res) => {
         const { id } = req.params;
     
         try{
-            const deletedTalon = await talonService.deleteTalon(id);
+            const deletedTalon = await talonService.removeTalon(id);
             if(deletedTalon){
                 res.status(200).json({ message: 'Talon deleted successfully!', talon: deletedTalon });
             }else{

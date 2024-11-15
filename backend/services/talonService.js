@@ -22,7 +22,7 @@ async function insertTalon(store = 1, dateSend, userSend, quantity, status = 'En
 }
 
 // Function to search for all Talons
-async function getTalons() {
+async function searchTalons() {
     const query = `SELECT * FROM postgres."oferte-ganhe".Talon;`;
     
     try {
@@ -35,7 +35,7 @@ async function getTalons() {
 }
 
 //Function to search for Talon by ID
-async function getTalonById(talonId) {
+async function searchTalonById(talonId) {
     const query = `SELECT * FROM postgres."oferte-ganhe".Talon WHERE id_talon = $1;`;
     
     try {
@@ -67,7 +67,7 @@ async function updateTalon(talonId, dateReceived, userReceived, status = 'Recebi
 }
 
 //Function to remove a stub
-async function deleteTalon(talonId) {
+async function removeTalon(talonId) {
     const query = `DELETE FROM postgres."oferte-ganhe".Talon 
     WHERE id_talon = $1 
     RETURNING *;`;
@@ -83,8 +83,8 @@ async function deleteTalon(talonId) {
 
 module.exports = { 
     insertTalon, 
-    getTalons, 
-    getTalonById, 
+    searchTalons, 
+    searchTalonById, 
     updateTalon, 
-    deleteTalon 
+    removeTalon 
 };
