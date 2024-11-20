@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+require('dotenv').config();
 
 //importing routes
 const viewRoutes = require('../backend/routes/viewRoutes.js');
