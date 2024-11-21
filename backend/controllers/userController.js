@@ -1,5 +1,5 @@
 const userService = require('../services/userService.js');
-const { hashPassword } = require('../services/authService.js'); // Importa a função para hashear a senha
+const { hashPassword } = require('../services/authService.js');
 
 const userController = {
     // Function to display the user page
@@ -11,15 +11,15 @@ const userController = {
     insertUser: async (req, res) => {
         const { name, registration, email, password, profile, store } = req.body;
 
-        try {
-            // Hash da senha antes de enviar para o serviço
+        try{
+            // Hash the password before sending it to the service
             const hashedPassword = await hashPassword(password);
 
-            // Chama o serviço com a senha já hashada
+            // Call the service with the already hashed password
             const newUser = await userService.insertUser(name, registration, email, hashedPassword, profile, store);
 
             res.status(201).json({ message: 'User registered successfully!', user: newUser });
-        } catch (erro) {
+        }catch(erro){
             console.error('Error registering user:', erro);
             res.status(500).json({ message: 'Error registering user', erro: erro.message });
         }
