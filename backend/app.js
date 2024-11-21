@@ -2,17 +2,19 @@ const express = require('express');
 const path = require('path');
 require('dotenv').config();
 
-//importing routes
-const viewRoutes = require('../backend/routes/viewRoutes.js');
-const userRoutes = require('../backend/routes/userRoutes.js');
-const profileRoutes = require('../backend/routes/profileRoutes.js');
-const permissionRoutes = require('../backend/routes/permissionRoutes.js');
-const profilePermission = require('../backend/routes/profilePermissionRoutes.js'); 
-const talonRoutes = require('../backend/routes/talonRoutes.js');
-const stockRoutes = require('../backend/routes/stockRoutes.js');
-const storeRoutes = require('../backend/routes/storeRoutes.js');
-const transactionRoutes = require('../backend/routes/transactionRoutes');
+console.log(process.env.JWT_SECRET);
 
+//importing routes
+const viewRoutes = require('./routes/viewRoutes.js');
+const userRoutes = require('./routes/userRoutes.js');
+const profileRoutes = require('./routes/profileRoutes.js');
+const permissionRoutes = require('./routes/permissionRoutes.js');
+const profilePermission = require('./routes/profilePermissionRoutes.js'); 
+const talonRoutes = require('./routes/talonRoutes.js');
+const stockRoutes = require('./routes/stockRoutes.js');
+const storeRoutes = require('./routes/storeRoutes.js');
+const transactionRoutes = require('./routes/transactionRoutes.js');
+const authRoutes = require('./routes/authRoutes.js');
 
 const app = express();
 
@@ -32,6 +34,7 @@ app.use('/api', talonRoutes);
 app.use('/api', stockRoutes);
 app.use('/api', storeRoutes);
 app.use('/api', transactionRoutes);
+app.use('/api', authRoutes);
 
 //Set a default route to redirect to login
 app.get('/', (req, res) => {
