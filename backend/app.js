@@ -2,8 +2,6 @@ const express = require('express');
 const path = require('path');
 require('dotenv').config();
 
-console.log(process.env.JWT_SECRET);
-
 //importing routes
 const viewRoutes = require('./routes/viewRoutes.js');
 const userRoutes = require('./routes/userRoutes.js');
