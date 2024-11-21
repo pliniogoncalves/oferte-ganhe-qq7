@@ -51,19 +51,37 @@ const userController = {
         }
     },
 
-    // Função para editar um usuário existente
-    editUser : async (req, res) =>{
+    // Function to edit an existing user
+    editUser: async (req, res) => {
         const { registration } = req.params;
         const { name, newRegistration, email, password, profile, store } = req.body;
 
         try{
-            const updateUser = await userService.editUser(name, newRegistration, email, password, profile, store, registration);
-            if (updateUser) {
-                res.status(200).json({ message: 'User updated successfully!', user: updateUser });
+            let hashedPassword = null;
+
+            // If password was provided, hash it
+            if(password){
+                hashedPassword = await hashPassword(password);
+            }
+
+            // Call the service to update the user
+            const updatedUser = await userService.editUser(
+                name,
+                newRegistration,
+                email,
+                hashedPassword,
+                profile,
+                store,
+                registration
+            );
+
+            if(updatedUser){
+                res.status(200).json({ message: 'User updated successfully!', user: updatedUser });
             }else{
                 res.status(404).json({ message: 'User not found.' });
             }
         }catch(erro){
+            console.error('Error editing user:', erro);
             res.status(500).json({ message: 'Error editing user', error: erro.message });
         }
     },
