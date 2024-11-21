@@ -32,4 +32,22 @@ async function login(req, res) {
     }
 }
 
-module.exports = { login };
+async function logout(req, res) {
+    const token = req.header('Authorization')?.split(' ')[1];
+    if(!token){
+        return res.status(400).json({ message: 'Token not provided.' });
+    }
+
+    try{
+        // Add the token to the revoked tokens list
+        const query = `INSERT INTO postgres."oferte-ganhe".RevokedTokens (token) VALUES ($1)`;
+        await pool.query(query, [token]);
+
+        res.status(200).json({ message: 'Logout successful. Token revoked.' });
+    }catch(err){
+        console.error('Error during logout:', err);
+        res.status(500).json({ message: 'Error during logout.', error: err.message });
+    }
+}
+
+module.exports = { login, logout };

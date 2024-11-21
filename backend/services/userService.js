@@ -3,7 +3,7 @@ const pool = require('../config/database');
 // Function to insert a new user
 async function insertUser(name, registration, email, password, profile = '1', store = '1') {
     const query = `
-        INSERT INTO postgres."oferte-ganhe".Users (name_users, registration_users, email_users, password_users, id_profile, id_store)
+        INSERT INTO Users (name_users, registration_users, email_users, password_users, id_profile, id_store)
         VALUES ($1, $2, $3, $4, 
             COALESCE((SELECT id_profile FROM postgres."oferte-ganhe".Profile WHERE name_profile = $5), 1), 
             COALESCE((SELECT id_store FROM postgres."oferte-ganhe".Store WHERE number_store = $6), 1)
