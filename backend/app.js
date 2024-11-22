@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 require('dotenv').config();
+const cookieParser = require('cookie-parser');
 
 //importing routes
 const viewRoutes = require('./routes/viewRoutes.js');
@@ -21,6 +22,9 @@ app.use(express.json());
 
 //Middleware for serving static files
 app.use(express.static(path.join(__dirname, '../frontend/public')));
+
+// Middleware to process cookies
+app.use(cookieParser());
 
 //Use view routes
 app.use('/', viewRoutes);
