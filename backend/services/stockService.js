@@ -1,32 +1,36 @@
-const pool = require('../config/database');
+const Stock = require('../models/Stock');
+const Store = require('../models/Store');
+const Talon = require('../models/Talon');
 
-//Function to insert a new stock
+// Function to insert a new stock
 async function insertStock(storeId, talonId, currentStock, minStock, recommendedStock, stockStatus) {
-    const query = `
-        INSERT INTO postgres."oferte-ganhe".Stock 
-            (id_store, id_talon, current_stock, minimum_stock, recommended_stock, status_stock)
-        VALUES ($1, $2, $3, $4, $5, $6)
-        RETURNING *;
-    `;
-    const values = [storeId, talonId, currentStock, minStock, recommendedStock, stockStatus];
-    
-    try {
-        const result = await pool.query(query, values);
-        return result.rows[0];
-    } catch (err) {
+    try{
+        const stock = await Stock.create({
+            id_store: storeId,
+            id_talon: talonId,
+            current_stock: currentStock,
+            minimum_stock: minStock,
+            recommended_stock: recommendedStock,
+            status_stock: stockStatus,
+        });
+        return stock;
+    }catch(err){
         console.error('Error inserting stock:', err);
         throw err;
     }
 }
 
-// Function to search for all stock
+//Function to search for all stocks
 async function searchStocks() {
-    const query = `SELECT * FROM postgres."oferte-ganhe".Stock;`;
-    
-    try {
-        const result = await pool.query(query);
-        return result.rows;
-    } catch (err) {
+    try{
+        const stocks = await Stock.findAll({
+            include: [
+                { model: Store, attributes: ['name_store'], required: false },
+                { model: Talon, attributes: ['status_talon'], required: false },
+            ],
+        });
+        return stocks;
+    }catch(err){
         console.error('Error fetching stocks:', err);
         throw err;
     }
@@ -34,12 +38,16 @@ async function searchStocks() {
 
 //Function to search for a stock by ID
 async function searchStockById(stockId) {
-    const query = `SELECT * FROM postgres."oferte-ganhe".Stock WHERE id_stock = $1;`;
-    
-    try {
-        const result = await pool.query(query, [stockId]);
-        return result.rows[0];
-    } catch (err) {
+    try{
+        const stock = await Stock.findOne({
+            where: { id_stock: stockId },
+            include: [
+                { model: Store, attributes: ['name_store'], required: false },
+                { model: Talon, attributes: ['status_talon'], required: false },
+            ],
+        });
+        return stock;
+    }catch(err){
         console.error('Error fetching stock by ID:', err);
         throw err;
     }
@@ -47,32 +55,36 @@ async function searchStockById(stockId) {
 
 //Function to update a stock
 async function editStock(stockId, storeId, talonId, currentStock, minStock, recommendedStock, stockStatus) {
-    const query = `
-        UPDATE postgres."oferte-ganhe".Stock
-        SET id_store = $1, id_talon = $2, current_stock = $3, minimum_stock = $4, 
-            recommended_stock = $5, status_stock = $6
-        WHERE id_stock = $7
-        RETURNING *;
-    `;
-    const values = [storeId, talonId, currentStock, minStock, recommendedStock, stockStatus, stockId];
-    
     try {
-        const result = await pool.query(query, values);
-        return result.rows[0];
-    } catch (err) {
+        const stock = await Stock.update(
+            { 
+                id_store: storeId, 
+                id_talon: talonId, 
+                current_stock: currentStock, 
+                minimum_stock: minStock, 
+                recommended_stock: recommendedStock, 
+                status_stock: stockStatus 
+            },
+            { 
+                where: { id_stock: stockId }, 
+                returning: true 
+            }
+        );
+        return stock[1][0];
+    }catch(err){
         console.error('Error updating stock:', err);
         throw err;
     }
 }
 
-// Function to delete a stock
+//Function to delete a stock
 async function removeStock(stockId) {
-    const query = `DELETE FROM postgres."oferte-ganhe".Stock WHERE id_stock = $1 RETURNING *;`;
-    
-    try {
-        const result = await pool.query(query, [stockId]);
-        return result.rows[0];
-    } catch (err) {
+    try{
+        const stock = await Stock.destroy({
+            where: { id_stock: stockId },
+        });
+        return stock;
+    }catch(err){
         console.error('Error deleting stock:', err);
         throw err;
     }
