@@ -1,19 +1,19 @@
-const pool = require('../config/database');
+const Transaction = require('../models/Transaction');
+const Talon = require('../models/Talon');
+const User = require('../models/User');
 
 //Function to insert a new transaction
 async function insertTransaction(talonId, transactionType, transactionDate, userId, talonQuantity) {
-    const query = `
-        INSERT INTO postgres."oferte-ganhe".Transaction 
-            (id_talon, type_transaction, date_transaction, user_transaction, quantity_talon_transaction)
-        VALUES ($1, $2, $3, $4, $5)
-        RETURNING *;
-    `;
-    const values = [talonId, transactionType, transactionDate, userId, talonQuantity];
-    
-    try {
-        const result = await pool.query(query, values);
-        return result.rows[0];
-    } catch (err) {
+    try{
+        const transaction = await Transaction.create({
+            id_talon: talonId,
+            type_transaction: transactionType,
+            date_transaction: transactionDate,
+            user_transaction: userId,
+            quantity_talon_transaction: talonQuantity,
+        });
+        return transaction;
+    }catch(err){
         console.error('Error inserting transaction:', err);
         throw err;
     }
@@ -21,12 +21,15 @@ async function insertTransaction(talonId, transactionType, transactionDate, user
 
 //Function to fetch all transactions
 async function searchTransactions() {
-    const query = `SELECT * FROM postgres."oferte-ganhe".Transaction;`;
-    
-    try {
-        const result = await pool.query(query);
-        return result.rows;
-    } catch (err) {
+    try{
+        const transactions = await Transaction.findAll({
+            include: [
+                { model: Talon, attributes: ['status_talon'], required: false },
+                { model: User, attributes: ['name_users'], required: false },
+            ],
+        });
+        return transactions;
+    }catch(err){
         console.error('Error fetching transactions:', err);
         throw err;
     }
@@ -34,12 +37,16 @@ async function searchTransactions() {
 
 //Function to search for transaction by ID
 async function searchTransactionId(transactionId) {
-    const query = `SELECT * FROM postgres."oferte-ganhe".Transaction WHERE id_transaction = $1;`;
-    
-    try {
-        const result = await pool.query(query, [transactionId]);
-        return result.rows[0];
-    } catch (err) {
+    try{
+        const transaction = await Transaction.findOne({
+            where: { id_transaction: transactionId },
+            include: [
+                { model: Talon, attributes: ['status_talon'], required: false },
+                { model: User, attributes: ['name_users'], required: false },
+            ],
+        });
+        return transaction;
+    }catch(err){
         console.error('Error fetching transaction by ID:', err);
         throw err;
     }
@@ -47,18 +54,21 @@ async function searchTransactionId(transactionId) {
 
 //Function to update a transaction
 async function editTransaction(transactionId, transactionType, transactionDate, userId, talonQuantity) {
-    const query = `
-        UPDATE postgres."oferte-ganhe".Transaction
-        SET type_transaction = $1, date_transaction = $2, user_transaction = $3, quantity_talon_transaction = $4
-        WHERE id_transaction = $5
-        RETURNING *;
-    `;
-    const values = [transactionType, transactionDate, userId, talonQuantity, transactionId];
-    
-    try {
-        const result = await pool.query(query, values);
-        return result.rows[0];
-    } catch (err) {
+    try{
+        const transaction = await Transaction.update(
+            {
+                type_transaction: transactionType,
+                date_transaction: transactionDate,
+                user_transaction: userId,
+                quantity_talon_transaction: talonQuantity,
+            },
+            {
+                where: { id_transaction: transactionId },
+                returning: true,
+            }
+        );
+        return transaction[1][0];
+    }catch(err){
         console.error('Error updating transaction:', err);
         throw err;
     }
@@ -66,21 +76,21 @@ async function editTransaction(transactionId, transactionType, transactionDate, 
 
 //Function to delete a transaction
 async function removeTransaction(transactionId) {
-    const query = `DELETE FROM postgres."oferte-ganhe".Transaction WHERE id_transaction = $1 RETURNING *;`;
-    
-    try {
-        const result = await pool.query(query, [transactionId]);
-        return result.rows[0];
-    } catch (err) {
+    try{
+        const transaction = await Transaction.destroy({
+            where: { id_transaction: transactionId },
+        });
+        return transaction;
+    }catch(err){
         console.error('Error deleting transaction:', err);
         throw err;
     }
 }
 
-module.exports = { 
-    insertTransaction, 
-    searchTransactions, 
-    searchTransactionId, 
-    editTransaction, 
-    removeTransaction 
+module.exports = {
+    insertTransaction,
+    searchTransactions,
+    searchTransactionId,
+    editTransaction,
+    removeTransaction,
 };
