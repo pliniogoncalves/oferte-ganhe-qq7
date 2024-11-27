@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const talonController = require('../controllers/talonController.js');
-const authenticateToken = require('../Middlewares/authMiddleware.js');
+const authenticateToken = require('../middlewares/authMiddleware.js');
 
 // Debug route to check if the stub route is active
 router.get('/', (req, res) => {

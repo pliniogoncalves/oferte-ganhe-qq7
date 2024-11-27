@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const permissionController = require('../controllers/permissionController.js');
-const authenticateToken = require('../Middlewares/authMiddleware.js');
+const authenticateToken = require('../middlewares/authMiddleware.js');
 
 //Debug route to check if 'api/permission' is active
 router.get('/', (req, res) =>{

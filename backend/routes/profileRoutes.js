@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const profileController = require('../controllers/profileController.js');
-const authenticateToken = require('../Middlewares/authMiddleware.js');
+const authenticateToken = require('../middlewares/authMiddleware.js');
 
 //Debug route to check if 'api/profile' is active
 router.get('/', (req, res) =>{

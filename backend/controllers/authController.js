@@ -1,13 +1,14 @@
 const authService = require('../services/authService');
 const User = require('../models/User');
+const ProfilePermission = require('../services/profilePermissionService');
 
 async function login(req, res) {
     const { email, password } = req.body;
 
     try{
-        const user = await User.findOne({ where: { email_users: email } });
+        const user = await User.findOne({ where: { email_users: email }, include: ['profile'] });
 
-        if (!user) {
+        if(!user){
             return res.status(404).json({ message: 'User not found.' });
         }
 
@@ -18,8 +19,11 @@ async function login(req, res) {
             return res.status(401).json({ message: 'Invalid credentials.' });
         }
 
+        // Fetch the permissions for the user's profile
+        const permissions = await ProfilePermission.searchPermissionsByProfile(user.id_profile);
+
         // Generate the JWT token
-        const token = authService.generateToken(user);
+        const token = authService.generateToken(user, permissions.map(p => p.name_permission));
 
         // Set token in a cookie
         res.cookie('token', token, {

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const transactionController = require('../controllers/transactionController.js');
-const authenticateToken = require('../Middlewares/authMiddleware.js');
+const authenticateToken = require('../middlewares/authMiddleware.js');
 
 //Debug route to check if the transaction route is active
 router.get('/', (req, res) => {
