@@ -1,6 +1,7 @@
-const { Pool } = require('pg');
+//const { Pool } = require('pg');
 
-//Configuração do pool de conexão
+/*
+//Connection pool configuration
 const pool = new Pool({
     user: 'postgres',
     host: 'localhost',
@@ -9,13 +10,35 @@ const pool = new Pool({
     port: 5432,
 });
 
-//testa a conexão ao banco de dados
+//test the database connection
 pool.connect((err, client, release) => {
     if(err) {
-        return console.error('Erro ao conectar ao banco de dados');
+        return console.error('Error connecting to database');
     }
-    console.log('Conexão realizada com sucesso!');
+    console.log('Connection successful!');
     release(); 
 })
 
 module.exports = pool;
+*/
+
+const { Sequelize } = require('sequelize');
+
+// Sequelize Configuration
+const sequelize = new Sequelize('postgres', 'postgres', 'postgres', {
+    host: 'localhost',
+    dialect: 'postgres',
+    logging: false,
+});
+
+// Test the database connection using Sequelize
+(async () => {
+    try {
+        await sequelize.authenticate();
+        console.log('Connection successful!');
+    } catch (error) {
+        console.error('Error connecting to database:', error.message);
+    }
+})();
+
+module.exports = sequelize;
