@@ -1,19 +1,15 @@
 const authService = require('../services/authService');
-const pool = require('../config/database');
+const User = require('../models/User');
 
 async function login(req, res) {
     const { email, password } = req.body;
 
     try{
-        // Search for the user by email
-        const query = `SELECT * FROM postgres."oferte-ganhe".Users WHERE email_users = $1;`;
-        const result = await pool.query(query, [email]);
+        const user = await User.findOne({ where: { email_users: email } });
 
-        if(result.rows.length === 0){
+        if (!user) {
             return res.status(404).json({ message: 'User not found.' });
         }
-
-        const user = result.rows[0];
 
         // Check password
         const isPasswordValid = await authService.verifyPassword(password, user.password_users);
