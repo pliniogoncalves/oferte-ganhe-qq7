@@ -57,12 +57,7 @@ const userController = {
         const { name, newRegistration, email, password, profile, store } = req.body;
 
         try{
-            let hashedPassword = null;
-
-            // If password was provided, hash it
-            if(password){
-                hashedPassword = await hashPassword(password);
-            }
+            let hashedPassword = password ? await hashPassword(password) : undefined;
 
             // Call the service to update the user
             const updatedUser = await userService.editUser(

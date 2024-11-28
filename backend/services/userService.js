@@ -87,6 +87,7 @@ async function searchUserRegistration(registration) {
 
 //function Edit user
 async function editUser(name, newRegistration, email, password, profile, store, registration) {
+    console.log('Editing user:', { name, newRegistration, email, profile, store, registration });
 
    //Fetch profile ID based on name
     const foundProfile = await Profile.findOne({
@@ -106,24 +107,28 @@ async function editUser(name, newRegistration, email, password, profile, store, 
         throw new Error(`Store with number '${store}' not found`);
     }
 
+    //Build dynamic fields for update
+    const updateFields = {
+        ...(name && { name_users: name }),
+        ...(newRegistration && { registration_users: newRegistration }),
+        ...(email && { email_users: email }),
+        ...(password && { password_users: password }),
+        id_profile: foundProfile.id,
+        id_store: foundStore.id,
+    }; 
+
     try{
         const [affectedRows, [updatedUser]] = await User.update(
-            {
-                name_users: name,
-                registration_users: newRegistration,
-                email_users: email,
-                password_users: password,
-                id_profile: foundProfile.id,
-                id_store: foundStore.id,
-            },
+            updateFields,
             {
                 where: { registration_users: registration },
                 returning: true,
             }
         );
 
+        console.log('User updated:', updatedUser);
         return updatedUser;
-    }catch(err){
+    } catch (err) {
         console.error('Error editing user:', err);
         throw err;
     }
