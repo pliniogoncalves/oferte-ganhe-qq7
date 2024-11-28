@@ -3,7 +3,7 @@ const Store = require('../models/Store');
 const User = require('../models/User');
 
 //Funcition Insert new user
-async function insertUser(name, registration, email, password, profileName = null, storeNumber = null) {
+async function insertUser(name, registration, email, password, profileName = 1, storeNumber = 1) {
     try{
         let idProfile = 1;
         let idStore = 1;
@@ -14,9 +14,9 @@ async function insertUser(name, registration, email, password, profileName = nul
                 where: { name_profile: profileName },
             });
             if(foundProfile){
-                idProfile = foundProfile.id;
+                idProfile = foundProfile.id_profile;
             }else{
-                console.warn(`Profile with name '${profileName}' not found. Using default.`);
+                throw new Error(`Profile with name '${profileName}' not found.`);
             }
         }
 
@@ -26,9 +26,9 @@ async function insertUser(name, registration, email, password, profileName = nul
                 where: { number_store: storeNumber },
             });
             if (foundStore) {
-                idStore = foundStore.id;
+                idStore = foundStore.id_store;
             }else{
-                console.warn(`Store with number '${storeNumber}' not found. Using default.`);
+                throw new Error(`Store with number '${storeNumber}' not found.`);
             }
         }
 
@@ -43,7 +43,7 @@ async function insertUser(name, registration, email, password, profileName = nul
         });
 
         return user;
-    } catch (err) {
+    }catch(err){
         console.error('Error inserting user:', err);
         throw err;
     }
@@ -89,35 +89,36 @@ async function searchUserRegistration(registration) {
 async function editUser(name, newRegistration, email, password, profile, store, registration) {
     console.log('Editing user:', { name, newRegistration, email, profile, store, registration });
 
-   //Fetch profile ID based on name
-    const foundProfile = await Profile.findOne({
-        where: { name_profile: profile },
-    });
+    try {
+        //Fetch profile ID based on name
+        const foundProfile = await Profile.findOne({
+            where: { name_profile: profile },
+        });
 
-    if(!foundProfile){
-        throw new Error(`Profile with name '${profile}' not found`);
-    }
+        if(!foundProfile){
+            throw new Error(`Profile with name '${profile}' not found`);
+        }
 
-    //Fetch store ID based on number
-    const foundStore = await Store.findOne({
-        where: { number_store: store },
-    });
+        //Fetch store ID based on number
+        const foundStore = await Store.findOne({
+            where: { number_store: store },
+        });
 
-    if(!foundStore) {
-        throw new Error(`Store with number '${store}' not found`);
-    }
+        if(!foundStore){
+            throw new Error(`Store with number '${store}' not found`);
+        }
 
-    //Build dynamic fields for update
-    const updateFields = {
-        ...(name && { name_users: name }),
-        ...(newRegistration && { registration_users: newRegistration }),
-        ...(email && { email_users: email }),
-        ...(password && { password_users: password }),
-        id_profile: foundProfile.id,
-        id_store: foundStore.id,
-    }; 
+        //Build dynamic fields for update
+        const updateFields = {
+            ...(name && { name_users: name }),
+            ...(newRegistration && { registration_users: newRegistration }),
+            ...(email && { email_users: email }),
+            ...(password && { password_users: password }),
+            id_profile: foundProfile.id_profile,
+            id_store: foundStore.id_store,      
+        };
 
-    try{
+        //Update user
         const [affectedRows, [updatedUser]] = await User.update(
             updateFields,
             {
@@ -126,10 +127,14 @@ async function editUser(name, newRegistration, email, password, profile, store, 
             }
         );
 
+        if(affectedRows === 0){
+            throw new Error(`User with registration '${registration}' not found`);
+        }
+
         console.log('User updated:', updatedUser);
         return updatedUser;
     } catch (err) {
-        console.error('Error editing user:', err);
+        console.error('Error editing user:', err.message);
         throw err;
     }
 }
