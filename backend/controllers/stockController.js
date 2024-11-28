@@ -68,8 +68,8 @@ const stockController = {
     
         try{
             const removedStock = await stockService.removeStock(id);
-            if(deletedStock){
-                res.status(200).json({ message: 'Stock record deleted successfully!', stock: deletedStock });
+            if(removedStock){
+                res.status(200).json({ message: 'Stock record deleted successfully!', stock: removedStock });
             }else{
                 res.status(404).json({ message: 'Stock record not found' });
             }
