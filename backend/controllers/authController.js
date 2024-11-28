@@ -1,6 +1,5 @@
 const authService = require('../services/authService');
 const User = require('../models/User');
-const ProfilePermission = require('../services/profilePermissionService');
 
 async function login(req, res) {
     const { email, password } = req.body;
@@ -19,11 +18,8 @@ async function login(req, res) {
             return res.status(401).json({ message: 'Invalid credentials.' });
         }
 
-        // Fetch the permissions for the user's profile
-        const permissions = await ProfilePermission.searchPermissionsByProfile(user.id_profile);
-
         // Generate the JWT token
-        const token = authService.generateToken(user, permissions.map(p => p.name_permission));
+        const token = await authService.generateToken(user);
 
         // Set token in a cookie
         res.cookie('token', token, {
