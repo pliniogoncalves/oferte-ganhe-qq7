@@ -2,26 +2,55 @@ const Profile = require('../models/Profile');
 const Store = require('../models/Store');
 const User = require('../models/User');
 
-//Insert new user
-async function insertUser(name, registration, email, password, profile = '1', store = '1') {
+//Funcition Insert new user
+async function insertUser(name, registration, email, password, profileName = null, storeNumber = null) {
     try{
+        let idProfile = 1;
+        let idStore = 1;
+
+        //Fetch profile ID based on name
+        if(profileName){
+            const foundProfile = await Profile.findOne({
+                where: { name_profile: profileName },
+            });
+            if(foundProfile){
+                idProfile = foundProfile.id;
+            }else{
+                console.warn(`Profile with name '${profileName}' not found. Using default.`);
+            }
+        }
+
+        //Fetch store ID based on number
+        if(storeNumber){
+            const foundStore = await Store.findOne({
+                where: { number_store: storeNumber },
+            });
+            if (foundStore) {
+                idStore = foundStore.id;
+            }else{
+                console.warn(`Store with number '${storeNumber}' not found. Using default.`);
+            }
+        }
+
+        //Insert new user
         const user = await User.create({
             name_users: name,
             registration_users: registration,
             email_users: email,
             password_users: password,
-            id_profile: profile,
-            id_store: store,
+            id_profile: idProfile,
+            id_store: idStore,
         });
 
         return user;
-    }catch(err){
+    } catch (err) {
         console.error('Error inserting user:', err);
         throw err;
     }
 }
 
-//Query all users
+
+//Function search all users
 async function searchUser() {
     try{
         const users = await User.findAll({
@@ -38,7 +67,7 @@ async function searchUser() {
     }
 }
 
-//Query user by record
+//Function search user by registration
 async function searchUserRegistration(registration) {
     try{
         const user = await User.findOne({
@@ -56,8 +85,27 @@ async function searchUserRegistration(registration) {
     }
 }
 
-//Edit user
+//function Edit user
 async function editUser(name, newRegistration, email, password, profile, store, registration) {
+
+   //Fetch profile ID based on name
+    const foundProfile = await Profile.findOne({
+        where: { name_profile: profile },
+    });
+
+    if(!foundProfile){
+        throw new Error(`Profile with name '${profile}' not found`);
+    }
+
+    //Fetch store ID based on number
+    const foundStore = await Store.findOne({
+        where: { number_store: store },
+    });
+
+    if(!foundStore) {
+        throw new Error(`Store with number '${store}' not found`);
+    }
+
     try{
         const [affectedRows, [updatedUser]] = await User.update(
             {
@@ -65,8 +113,8 @@ async function editUser(name, newRegistration, email, password, profile, store, 
                 registration_users: newRegistration,
                 email_users: email,
                 password_users: password,
-                id_profile: profile,
-                id_store: store,
+                id_profile: foundProfile.id,
+                id_store: foundStore.id,
             },
             {
                 where: { registration_users: registration },
@@ -81,7 +129,7 @@ async function editUser(name, newRegistration, email, password, profile, store, 
     }
 }
 
-//Remove user
+//Function Remove user
 async function removeUser(registration) {
     try{
         const user = await User.destroy({

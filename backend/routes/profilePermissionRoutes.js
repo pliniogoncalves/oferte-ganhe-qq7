@@ -13,8 +13,8 @@ router.get('/profile-permissions/page', profilePermissionController.getProfilePe
 //Define the routes and trigger the controller
 router.post('/profile-permissions/register', profilePermissionController.insertProfilePermission);
 router.get('/profile-permissions/list', profilePermissionController.searchAllProfilesWithPermissions);
-router.get('/profile-permissions/list/:id_profile', profilePermissionController.searchPermissionsByProfile);
-router.delete('/profile-permissions/delete/:id_profile/:id_permission', profilePermissionController.removePermissionFromProfile);
+router.get('/profile-permissions/list/:profileName', profilePermissionController.searchPermissionsByProfile);
+router.delete('/profile-permissions/delete/:profileName/:permissionName', profilePermissionController.removePermissionFromProfile);
 
 module.exports = router;
 

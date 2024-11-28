@@ -1,11 +1,27 @@
 const ProfilePermission = require('../models/ProfilePermission');
 const Permission = require('../models/Permission');
-const Profile = require('../models/Profile')
+const Profile = require('../models/Profile');
 
-//Insert association between Profile and Permission
-async function insertProfilePermission(id_profile, id_permission) {
+//Insert association between Profile and Permission by name
+async function insertProfilePermission(profileName, permissionName) {
     try{
-        const profilePermission = await ProfilePermission.create({ id_profile, id_permission });
+        //Search for profile ID by name
+        const profile = await Profile.findOne({ where: { name_profile: profileName } });
+        if (!profile) {
+            throw new Error(`Profile with name '${profileName}' not found`);
+        }
+
+        //Search for permission ID by name
+        const permission = await Permission.findOne({ where: { name_permission: permissionName } });
+        if(!permission){
+            throw new Error(`Permission with name '${permissionName}' not found`);
+        }
+
+        //Insert the association
+        const profilePermission = await ProfilePermission.create({ 
+            id_profile: profile.id_profile, 
+            id_permission: permission.id_permission 
+        });
         return profilePermission;
     }catch(err){
         console.error('Error inserting Profile Permission:', err);
@@ -13,13 +29,20 @@ async function insertProfilePermission(id_profile, id_permission) {
     }
 }
 
-//Search for permissions associated with a Profile
-async function searchPermissionsByProfile(id_profile) {
+//Search for permissions associated with a Profile by name
+async function searchPermissionsByProfile(profileName) {
     try{
+        //Search for profile ID by name
+        const profile = await Profile.findOne({ where: { name_profile: profileName } });
+        if(!profile){
+            throw new Error(`Profile with name '${profileName}' not found`);
+        }
+
+        //Fetch associated permissions
         const permissions = await Permission.findAll({
             include: {
                 model: Profile,
-                where: { id_profile },
+                where: { id_profile: profile.id_profile },
                 through: { attributes: [] },
             },
         });
@@ -46,16 +69,34 @@ async function searchAllProfilesWithPermissions() {
     }
 }
 
-//Remove permission from a Profile
-async function removePermissionFromProfile(id_profile, id_permission) {
+//Remove permission from a Profile by name
+async function removePermissionFromProfile(profileName, permissionName) {
     try{
-        const profilePermission = await ProfilePermission.findOne({ where: { id_profile, id_permission } });
+        //Search for profile ID by name
+        const profile = await Profile.findOne({ where: { name_profile: profileName } });
+        if(!profile){
+            throw new Error(`Profile with name '${profileName}' not found`);
+        }
+
+        //Search for permission ID by name
+        const permission = await Permission.findOne({ where: { name_permission: permissionName } });
+        if(!permission){
+            throw new Error(`Permission with name '${permissionName}' not found`);
+        }
+
+        //Remove the association
+        const profilePermission = await ProfilePermission.findOne({ 
+            where: { 
+                id_profile: profile.id_profile, 
+                id_permission: permission.id_permission 
+            } 
+        });
         if (profilePermission) {
             await profilePermission.destroy();
             return profilePermission;
         }
         throw new Error('Profile Permission not found');
-    }catch(err){
+    } catch (err) {
         console.error('Error removing Permission from Profile:', err);
         throw err;
     }

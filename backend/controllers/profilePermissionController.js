@@ -10,10 +10,10 @@ const profilePermissionController = {
 
     //Function to associate a new permission to a profile
     insertProfilePermission: async (req, res) => {
-        const { id_profile, id_permission } = req.body;
+        const { profileName, permissionName } = req.body;
 
         try {
-            const newProfilePermission = await profilePermissionService.insertProfilePermission(id_profile, id_permission);
+            const newProfilePermission = await profilePermissionService.insertProfilePermission(profileName, permissionName);
             res.status(201).json({ message: 'Permission associated to Profile successfully!', profilePermission: newProfilePermission });
         } catch (err) {
             res.status(500).json({ message: 'Error associating Permission to Profile', error: err.message });
@@ -22,10 +22,10 @@ const profilePermissionController = {
 
     //Function to search for permissions associated with a specific profile 
     searchPermissionsByProfile: async (req, res) => {
-        const { id_profile } = req.params;
+        const { profileName } = req.params;
 
         try {
-            const permissions = await profilePermissionService.searchPermissionsByProfile(id_profile);
+            const permissions = await profilePermissionService.searchPermissionsByProfile(profileName);
             if (permissions.length) {
                 res.status(200).json(permissions);
             } else {
@@ -48,10 +48,10 @@ const profilePermissionController = {
 
     //Function to remove a permission from a profile
     removePermissionFromProfile: async (req, res) => {
-        const { id_profile, id_permission } = req.params;
+        const { profileName, permissionName } = req.params;
 
         try {
-            const removedProfilePermission = await profilePermissionService.removePermissionFromProfile(id_profile, id_permission);
+            const removedProfilePermission = await profilePermissionService.removePermissionFromProfile(profileName, permissionName);
             if (removedProfilePermission) {
                 res.status(200).json({ message: 'Permission removed from Profile successfully!', profilePermission: removedProfilePermission });
             } else {
