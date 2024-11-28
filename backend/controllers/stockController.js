@@ -62,7 +62,7 @@ const stockController = {
         }
     },
 
-    // Função para deletar um registro de estoque
+    //Function to delete a stock record
     removeStock: async (req, res) => {
         const { id } = req.params;
     
