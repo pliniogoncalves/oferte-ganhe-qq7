@@ -1,12 +1,19 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const { searchPermissionsByProfile } = require('../services/profilePermissionService');
+const Profile = require('../models/Profile');
 
 //Function to generate a JWT token
 async function generateToken(user) {
+
+    // Fetch the profile name from the user and then fetch permissions
+    const userProfile = await Profile.findOne({ where: { id_profile: user.id_profile } });
+    if(!userProfile){
+        throw new Error(`Profile with ID '${user.id_profile}' not found`);
+    }
     
     // Fetch permissions associated with the user profile
-    const permissions = await searchPermissionsByProfile(user.id_profile);
+    const permissions = await searchPermissionsByProfile(user.name_profile);
 
     const payload = { 
         id: user.id_users, 
