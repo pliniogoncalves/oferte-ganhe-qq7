@@ -13,7 +13,7 @@ async function generateToken(user) {
     }
     
     // Fetch permissions associated with the user profile
-    const permissions = await searchPermissionsByProfile(user.name_profile);
+    const permissions = await searchPermissionsByProfile(userProfile.name_profile);
 
     const payload = { 
         id: user.id_users, 
