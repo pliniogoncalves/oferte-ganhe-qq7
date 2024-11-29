@@ -3,7 +3,7 @@ function authorizePermission(requiredPermission) {
         const userPermissions = req.user.permissions;
 
         if (!userPermissions || !userPermissions.includes(requiredPermission)) {
-            return res.status(403).json({ message: 'Access Forbidden. You do not have permission to access this resource.' });
+            return res.status(403).render('login', { errorMessage: 'Acesso bloqueado' })
         }
 
         next();

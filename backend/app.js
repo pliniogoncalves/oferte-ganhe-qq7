@@ -1,7 +1,7 @@
 const express = require('express');
-const path = require('path');
 require('dotenv').config();
 const cookieParser = require('cookie-parser');
+const frontendMiddleware = require('./middlewares/frontendMiddleware');
 
 //importing routes
 const viewRoutes = require('./routes/viewRoutes.js');
@@ -17,16 +17,12 @@ const authRoutes = require('./routes/authRoutes.js');
 
 const app = express();
 
-// Setting EJS as the view engine
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, '../frontend/views'));
+//Middleware to process Frontend
+frontendMiddleware(app);
 
 //Middleware to process JSON
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-//Middleware for serving static files
-app.use(express.static(path.join(__dirname, '../frontend/public')));
 
 // Middleware to process cookies
 app.use(cookieParser());
@@ -45,7 +41,11 @@ app.use('/api', authRoutes);
 
 //Set a default route to redirect to login
 app.get('/', (req, res) => {
-    res.redirect('/login');
+    if (!req.cookies.token) {  // Verifica se o token não existe
+        res.redirect('/login');
+    } else {
+        res.redirect('/main');  // Se estiver autenticado, vai para a página principal
+    }
 });
 
 module.exports = app;
