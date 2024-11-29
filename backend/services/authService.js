@@ -17,7 +17,7 @@ async function generateToken(user) {
 
     const payload = { 
         id: user.id_users, 
-        email: user.email_users,
+        registration: user.registration_users,
         id_profile: user.id_profile,
         permissions: permissions.map(permission => permission.name_permission)
     };

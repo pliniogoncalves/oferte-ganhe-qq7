@@ -8,7 +8,6 @@ async function authenticateToken(req, res, next) {
     }
 
     try{
-        // Validate token
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         req.user = decoded;
 

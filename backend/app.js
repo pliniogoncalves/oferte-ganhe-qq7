@@ -17,8 +17,13 @@ const authRoutes = require('./routes/authRoutes.js');
 
 const app = express();
 
+// Setting EJS as the view engine
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, '../frontend/views'));
+
 //Middleware to process JSON
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 //Middleware for serving static files
 app.use(express.static(path.join(__dirname, '../frontend/public')));
