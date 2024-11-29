@@ -5,14 +5,10 @@ const authorizePermission = require('../middlewares/authorizePermission.js');
 
 // Render the login page
 router.get('/login', (req, res) => {
-  const messages = req.session.errorMessage || null;
-
-  req.session.messages = null;
-
   res.render('login', { 
       layout: 'layouts/loginLayout', 
       title: 'Login', 
-      messages 
+      messages: res.locals.messages
   });
 });
 

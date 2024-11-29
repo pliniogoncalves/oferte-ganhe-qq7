@@ -20,10 +20,7 @@ app.use(messageMiddleware);
 
 //Middleware to process Frontend
 frontendMiddleware(app);
-
-// Middleware to manage messages
-app.use(messageMiddleware); 
-
+ 
 //Middleware to process JSON
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

@@ -4,10 +4,12 @@
     </div>
     <h2 class="text-center">App Oferte e Ganhe</h2>
 
-    <% if(messages){ %>
-        <div class="alert alert-danger text-center" role="alert">
-            <%= messages %>
-        </div>
+    <% if(messages && messages.length > 0){ %>
+        <% messages.forEach(message => { %>
+            <div class="alert alert-danger text-center" role="alert">
+                <%= message %>
+            </div>
+        <% }) %>
     <% } %>
 
     <form action="/api/login" method="POST">
