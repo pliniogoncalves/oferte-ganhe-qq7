@@ -1,7 +1,35 @@
 const express = require('express');
+const session = require('express-session');
 require('dotenv').config();
 const cookieParser = require('cookie-parser');
 const frontendMiddleware = require('./middlewares/frontendMiddleware');
+const { messageMiddleware } = require('./middlewares/messagesMiddleware.js');
+
+const app = express();
+
+//Express Session
+app.use(session({
+    secret: '12345',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 60000 }
+}));
+
+// Middleware to manage messages
+app.use(messageMiddleware); 
+
+//Middleware to process Frontend
+frontendMiddleware(app);
+
+// Middleware to manage messages
+app.use(messageMiddleware); 
+
+//Middleware to process JSON
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Middleware to process cookies
+app.use(cookieParser());
 
 //importing routes
 const viewRoutes = require('./routes/viewRoutes.js');
@@ -14,18 +42,6 @@ const stockRoutes = require('./routes/stockRoutes.js');
 const storeRoutes = require('./routes/storeRoutes.js');
 const transactionRoutes = require('./routes/transactionRoutes.js');
 const authRoutes = require('./routes/authRoutes.js');
-
-const app = express();
-
-//Middleware to process Frontend
-frontendMiddleware(app);
-
-//Middleware to process JSON
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// Middleware to process cookies
-app.use(cookieParser());
 
 //Use view routes
 app.use('/', viewRoutes);
@@ -41,10 +57,10 @@ app.use('/api', authRoutes);
 
 //Set a default route to redirect to login
 app.get('/', (req, res) => {
-    if (!req.cookies.token) {  // Verifica se o token não existe
+    if(!req.cookies.token) {
         res.redirect('/login');
-    } else {
-        res.redirect('/main');  // Se estiver autenticado, vai para a página principal
+    }else{
+        res.redirect('/main');
     }
 });
 

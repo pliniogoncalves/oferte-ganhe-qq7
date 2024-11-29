@@ -8,14 +8,16 @@ async function login(req, res) {
         const user = await User.findOne({ where: { registration_users: registration }, include: ['profile'] });
 
         if(!user){
-            return res.status(404).render('login',{errorMessage: 'Usuario não encontrado.' });
+            req.addMessage('Usuário não encontrado.');
+            return res.status(404).redirect('/login');
         }
 
         // Check password
         const isPasswordValid = await authService.verifyPassword(password, user.password_users);
 
         if(!isPasswordValid){
-            return res.status(401).render('login',{ errorMessage: 'Credenciais Inválidas' });
+            req.addMessage('Credenciais inválidas.');
+            return res.status(401).redirect('/login');
         }
 
         // Generate the JWT token
@@ -35,7 +37,8 @@ async function login(req, res) {
          
     }catch(err){
         console.error('Login error:', err);
-        res.status(500).render('login',{errorMessage: 'Erro interno do servidor.', error: err.message });
+        req.addMessage('Erro interno do servidor.');
+        res.status(500).redirect('/login');
     }
 }
 
@@ -43,11 +46,14 @@ async function logout(req, res) {
     try{
         // Clear the token cookie
         res.clearCookie('token');
+
         // Redirect to login page after logout
+        req.addMessage('Você saiu com sucesso.');
         res.redirect('/login');
     }catch(err){
         console.error('Error during logout:', err);
-        res.status(500).render('login',{errorMessage: 'Erro durante o logout.', error: err.message });
+        req.addMessage('Erro durante o logout.');
+        res.status(500).redirect('/login');
     }
 }
 

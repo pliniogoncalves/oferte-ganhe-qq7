@@ -4,9 +4,9 @@
     </div>
     <h2 class="text-center">App Oferte e Ganhe</h2>
 
-    <% if (errorMessage) { %>
+    <% if(messages){ %>
         <div class="alert alert-danger text-center" role="alert">
-            <%= errorMessage %>
+            <%= messages %>
         </div>
     <% } %>
 
@@ -25,7 +25,7 @@
             </div>
         </div>
         <div class="mb-3">
-            <a href="javascript:void(0);" onclick="mostrarRecuperacaoModal()">Esqueci a senha</a>
+            <a href="javascript:void(0);" onclick="">Esqueci a senha</a>
         </div>
         <div class="form-check mb-3">
             <input type="checkbox" class="form-check-input" id="rememberMe" name="remember" />
@@ -36,5 +36,5 @@
 
     <hr />
     <p class="text-center">Ajuda para fazer login?</p>
-    <button class="btn btn-amarelo w-100" onclick="showAjuda()">Fale Conosco</button>
+    <button class="btn btn-amarelo w-100" onclick="">Fale Conosco</button>
 </div>
