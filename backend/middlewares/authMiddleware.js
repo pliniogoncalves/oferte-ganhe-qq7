@@ -4,7 +4,12 @@ async function authenticateToken(req, res, next) {
     const token = req.cookies?.token;
 
     if(!token){
-        return res.status(401).json({ message: 'Access Denied. No token provided.' });
+        if(req.headers['accept'] === 'application/json') {
+            return res.status(401).json({ message: 'Access Denied. No token provided.' });
+        }
+
+        req.addMessage('Acesso negado. Faça login para continuar.');
+        return res.redirect('/login');
     }
 
     try{
@@ -12,8 +17,13 @@ async function authenticateToken(req, res, next) {
         req.user = decoded;
 
         next();
-    } catch (err) {
-        res.status(403).json({ message: 'Invalid token.', error: err.message });
+    }catch(err){
+        if(req.headers['accept'] === 'application/json'){
+            return res.status(403).json({ message: 'Invalid token.', error: err.message });
+        }
+
+        req.addMessage('Sessão expirada ou token inválido. Faça login novamente.');
+        return res.redirect('/login');
     }
 }
 

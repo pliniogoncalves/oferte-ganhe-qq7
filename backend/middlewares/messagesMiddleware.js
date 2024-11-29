@@ -1,5 +1,5 @@
 function messageMiddleware(req, res, next) {
-    if (!req.session.messages) req.session.messages = [];
+    if(!req.session.messages) req.session.messages = [];
 
     res.locals.messages = req.session.messages;
     req.session.messages = [];
