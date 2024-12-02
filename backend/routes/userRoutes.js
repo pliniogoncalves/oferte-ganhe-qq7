@@ -9,9 +9,6 @@ router.get('/', (req, res) => {
     res.send('Rota de Usuário ativa');
 });
 
-// Route to the users page
-router.get('/users/page', authenticateToken, authorizePermission('view_users_page'), userController.getUserPage);
-
 // Define the routes and trigger the controller
 router.post('/users/register', authenticateToken, userController.insertUser);
 router.get('/users/list', authenticateToken, authorizePermission('list_users'), userController.searchUser);

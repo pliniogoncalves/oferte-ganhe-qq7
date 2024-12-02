@@ -2,11 +2,7 @@ const userService = require('../services/userService.js');
 const { hashPassword } = require('../services/authService.js');
 
 const userController = {
-    // Function to display the user page
-    getUserPage: (req, res) => {
-        res.send("Página dos Usuários");
-    },
-
+    
     // Function to register a new User
     insertUser: async (req, res) => {
         const { name, registration, email, password, profile, store } = req.body;
