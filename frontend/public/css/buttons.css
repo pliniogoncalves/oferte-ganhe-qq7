@@ -1,0 +1,77 @@
+/* Custom Button */
+.btn-custom {
+  background-color: #269447;
+  color: white;
+}
+
+.btn-custom:hover {
+  background-color: #1f5d3d;
+  color: white;
+}
+
+.btn-custom.active {
+  background-color: #1f5d3d;
+  color: white;
+}
+
+.btn-submit {
+  background-color: #269447;
+  color: white;
+  margin-left: 60vh;
+  width: 30%;
+}
+
+.btn-cancelar {
+  background-color: #269447;
+  color: white;
+}
+
+.btn-cancelar:hover {
+  background-color: #1f5d3d; 
+  color: white;
+}
+
+.btn-enviar {
+  background-color: #96bb39;
+  color: white;
+}
+
+
+.btn-recebimento {
+  background-color: #f7e800;
+  color: #20512e;
+}
+
+.btn-exportar {
+  background-color: #b30d14;
+  color: white;
+}
+
+.btn-enviar:hover{
+  background-color: #69a841;
+  color: white;
+}
+
+.btn-recebimento:hover{
+  background-color: #e7ae15;
+  color: #20512e;
+}
+
+.btn-exportar:hover {
+  background-color: #851306;
+  color: white;
+}
+
+/*botão voltar*/
+.btn-voltar {
+    background-color: #269447;
+    color: white; 
+    margin-top: -40px;
+  }
+  
+  .btn-voltar:hover {
+    background-color: #1f5d3d;
+    color: white;
+    transition: background-color 0.3s ease;
+  }
+  

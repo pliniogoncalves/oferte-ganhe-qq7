@@ -4,6 +4,7 @@ const viewController = {
         res.render('login', { 
             layout: 'layouts/loginLayout', 
             title: 'Login', 
+            cssFiles: ['/css/login.css'],
             messages: res.locals.messages
         });
     },
@@ -11,7 +12,13 @@ const viewController = {
     getMainPage: (req, res) => {
         res.render('main', { 
             layout: 'layouts/mainLayout', 
-            title: 'Página Inicial - Dashboard' 
+            title: 'Página Inicial - Dashboard',
+            cssFiles: [
+                '/css/global.css', 
+                '/css/header.css', 
+                '/css/sidebar.css', 
+                'css/buttons.css'
+            ], 
         });
     },
     

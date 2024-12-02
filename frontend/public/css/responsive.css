@@ -1,0 +1,151 @@
+@media only screen and (min-width: 1280px) and (max-width: 1400px) {
+    /* Ajustes no header */
+    header {
+      padding: 1.5rem;
+    }
+  
+    header .img-fluid {
+      height: 4rem; /* Tamanho da logo reduzido para caber melhor */
+      margin-left: 12rem; /* Ajuste de margem */
+    }
+  
+    .btn-alert-circle {
+      width: 2.5rem; /* Ajuste do tamanho do botão */
+      height: 2.5rem;
+      right: 2rem; /* Aproximar da lateral */
+      top: 2rem; /* Reduzir espaço superior */
+    }
+  
+    /* Sidebar ajustes */
+    .sidebar {
+      width: 15vw; /* Aumenta a largura da sidebar para 15vw */
+      padding: 1.5rem 1rem; /* Reduz espaçamento interno */
+    }
+  
+    .sidebar button {
+      font-size: 0.8rem; /* Reduz o tamanho da fonte dos botões */
+      padding: 0.2rem; /* Reduz o espaçamento interno dos botões */
+    }
+  
+    .menu {
+      padding-top: 12vh;
+    }
+  
+    .bottom-links {
+      padding-top: 6.5vh;
+    }
+  
+    .sidebar .nav-item:nth-child(1),
+    .sidebar .nav-item:nth-child(2),
+    .sidebar .nav-item:nth-child(3),
+    .sidebar .nav-item:nth-child(4),
+    .sidebar .nav-item:nth-child(5),
+    .sidebar .nav-item:nth-child(6) {
+      margin-bottom: 0rem;
+    }
+  
+    .content {
+      margin-left: 16vw; /* Ajuste de margem para o conteúdo acompanhar a sidebar maior */
+    }
+  
+    /* Botão de submissão ajustado */
+    .btn-submit {
+      margin-left: 20vh; /* Ajuste da margem para o botão ficar mais centralizado */
+      width: 40%; /* Alargar o botão */
+    }
+  
+    /* Ajustes no avatar do usuário */
+    .user-avatar {
+      width: 2rem;
+      height: 2rem;
+    }
+  
+    .user-name,
+    .user-loja {
+      font-size: 0.9rem; /* Ajuste do tamanho da fonte */
+    }
+  }
+  
+  /*responsividade para mobile */
+  @media (max-width: 768px) {
+    .sidebar {
+      transform: translateX(-100%);
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 60vw;
+      height: 100%;
+      padding: 1.5rem 1rem;
+    }
+  
+    .sidebar.active {
+      transform: translateX(0);
+    }
+  
+    .sidebar button {
+      font-size: 0.9rem;
+      padding: 0.5rem 0.8rem;
+    }
+  
+    .close-btn {
+      display: block;
+    }
+  
+    .btn-alert-circle {
+      display: block !important;
+      width: 3rem;
+      height: 3rem;
+      top: 2rem;
+      right: 5%;
+    }
+  
+    header .img-fluid {
+      height: 3rem;
+      margin-right: 15rem;
+    }
+  
+    .content {
+      margin-left: 0;
+    }
+  
+    .btn-submit {
+      margin-left: 10vh;
+      width: 50%;
+    }
+  
+    .user-avatar {
+      width: 2rem;
+      height: 2rem;
+    }
+  
+    .user-name,
+    .user-loja {
+      font-size: 0.7rem;
+    }
+  
+    .modal-content {
+      margin-top: 30%; 
+      margin-left: 5%; 
+    }
+  
+    .btn-voltar{
+      display: none;
+    }
+  
+    .modal-notificacoes .modal-content {
+      margin-top: 30%; 
+      margin-left: 22%;
+      width: 95vw; /* 90% para tablets e celulares */
+      height: 57%; /* Altura automática para celulares */
+      overflow: visible;
+    }
+  
+    .modal-footer .btn-marcar-todas {
+      padding: 0.75rem 1.5rem; /* Aumenta o padding para o botão responsivo */
+      font-size: 1.25rem; /* Aumenta o tamanho do ícone no responsivo */
+  }
+  
+  .modal-footer .btn-marcar-todas i {
+      font-size: 1.5rem; /* Ajuste o tamanho do ícone aqui */
+  }
+  }
