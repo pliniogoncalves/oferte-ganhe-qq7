@@ -1,55 +1,46 @@
-// Adicionar usuário
-document.getElementById('addUserBtn').addEventListener('click', () => {
-    document.getElementById('userForm').reset();
-    document.getElementById('userModalLabel').textContent = 'Adicionar Usuário';
-    document.getElementById('userId').value = '';
-    userModal.show();
-});
+document.addEventListener("DOMContentLoaded", () => {
+    const addUserBtn = document.getElementById("addUserBtn");
+    const content = document.getElementById("content");
 
-// Editar usuário
-document.querySelectorAll('.editar').forEach(btn => {
-    btn.addEventListener('click', () => {
-        const id = btn.dataset.id;
-        fetch(`/usuarios/${id}`) // Rota para buscar os dados do usuário
-            .then(res => res.json())
-            .then(data => {
-                document.getElementById('userId').value = data.id;
-                document.getElementById('userName').value = data.nome;
-                document.getElementById('userRole').value = data.funcao;
-                document.getElementById('userStore').value = data.loja;
-                document.getElementById('userEmail').value = data.email;
-                document.getElementById('userModalLabel').textContent = 'Editar Usuário';
-                userModal.show();
+    // Carregar o formulário de cadastro
+    addUserBtn?.addEventListener("click", async () => {
+        try {
+            const response = await fetch('/users/add');
+            const formHTML = await response.text();
+            content.innerHTML = formHTML;
+
+            // Adicionar evento ao botão de cancelar
+            const cancelBtn = document.getElementById("cancelBtn");
+            cancelBtn.addEventListener("click", async () => {
+                const response = await fetch('/users/page');
+                const usersHTML = await response.text();
+                content.innerHTML = usersHTML;
             });
-    });
-});
 
-// Deletar usuário
-document.querySelectorAll('.deletar').forEach(btn => {
-    btn.addEventListener('click', () => {
-        const id = btn.dataset.id;
-        if (confirm('Deseja realmente excluir este usuário?')) {
-            fetch(`/usuarios/${id}`, { method: 'DELETE' })
-                .then(res => res.json())
-                .then(() => location.reload());
+            // Evento do formulário de submissão
+            const userForm = document.getElementById("userForm");
+            userForm.addEventListener("submit", async (e) => {
+                e.preventDefault();
+                const formData = new FormData(userForm);
+                const data = Object.fromEntries(formData.entries());
+
+                const saveResponse = await fetch('/api/users', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (saveResponse.ok) {
+                    alert('Usuário cadastrado com sucesso!');
+                    const response = await fetch('/users/page');
+                    const usersHTML = await response.text();
+                    content.innerHTML = usersHTML;
+                } else {
+                    alert('Erro ao cadastrar usuário.');
+                }
+            });
+        } catch (error) {
+            console.error("Erro ao carregar o formulário:", error);
         }
     });
-});
-
-// Submissão do formulário (Adicionar/Editar)
-document.getElementById('userForm').addEventListener('submit', e => {
-    e.preventDefault();
-    const id = document.getElementById('userId').value;
-    const url = id ? `/usuarios/${id}` : '/usuarios';
-    const method = id ? 'PUT' : 'POST';
-
-    const formData = new FormData(e.target);
-    const data = Object.fromEntries(formData.entries());
-
-    fetch(url, {
-        method: method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-    }).then(res => res.json())
-      .then(() => location.reload());
 });

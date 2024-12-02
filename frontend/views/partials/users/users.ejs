@@ -1,7 +1,7 @@
 <div class="container-fluid p-4">
     <!-- Cabeçalho -->
     <div class="text-center mb-4">
-        <h1 class="fw-bold">Lista de Usuários</h1>
+        <h1 class="fw-bold">Gestão de Usuários</h1>
         <p class="text-muted">Veja a lista de usuários cadastrados e suas respectivas situações.</p>
     </div>
 
@@ -9,14 +9,13 @@
     <div class="d-flex justify-content-between align-items-center mb-3">
         <div class="input-group" style="max-width: 300px;">
             <input type="text" id="search" class="form-control" placeholder="Procurar por usuário">
-            <button class="btn btn-success" id="searchBtn">Buscar</button>
+            <button class="btn btn-success" id="searchBtn" style="background-color: #269447; color: #fff;" >Buscar</button>
         </div>
-        <button class="btn btn-success" id="addUserBtn">Cadastrar Novo Usuário</button>
     </div>
 
     <!-- Tabela de usuários -->
     <table class="table table-bordered table-hover">
-        <thead class="table-success">
+        <thead style="background-color: #269447; color: #fff;">
             <tr>
                 <th>Nome</th>
                 <th>Função</th>
@@ -35,10 +34,10 @@
                         <td><%= user.email_users %></td>
                         <td class="text-center">
                             <button class="btn btn-sm btn-warning editar" data-id="<%= user.id %>">
-                                <i class="bi bi-pencil"></i>
+                                <i class="fas fa-edit"></i>
                             </button>
                             <button class="btn btn-sm btn-danger deletar" data-id="<%= user.id %>">
-                                <i class="bi bi-trash"></i>
+                                <i class="fas fa-trash"></i>
                             </button>
                         </td>
                     </tr>
@@ -50,4 +49,9 @@
             <% } %>   
         </tbody>
     </table>
+
+    <!-- Botão de cadastrar novo usuário -->
+    <div class="text-end mb-3">
+        <button class="btn btn-success" id="addUserBtn">Cadastrar Novo Usuário</button>
+    </div>
 </div>

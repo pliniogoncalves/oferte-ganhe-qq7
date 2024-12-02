@@ -10,8 +10,9 @@ router.get('/login', viewController.getLoginPage);
 // Render the main page (protected by authentication)
 router.get('/main', authenticateToken, authorizePermission('list_users'), viewController.getMainPage);
 
-// Render the sidebar pages
-router.get('/users/page', authenticateToken, authorizePermission('list_users'), viewController.getUserPage);
+// Render the Users pages
+router.get('/users/page', authenticateToken, viewController.getUserPage);
+router.get('/users/add', authenticateToken, viewController.getAddUserPage);
 
 
 module.exports = router;

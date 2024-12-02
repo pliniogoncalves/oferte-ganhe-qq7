@@ -28,7 +28,7 @@ const viewController = {
         try{
             const users = await userService.searchUser();
 
-            res.render('partials/users', { 
+            res.render('partials/users/users', { 
                 layout: false, 
                 title: 'Gestão de Usuários',
                 users: users,
@@ -37,6 +37,13 @@ const viewController = {
             console.error('Erro ao carregar usuários:', error);
             res.status(500).send('Erro ao carregar a página de usuários');
         }     
+    },
+
+    getAddUserPage: (req, res) =>{
+        res.render('partials/users/addUsers', {
+            layout: false,
+            title: 'Cadastrar Usuário',
+        });
     },
 
     getDashboard: (req, res) => {

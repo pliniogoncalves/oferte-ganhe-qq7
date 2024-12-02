@@ -1,0 +1,31 @@
+<div class="container-fluid p-4">
+    <div class="text-center mb-4">
+        <h1 class="fw-bold">Cadastrar Novo Usuário</h1>
+        <p class="text-muted">Preencha os dados abaixo para cadastrar um novo usuário.</p>
+    </div>
+    <form id="userForm">
+        <div class="mb-3">
+            <label for="name" class="form-label">Nome</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">E-mail</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+        <div class="mb-3">
+            <label for="role" class="form-label">Função</label>
+            <select class="form-control" id="role" name="role">
+                <option value="Admin">Admin</option>
+                <option value="User">Usuário</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="store" class="form-label">Loja</label>
+            <input type="text" class="form-control" id="store" name="store">
+        </div>
+        <div class="text-end">
+            <button type="button" id="cancelBtn" class="btn btn-secondary">Cancelar</button>
+            <button type="submit" id="submitBtn" class="btn btn-success">Salvar</button>
+        </div>
+    </form>
+</div>
