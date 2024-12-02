@@ -2,10 +2,6 @@ const profileService = require('../services/profileService.js')
 
 //Controller for the profile page
 const profileController = {
-    
-    getProfilePage: (req, res) => {
-        res.send("Página dos Perfis");
-    },
 
     //Function to register a new Profile
     insertProfile: async (req, res) => {

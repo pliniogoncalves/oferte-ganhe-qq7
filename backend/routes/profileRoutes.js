@@ -8,9 +8,6 @@ router.get('/', (req, res) =>{
     res.send('Active Profile Route');
 });
 
-// Route to Profile page
-router.get('/profiles/page', profileController.getProfilePage);
-
 //Define the routes and trigger the controller
 router.post('/profiles/register', authenticateToken, profileController.insertProfile);
 router.get('/profiles/list', authenticateToken, profileController.searchProfile);

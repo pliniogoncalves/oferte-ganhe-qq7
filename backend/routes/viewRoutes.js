@@ -14,5 +14,7 @@ router.get('/main', authenticateToken, authorizePermission('list_users'), viewCo
 router.get('/users/page', authenticateToken, viewController.getUserPage);
 router.get('/users/add', authenticateToken, viewController.getAddUserPage);
 
+//render the Profile pages
+router.get('/profiles/page', authenticateToken, viewController.getProfilePage);
 
 module.exports = router;
