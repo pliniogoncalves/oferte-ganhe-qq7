@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Inserts the received content into <main>
                 mainContent.innerHTML = content;
 
-            }catch (error){
+            }catch(error){
                 console.error("Erro ao carregar a página:", error);
                 mainContent.innerHTML = "<p class='text-danger'>Erro ao carregar o conteúdo.</p>";
             }

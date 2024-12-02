@@ -50,29 +50,29 @@ const viewController = {
     searchUsersByRegistration: async (req, res) => {
         const { registration } = req.query;
 
-        try {
+        try{
             const user = await userService.searchUserRegistration(registration);
 
-            if (!user) {
+            if(!user){
                 return res.status(404).send('Usuário não encontrado');
             }
 
             res.render('partials/users/usersTable', {
                 layout: false,
-                users: [user], // Passa como lista para reutilizar o template de tabela
+                users: [user],
             });
-        } catch (error) {
+        }catch(error){
             console.error('Erro ao buscar usuário por matrícula:', error);
             res.status(500).send('Erro ao buscar usuário.');
         }
     },
 
     getEditUserPage: async (req, res) => {
-        try {
+        try{
             const { registration } = req.params;
             const user = await userService.searchUserRegistration(registration);
 
-            if (!user) {
+            if(!user){
                 return res.status(404).send('Usuário não encontrado');
             }
 
@@ -81,7 +81,7 @@ const viewController = {
                 user,
                 title: 'Editar Usuário',
             });
-        } catch (error) {
+        }catch(error){
             console.error('Erro ao carregar edição:', error);
             res.status(500).send('Erro ao carregar a página de edição');
         }
