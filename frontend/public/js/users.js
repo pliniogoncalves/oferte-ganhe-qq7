@@ -44,4 +44,36 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
     });
+
+    // Delegação de eventos para buscar usuário por matrícula
+    document.addEventListener("click", async (event) => {
+        if (event.target.closest("#searchBtn")) {
+            const searchInput = document.getElementById("search");
+            const registration = searchInput?.value.trim();
+
+            if (!registration) {
+                alert('Por favor, insira uma matrícula para buscar.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/users/search?registration=${encodeURIComponent(registration)}`);
+                if (response.ok) {
+                    const tableHTML = await response.text();
+                    const tableBody = document.querySelector("table tbody");
+                    if (tableBody) {
+                        tableBody.innerHTML = tableHTML;
+                    } else {
+                        console.error("Tabela de usuários não encontrada.");
+                    }
+                } else if (response.status === 404) {
+                    alert('Usuário não encontrado.');
+                } else {
+                    alert('Erro ao buscar usuário.');
+                }
+            } catch (error) {
+                console.error('Erro ao buscar usuário:', error);
+            }
+        }
+    });
 });

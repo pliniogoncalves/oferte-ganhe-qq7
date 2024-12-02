@@ -47,6 +47,26 @@ const viewController = {
         });
     },
 
+    searchUsersByRegistration: async (req, res) => {
+        const { registration } = req.query;
+
+        try {
+            const user = await userService.searchUserRegistration(registration);
+
+            if (!user) {
+                return res.status(404).send('Usuário não encontrado');
+            }
+
+            res.render('partials/users/usersTable', {
+                layout: false,
+                users: [user], // Passa como lista para reutilizar o template de tabela
+            });
+        } catch (error) {
+            console.error('Erro ao buscar usuário por matrícula:', error);
+            res.status(500).send('Erro ao buscar usuário.');
+        }
+    },
+
     getProfilePage: async(req, res) => {
         try{
             const profiles = await profileService.searchProfile();

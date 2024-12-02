@@ -1,0 +1,22 @@
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Matrícula</th>
+            <th>Email</th>
+            <th>Perfil</th>
+            <th>Loja</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% users.forEach(user => { %>
+            <tr>
+                <td><%= user.name_users %></td>
+                <td><%= user.registration_users %></td>
+                <td><%= user.email_users %></td>
+                <td><%= user.profile.name_profile %></td>
+                <td><%= user.store.number_store %></td>
+            </tr>
+        <% }) %>
+    </tbody>
+</table>
