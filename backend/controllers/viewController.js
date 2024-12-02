@@ -1,3 +1,5 @@
+const userService = require('../services/userService');
+
 const viewController = {
 
     getLoginPage: (req, res) => {
@@ -22,11 +24,19 @@ const viewController = {
         });
     },
     
-    getUserPage: (req, res) => {
-        res.render('partials/users', { 
-            layout: false, 
-            title: 'Gestão de Usuários'
-        });
+    getUserPage: async(req, res) => {
+        try{
+            const users = await userService.searchUser();
+
+            res.render('partials/users', { 
+                layout: false, 
+                title: 'Gestão de Usuários',
+                users: users,
+            });
+        }catch(error){
+            console.error('Erro ao carregar usuários:', error);
+            res.status(500).send('Erro ao carregar a página de usuários');
+        }     
     },
 
     getDashboard: (req, res) => {
