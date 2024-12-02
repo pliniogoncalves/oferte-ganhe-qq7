@@ -76,4 +76,41 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
     });
+
+    document.addEventListener("click", async (event) => {
+        if (event.target.closest(".editar")) {
+            const registration = event.target.closest(".editar").dataset.registration;
+    
+            try {
+                const response = await fetch(`/users/edit/${registration}`);
+                if (response.ok) {
+                    document.getElementById("content").innerHTML = await response.text();
+    
+                    const userForm = document.getElementById("userForm");
+                    userForm.addEventListener("submit", async (e) => {
+                        e.preventDefault();
+                        const formData = new FormData(userForm);
+                        const data = Object.fromEntries(formData.entries());
+    
+                        const saveResponse = await fetch(`/api/users/edit/${registration}`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(data),
+                        });
+    
+                        if (saveResponse.ok) {
+                            alert('Usuário atualizado com sucesso!');
+                            const usersResponse = await fetch('/users/page');
+                            document.getElementById("content").innerHTML = await usersResponse.text();
+                        } else {
+                            alert('Erro ao atualizar usuário.');
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Erro ao carregar formulário de edição:', error);
+            }
+        }
+    });
+    
 });

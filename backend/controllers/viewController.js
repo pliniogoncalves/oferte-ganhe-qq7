@@ -67,6 +67,26 @@ const viewController = {
         }
     },
 
+    getEditUserPage: async (req, res) => {
+        try {
+            const { registration } = req.params;
+            const user = await userService.searchUserRegistration(registration);
+
+            if (!user) {
+                return res.status(404).send('Usuário não encontrado');
+            }
+
+            res.render('partials/users/editUsers', {
+                layout: false,
+                user,
+                title: 'Editar Usuário',
+            });
+        } catch (error) {
+            console.error('Erro ao carregar edição:', error);
+            res.status(500).send('Erro ao carregar a página de edição');
+        }
+    },
+
     getProfilePage: async(req, res) => {
         try{
             const profiles = await profileService.searchProfile();

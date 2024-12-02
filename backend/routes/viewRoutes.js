@@ -14,6 +14,7 @@ router.get('/main', authenticateToken, authorizePermission('list_users'), viewCo
 router.get('/users/page', authenticateToken, viewController.getUserPage);
 router.get('/users/add', authenticateToken, viewController.getAddUserPage);
 router.get('/users/search', authenticateToken, viewController.searchUsersByRegistration);
+router.get('/users/edit/:registration', authenticateToken, viewController.getEditUserPage);
 
 //render the Profile pages
 router.get('/profiles/page', authenticateToken, viewController.getProfilePage);
