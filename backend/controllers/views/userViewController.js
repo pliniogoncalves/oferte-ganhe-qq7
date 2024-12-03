@@ -26,13 +26,14 @@ const userViewController = {
         });
     },
 
-    getAllUsers: async (req, res) =>{
+    getAllUsers: async (req, res) => {
         try{
             const users = await userService.searchUser();
-            if(!users || users.length === 0) {
-                return res.status(200).render("partials/users/usersTable", { users: [] });
-            }
-            res.status(200).render("partials/users/usersTable", { users });
+            res.status(200).render("partials/users/usersTable", { 
+                layout: false,
+                users: users || [], 
+                cssFiles: [] 
+            });
         }catch(error){
             console.error("Erro ao listar usuários:", error);
             res.status(500).send("Erro ao listar usuários.");
@@ -41,33 +42,35 @@ const userViewController = {
 
     searchUsersByRegistration: async (req, res) => {
         const { registration } = req.query;
-
+    
         try{
-
             if(!registration){
                 const users = await userService.getAllUsers();
-                if(!users || users.length === 0){
-                    return res.status(200).render('partials/users/usersTable', { users: [] });
-                }
-                return res.status(200).render('partials/users/usersTable', { users });
+                res.status(200).render("partials/users/usersTable", { 
+                    layout: false,
+                    users: users || [], 
+                    cssFiles: []
+                });
+                return;
             }
-
+    
             const user = await userService.searchUserRegistration(registration);
-
+    
             if(!user){
-                return res.status(404).send('Usuário não encontrado');
+                return res.status(404).send("Usuário não encontrado");
             }
-
-            res.render('partials/users/usersTable', {
+    
+            res.render("partials/users/usersTable", { 
                 layout: false,
-                users: [user],
-                cssFiles: [],
+                users: [user], 
+                cssFiles: []
             });
         }catch(error){
-            console.error('Erro ao buscar usuário por matrícula:', error);
-            res.status(500).send('Erro ao buscar usuário.');
+            console.error("Erro ao buscar usuário por matrícula:", error);
+            res.status(500).send("Erro ao buscar usuário.");
         }
     },
+    
 
     getEditUserPage: async (req, res) => {
         try{
