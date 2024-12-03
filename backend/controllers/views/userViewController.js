@@ -1,25 +1,25 @@
-const userService = require('../../services/userService');
-const profileService = require('../../services/profileService');
-const storeService = require('../../services/storeService');
+const userViewService = require('../../services/views/userViewService.js');
 
 const userViewController = {
-    
-    getUserPage: async(req, res) => {
+    getUserPage: async (req, res) => {
         try{
-            const users = await userService.searchUser();
+            const itemsPerPage = 10; 
+            const { users, currentPage, totalPages } = await userViewService.getPaginatedUsers(req.query.page, itemsPerPage);
 
             res.render('partials/users/users', { 
                 layout: false, 
                 title: 'Gestão de Usuários',
-                users: users,
+                users,
+                currentPage,
+                totalPages,
             });
         }catch(error){
             console.error('Erro ao carregar usuários:', error);
             res.status(500).send('Erro ao carregar a página de usuários');
-        }     
+        }
     },
 
-    getAddUserPage: (req, res) =>{
+    getAddUserPage: (req, res) => {
         res.render('partials/users/addUsers', {
             layout: false,
             title: 'Cadastrar Usuário',
@@ -28,11 +28,11 @@ const userViewController = {
 
     getAllUsers: async (req, res) => {
         try{
-            const users = await userService.searchUser();
+            const users = await userViewService.getAllUsers();
             res.status(200).render("partials/users/usersTable", { 
                 layout: false,
-                users: users || [], 
-                cssFiles: [] 
+                users: users || [],
+                cssFiles: [],
             });
         }catch(error){
             console.error("Erro ao listar usuários:", error);
@@ -42,54 +42,41 @@ const userViewController = {
 
     searchUsersByRegistration: async (req, res) => {
         const { registration } = req.query;
-    
+
         try{
-            if(!registration){
-                const users = await userService.getAllUsers();
-                res.status(200).render("partials/users/usersTable", { 
-                    layout: false,
-                    users: users || [], 
-                    cssFiles: []
-                });
-                return;
-            }
-    
-            const user = await userService.searchUserRegistration(registration);
-    
-            if(!user){
+            const users = registration 
+                ? await userViewService.getUserByRegistration(registration) 
+                : await userViewService.getAllUsers();
+
+            if(registration && !users){
                 return res.status(404).send("Usuário não encontrado");
             }
-    
+
             res.render("partials/users/usersTable", { 
                 layout: false,
-                users: [user], 
-                cssFiles: []
+                users: Array.isArray(users) ? users : [users],
+                cssFiles: [],
             });
         }catch(error){
             console.error("Erro ao buscar usuário por matrícula:", error);
             res.status(500).send("Erro ao buscar usuário.");
         }
     },
-    
 
     getEditUserPage: async (req, res) => {
         try{
             const { registration } = req.params;
+            const { user, profiles, stores } = await userViewService.getEditUserData(registration);
 
-            const users = await userService.searchUserRegistration(registration);
-
-            if(!users){
+            if(!user){
                 return res.status(404).send('Usuário não encontrado');
             }
 
-            const profiles = await profileService.searchProfile();
-            const stores = await storeService.searchStore();
-
             res.render('partials/users/editUsers', {
                 layout: false,
-                users:users,
-                profiles: profiles,
-                stores: stores,
+                users: user,
+                profiles,
+                stores,
                 title: 'Editar Usuário',
             });
         }catch(error){
@@ -97,7 +84,6 @@ const userViewController = {
             res.status(500).send('Erro ao carregar a página de edição');
         }
     },
-    
 };
 
 module.exports = userViewController;

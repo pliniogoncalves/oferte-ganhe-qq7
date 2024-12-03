@@ -23,7 +23,7 @@ const userController = {
 
     //Function to Search All Users
     searchUser : async (req, res) => {
-        try {
+        try{
             const users = await userService.searchUser();
             res.status(200).json(users);
         }catch(err){
@@ -35,7 +35,7 @@ const userController = {
     searchUserRegistration : async (req, res) => {
         const { registration } = req.params;
 
-        try {
+        try{
             const result = await userService.searchUserRegistration(registration);
             if(result){
                 res.status(200).json(result);

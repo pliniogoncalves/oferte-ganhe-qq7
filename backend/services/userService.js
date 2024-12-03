@@ -153,10 +153,22 @@ async function removeUser(registration) {
     }
 }
 
+//Function counts all users
+async function countUsers() {
+    try {
+        const count = await User.count();
+        return count;
+    } catch (err) {
+        console.error('Error counting users:', err);
+        throw err;
+    }
+}
+
 module.exports = {
     insertUser,
     searchUser,
     searchUserRegistration,
     editUser,
     removeUser,
+    countUsers,
 };
