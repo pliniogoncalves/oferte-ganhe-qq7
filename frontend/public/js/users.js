@@ -73,17 +73,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Read
     document.addEventListener("click", async (event) => {
-        if(event.target.closest("#searchBtn")) {
+        if (event.target.closest("#searchBtn")) {
             const searchInput = document.getElementById("search");
             const registration = searchInput?.value.trim();
-
-            if(!registration){
-                alert('Por favor, insira uma matrícula para buscar.');
-                return;
-            }
-
+    
+            let response;
             try{
-                const response = await fetch(`/users/search?registration=${encodeURIComponent(registration)}`);
+                
+                if(!registration){
+                    response = await fetch(`/users/list`);
+                }else{
+                    response = await fetch(`/users/search?registration=${encodeURIComponent(registration)}`);
+                }
+    
                 if(response.ok){
                     const tableHTML = await response.text();
                     const tableBody = document.querySelector("table tbody");
@@ -92,13 +94,13 @@ document.addEventListener("DOMContentLoaded", () => {
                     }else{
                         console.error("Tabela de usuários não encontrada.");
                     }
-                }else if(response.status === 404){
-                    alert('Usuário não encontrado.');
+                }else if(response.status === 404) {
+                    alert(registration ? 'Usuário não encontrado.' : 'Nenhum usuário disponível.');
                 }else{
-                    alert('Erro ao buscar usuário.');
+                    alert('Erro ao buscar usuários.');
                 }
             }catch(error){
-                console.error('Erro ao buscar usuário:', error);
+                console.error('Erro ao buscar usuários:', error);
             }
         }
     });

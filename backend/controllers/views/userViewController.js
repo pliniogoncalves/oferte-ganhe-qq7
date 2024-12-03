@@ -26,10 +26,32 @@ const userViewController = {
         });
     },
 
+    getAllUsers: async (req, res) =>{
+        try{
+            const users = await userService.searchUser();
+            if(!users || users.length === 0) {
+                return res.status(200).render("partials/users/usersTable", { users: [] });
+            }
+            res.status(200).render("partials/users/usersTable", { users });
+        }catch(error){
+            console.error("Erro ao listar usuários:", error);
+            res.status(500).send("Erro ao listar usuários.");
+        }
+    },
+
     searchUsersByRegistration: async (req, res) => {
         const { registration } = req.query;
 
         try{
+
+            if(!registration){
+                const users = await userService.getAllUsers();
+                if(!users || users.length === 0){
+                    return res.status(200).render('partials/users/usersTable', { users: [] });
+                }
+                return res.status(200).render('partials/users/usersTable', { users });
+            }
+
             const user = await userService.searchUserRegistration(registration);
 
             if(!user){
@@ -39,6 +61,7 @@ const userViewController = {
             res.render('partials/users/usersTable', {
                 layout: false,
                 users: [user],
+                cssFiles: [],
             });
         }catch(error){
             console.error('Erro ao buscar usuário por matrícula:', error);

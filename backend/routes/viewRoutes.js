@@ -16,6 +16,7 @@ router.get('/main', authenticateToken, authorizePermission('list_users'), mainVi
 // Render the Users pages
 router.get('/users/page', authenticateToken, userViewController.getUserPage);
 router.get('/users/add', authenticateToken, userViewController.getAddUserPage);
+router.get('/users/list', authenticateToken, userViewController.getAllUsers);
 router.get('/users/search', authenticateToken, userViewController.searchUsersByRegistration);
 router.get('/users/edit/:registration', authenticateToken, userViewController.getEditUserPage);
 
