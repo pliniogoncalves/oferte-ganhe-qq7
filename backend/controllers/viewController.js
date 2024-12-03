@@ -1,5 +1,6 @@
 const userService = require('../services/userService');
 const profileService = require('../services/profileService');
+const storeService = require('../services/storeService');
 
 const viewController = {
 
@@ -70,15 +71,21 @@ const viewController = {
     getEditUserPage: async (req, res) => {
         try{
             const { registration } = req.params;
-            const user = await userService.searchUserRegistration(registration);
 
-            if(!user){
+            const users = await userService.searchUserRegistration(registration);
+
+            if(!users){
                 return res.status(404).send('Usuário não encontrado');
             }
 
+            const profiles = await profileService.searchProfile();
+            const stores = await storeService.searchStore();
+
             res.render('partials/users/editUsers', {
                 layout: false,
-                user,
+                users:users,
+                profiles: profiles,
+                stores: stores,
                 title: 'Editar Usuário',
             });
         }catch(error){

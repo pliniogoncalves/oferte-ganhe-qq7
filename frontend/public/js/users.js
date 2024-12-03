@@ -109,23 +109,39 @@ document.addEventListener("DOMContentLoaded", () => {
                 if(response.ok){
                     document.getElementById("content").innerHTML = await response.text();
     
+                    const cancelBtn = document.getElementById("cancelBtn");
+                    cancelBtn.addEventListener("click", async () => {
+                        const usersResponse = await fetch('/users/page');
+                        document.getElementById("content").innerHTML = await usersResponse.text();
+                    });
+    
                     const userForm = document.getElementById("userForm");
                     userForm.addEventListener("submit", async (e) => {
                         e.preventDefault();
+    
                         const formData = new FormData(userForm);
                         const data = Object.fromEntries(formData.entries());
+    
+                        const payload = {
+                            name: data.name,
+                            newRegistration: data.registration,
+                            email: data.email,
+                            password: data.password,
+                            profile: data.profile,
+                            store: data.store,
+                        };
     
                         const saveResponse = await fetch(`/api/users/edit/${registration}`, {
                             method: 'PUT',
                             headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(data),
+                            body: JSON.stringify(payload),
                         });
     
                         if(saveResponse.ok){
                             alert('Usuário atualizado com sucesso!');
                             const usersResponse = await fetch('/users/page');
                             document.getElementById("content").innerHTML = await usersResponse.text();
-                        }else{
+                        } else {
                             alert('Erro ao atualizar usuário.');
                         }
                     });
