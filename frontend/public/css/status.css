@@ -1,0 +1,45 @@
+/* Badge de status */
+.badge-solicitado {
+    background-color: #b30d14; /* Cor do badge para 'Solicitado' */
+  }
+  
+  .badge-recebido {
+    background-color: #28a745; /* Cor do badge para 'Recebido' */
+  }
+  
+  .badge-enviado {
+    background-color: #ffc107; /* Cor do badge para status padrão */
+  }
+  
+  /* Classes para os status do estoque */
+  .low-stock {
+    border: 2px solid #dc3545; /* Vermelho */
+  }
+  
+  .medium-stock {
+    border: 2px solid #ffc107; /* Amarelo */
+  }
+  
+  .sufficient-stock {
+    border: 2px solid #28a745; /* Verde */
+  }
+  
+  /* Classes para os badges */
+  .badge-default {
+    background-color: #cccccc;
+  }
+  
+  .badge-low {
+    background-color: #dc3545; /* Vermelho */
+    color: white;
+  }
+  
+  .badge-medium {
+    background-color: #ffc107; /* Amarelo */
+    color: black;
+  }
+  
+  .badge-sufficient {
+    background-color: #28a745; /* Verde */
+    color: white;
+  }

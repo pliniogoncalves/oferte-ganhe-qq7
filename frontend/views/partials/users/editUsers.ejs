@@ -18,7 +18,7 @@
         </div>
 
         <div class="mb-3">
-            <label for="registration" class="form-label">Matrícula</label>
+            <label for="registration" class="form-label">Matrícula (opcional)</label>
             <input type="text" class="form-control" id="registration" name="registration" value="<%= users.registration_users %>" required>
         </div>
 
@@ -50,9 +50,14 @@
             </select>
         </div>
 
-        <div class="text-end">
-            <button type="button" id="cancelBtn" class="btn btn-secondary">Cancelar</button>
-            <button type="submit" id="submitBtn" class="btn btn-primary">Salvar Alterações</button>
+        <div class="text-center mb-4">
+            <div class="row justify-content-center">
+                <div class="col-12 col-sm-6 col-md-3 mb-2">
+                    <button type="submit" id="submitBtn" class="btn btn-custom w-100">
+                        <i class="fas fa-save"></i> Salvar Alterações
+                    </button>
+                </div>
+            </div>
         </div>
         
     </form>

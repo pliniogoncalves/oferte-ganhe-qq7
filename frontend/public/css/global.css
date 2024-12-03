@@ -14,17 +14,13 @@ body {
   font-style: normal;
 }
 
-.table-responsive {
-  overflow-x: auto;
-}
-
 .form-control {
   padding-left: 40px;
 }
 
-#content {
+.content {
   padding: 1rem;
-  margin-left: 6.4vw;
+  margin-left: 14.4vw;
 }
 
 .input-icon {

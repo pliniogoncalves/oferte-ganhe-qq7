@@ -8,7 +8,10 @@ const mainViewController = {
                 '/css/global.css', 
                 '/css/header.css', 
                 '/css/sidebar.css', 
-                'css/buttons.css'
+                'css/buttons.css',
+                'css/tables.css',
+                'css/notifications.css',
+                'css/responsive.css',
             ], 
         });
     },

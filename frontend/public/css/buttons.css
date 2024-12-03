@@ -62,16 +62,50 @@
   color: white;
 }
 
-/*botão voltar*/
 .btn-voltar {
-    background-color: #269447;
-    color: white; 
-    margin-top: -40px;
-  }
+  background-color: #269447;
+  color: white; 
+  margin-top: -40px;
+}
   
-  .btn-voltar:hover {
-    background-color: #1f5d3d;
-    color: white;
-    transition: background-color 0.3s ease;
-  }
+.btn-voltar:hover {
+  background-color: #1f5d3d;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.bottom-links {
+  padding-top: 5.5vh;
+}
+  
+.bottom-links button {
+  margin-bottom: 1rem;
+}
+  
+.close-btn {
+  display: none;
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: none;
+  border: none;
+  color: #269447;
+  cursor: pointer;
+  z-index: 1001;
+}
+  
+.close-btn i {
+  font-size: 1.5rem;
+  color: #269447;
+}
+  
+.btn-danger {
+  background-color: #b30d14;
+  border-color: #b30d14;
+}
+  
+.btn-danger:hover {
+  background-color: #851306;
+  border-color: #851306;
+}
   

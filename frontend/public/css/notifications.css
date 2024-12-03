@@ -1,0 +1,112 @@
+.btn-alert-circle {
+    background-color: #1f5d3d;
+    color: white;
+    border: none;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    position: absolute;
+    right: 5rem;
+    top: 2.5rem;
+    z-index: 1001;
+  }
+  
+  .notification-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: yellow;
+    color: black;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    display: none;
+  }
+
+  /*conteudo do modal*/
+.modal-notificacoes .modal-content {
+    width: 90vw;
+    max-width: 600px;
+    margin-right: 28%; 
+    height: auto; 
+  }
+  
+  
+  /* Título do modal */
+  .modal-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+  /* Corpo do modal com linhas alternadas */
+  #modalNotificacaoBody p {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    margin: 0;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  #modalNotificacaoBody p:nth-child(odd) {
+    background-color: #cac6c6
+  }
+  
+  #modalNotificacaoBody p:nth-child(even) {
+    background-color: #ffffff;
+  }
+  
+  /* Formatação para mensagens não lidas */
+  .notificacao-nao-lida {
+    font-weight: bold;
+  }
+  
+  .notificacao-lida {
+    font-weight: normal;
+    color: #777;
+  }
+  
+  /* Rodapé do modal com o botão centralizado */
+  .modal-footer {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+  }
+  
+  .modal-footer .btn-marcar-todas {
+    background-color: #269447;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .modal-footer .btn-marcar-todas:hover {
+    background-color: #1f5d3d;
+    color: white;
+  }
+  
+  .modal-footer .btn-marcar-todas {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    min-width: 120px;
+    height: auto;
+  }
+  
+  .modal-footer .btn-marcar-todas i {
+    font-size: 1.5rem;
+  }
+  
+  .modal-footer .btn-cancelar {
+    background-color: #851306;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+  }

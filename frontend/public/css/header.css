@@ -1,27 +1,48 @@
 /* Header */
 header {
-    background-color: #269447;
-    color: white;
-    text-align: center;
-    padding: 2rem;
-    font-size: 1.5rem;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  header .img-fluid {
-    height: 5rem; /* Tamanho padrão para a logo */
-    margin-left: 14rem; /* Espaço entre a logo e o texto */
-  }
-  
-  header::after {
-    content: "";
-    display: block;
-    width: 100%;
-    height: 0.5rem;
-    background-color: #f5d307;
-    position: absolute;
-    bottom: 0;
-  }
+  background-color: #269447;
+  color: white;
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.5rem;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+header .img-fluid {
+  height: 5rem;
+  margin-left: 13rem;
+}
+
+header::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 0.5rem;
+  background-color: #f5d307;
+  position: absolute;
+  bottom: 0;
+}
+
+.hamburger {
+  font-size: 2rem;
+  cursor: pointer;
+  position: absolute;
+  left: 2rem;
+  top: 2rem;
+  color: white;
+  display: block;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  display: none;
+}
