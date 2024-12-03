@@ -17,3 +17,21 @@ body {
 .table-responsive {
   overflow-x: auto;
 }
+
+.form-control {
+  padding-left: 40px;
+}
+
+#content {
+  padding: 1rem;
+  margin-left: 6.4vw;
+}
+
+.input-icon {
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #999;
+}

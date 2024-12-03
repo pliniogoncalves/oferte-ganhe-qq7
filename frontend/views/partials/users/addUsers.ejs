@@ -1,8 +1,16 @@
 <div class="container-fluid p-4">
-    <div class="text-center mb-4">
-        <h1 class="fw-bold">Cadastrar Novo Usuário</h1>
-        <p class="text-muted">Preencha os dados abaixo para cadastrar um novo usuário.</p>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        
+        <%- include('../../components/backButton.ejs') %>
+
+        <div class="w-100 text-center me-4 me-md-5">
+            <h1 class="fw-bold">Cadastrar Novo Usuário</h1>
+            <p class="text-muted">Preencha os dados abaixo para cadastrar um novo usuário.</p>
+        </div>
+
     </div>
+    
     <form id="userForm">
         <div class="mb-3">
             <label for="name" class="form-label">Nome</label>

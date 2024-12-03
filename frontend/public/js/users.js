@@ -3,8 +3,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //Create
     document.addEventListener("click", async (event) => {
-        if(event.target.closest("#addUserBtn")){
+        const addUserBtn = event.target.closest("#addUserBtn");
+        if(addUserBtn){
             try{
+                const url = '/users/add';
+                window.history.pushState({}, '', url);
+
                 const response = await fetch('/users/add');
                 const formHTML = await response.text();
                 content.innerHTML = formHTML;

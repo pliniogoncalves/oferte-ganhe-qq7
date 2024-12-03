@@ -43,7 +43,7 @@ function toggleSidebar() {
   
     sidebar.classList.remove("active");
     mainContent.classList.remove("active");
-    overlay.style.display = "none"; // Esconde o overlay
+    overlay.style.display = "none";
   }
   
   function setActiveButton(activeSection) {
