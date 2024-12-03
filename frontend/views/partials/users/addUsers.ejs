@@ -9,19 +9,26 @@
             <input type="text" class="form-control" id="name" name="name" required>
         </div>
         <div class="mb-3">
+            <label for="registration" class="form-label">Matrícula</label>
+            <input type="text" class="form-control" id="registration" name="registration" required>
+        </div>
+        <div class="mb-3">
             <label for="email" class="form-label">E-mail</label>
             <input type="email" class="form-control" id="email" name="email" required>
         </div>
         <div class="mb-3">
-            <label for="role" class="form-label">Função</label>
-            <select class="form-control" id="role" name="role">
-                <option value="Admin">Admin</option>
-                <option value="User">Usuário</option>
+            <label for="password" class="form-label">Senha</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+        <div class="mb-3">
+            <label for="profile" class="form-label">Perfil</label>
+            <select class="form-control" id="profile" name="profile" required>
             </select>
         </div>
         <div class="mb-3">
             <label for="store" class="form-label">Loja</label>
-            <input type="text" class="form-control" id="store" name="store">
+            <select class="form-control" id="store" name="store" required>
+            </select>
         </div>
         <div class="text-end">
             <button type="button" id="cancelBtn" class="btn btn-secondary">Cancelar</button>

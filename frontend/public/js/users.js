@@ -8,27 +8,50 @@ document.addEventListener("DOMContentLoaded", () => {
                 const response = await fetch('/users/add');
                 const formHTML = await response.text();
                 content.innerHTML = formHTML;
-
-                
+    
+                const [storesResponse, rolesResponse] = await Promise.all([
+                    fetch('/api/store/list'),
+                    fetch('/api/profiles/list')
+                ]);
+    
+                const stores = await storesResponse.json();
+                const roles = await rolesResponse.json();
+    
+                const storeSelect = document.getElementById("store");
+                stores.forEach(store => {
+                    const option = document.createElement("option");
+                    option.value = store.number_store;
+                    option.textContent = store.number_store;
+                    storeSelect.appendChild(option);
+                });
+    
+                const profileSelect = document.getElementById("profile");
+                roles.forEach(profile => {
+                    const option = document.createElement("option");
+                    option.value = profile.name_profile;
+                    option.textContent = profile.name_profile;
+                    profileSelect.appendChild(option);
+                });
+    
                 const cancelBtn = document.getElementById("cancelBtn");
                 cancelBtn.addEventListener("click", async () => {
                     const response = await fetch('/users/page');
                     const usersHTML = await response.text();
                     content.innerHTML = usersHTML;
                 });
-
+    
                 const userForm = document.getElementById("userForm");
                 userForm.addEventListener("submit", async (e) => {
                     e.preventDefault();
                     const formData = new FormData(userForm);
                     const data = Object.fromEntries(formData.entries());
-
-                    const saveResponse = await fetch('/api/users', {
+    
+                    const saveResponse = await fetch('/api/users/register/', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(data)
                     });
-
+    
                     if(saveResponse.ok){
                         alert('Usuário cadastrado com sucesso!');
                         const response = await fetch('/users/page');
