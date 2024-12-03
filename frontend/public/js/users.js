@@ -105,9 +105,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Update
     document.addEventListener("click", async (event) => {
-        if(event.target.closest(".editar")) {
+        const addUserBtn = event.target.closest(".editar");
+        if(addUserBtn){
             const registration = event.target.closest(".editar").dataset.registration;
-    
+            
+            const url = `/users/edit/${registration}`;
+            window.history.pushState({}, '', url);
+            
             try{
                 const response = await fetch(`/users/edit/${registration}`);
                 if(response.ok){
