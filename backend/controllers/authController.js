@@ -80,7 +80,7 @@ async function forgotPassword(req, res) {
     }catch(err){
         console.error('Erro ao enviar e-mail:', err);
         const message = 'Erro ao enviar e-mail.';
-        res.status(500).json({ message: 'Erro ao enviar e-mail.', error: err.message });
+        return handleResponse(req, res, 500, 'Erro ao enviar e-mail.', '/forgot-password');
     }
 }
 
