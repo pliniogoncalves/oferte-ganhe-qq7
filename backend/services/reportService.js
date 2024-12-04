@@ -1,5 +1,6 @@
 const { PythonShell } = require('python-shell');
 const path = require('path');
+const os = require('os');
 
 const pythonExecutable = os.platform() === 'win32'
     ? path.join(__dirname, '../../.venv/Scripts/python.exe') 
