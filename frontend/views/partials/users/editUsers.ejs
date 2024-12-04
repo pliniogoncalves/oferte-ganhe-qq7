@@ -48,7 +48,7 @@
                 <% stores.forEach(store => { %>
                     <option value="<%= store.number_store %>" 
                             <%= store.id_store === users.id_store ? 'selected' : '' %>>
-                        <%= store.number_store === '0' ? 'Matriz' : store.number_store %>
+                        <%= store.id_store === 1 ? store.name_store : (store.number_store === '0' ? 'Matriz' : store.number_store) %>
                     </option>
                 <% }); %>
             </select>
