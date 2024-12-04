@@ -57,16 +57,14 @@ async function forgotPassword(req, res) {
 
         const resetToken = await authService.generateToken({ id: user.id_users }, '15m');
         const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`;
-        console.log('Link de redefinição gerado:', resetLink);
 
         const transporter = nodemailer.createTransport({
-            service: 'Gmail',
+            host: process.env.MAILTRAP_HOST,
+            port: process.env.MAILTRAP_PORT,
             auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS,
+                user: process.env.MAILTRAP_USER,
+                pass: process.env.MAILTRAP_PASS,
             },
-            logger: true,
-            debug: true,
         });
 
         await transporter.sendMail({
@@ -76,7 +74,6 @@ async function forgotPassword(req, res) {
             html: `<p>Clique no link para redefinir sua senha: <a href="${resetLink}">Redefinir Senha</a></p>`,
         });
 
-        console.log('E-mail enviado para:', email);
         res.status(200).json({ message: 'E-mail enviado com sucesso.' });
     }catch(err){
         console.error('Erro ao enviar e-mail:', err);
