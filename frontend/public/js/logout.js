@@ -5,10 +5,22 @@ document.getElementById('logoutBtn').addEventListener('click', async () => {
         if (response.ok) {
             window.location.href = '/login';
         } else {
-            alert('Logout failed.');
+            exibirModalMensagem('Erro', 'Falha ao fazer logout.');
         }
     } catch (error) {
         console.error('Logout error:', error);
-        alert('An error occurred.');
+        exibirModalMensagem('Erro', 'Ocorreu um erro ao tentar fazer logout.');
     }
 });
+
+/**
+ * Exibe o modal de mensagens.
+ * @param {string} titulo - Título da mensagem.
+ * @param {string} mensagem - Conteúdo da mensagem.
+ */
+function exibirModalMensagem(titulo, mensagem) {
+    document.getElementById('modalTitle').innerText = titulo;
+    document.getElementById('modalMessage').innerText = mensagem;
+    const modal = new bootstrap.Modal(document.getElementById('mensagemModal'));
+    modal.show();
+}

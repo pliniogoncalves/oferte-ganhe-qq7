@@ -4,7 +4,9 @@ const loginViewController = {
         res.render('login', { 
             layout: 'layouts/loginLayout', 
             title: 'Login', 
-            cssFiles: ['/css/login.css'],
+            cssFiles: [
+                '/css/login.css'
+            ],
             messages: res.locals.messages
         });
     },
