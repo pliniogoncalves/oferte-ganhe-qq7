@@ -5,17 +5,17 @@ const nodemailer = require('nodemailer');
 async function login(req, res) {
     const { registration, password } = req.body;
 
-    try {
+    try{
         const user = await User.findOne({ where: { registration_users: registration }, include: ['profile'] });
 
-        if (!user) {
+        if(!user){
             const message = 'Usuário não encontrado.';
             return handleResponse(req, res, 404, message, '/login');
         }
 
         const isPasswordValid = await authService.verifyPassword(password, user.password_users);
 
-        if (!isPasswordValid) {
+        if(!isPasswordValid){
             const message = 'Credenciais inválidas.';
             return handleResponse(req, res, 401, message, '/login');
         }
@@ -30,7 +30,7 @@ async function login(req, res) {
         });
 
         return handleResponse(req, res, 200, 'Login bem-sucedido.', '/main', { token });
-    } catch (err) {
+    }catch(err){
         console.error('Login error:', err);
         return handleResponse(req, res, 500, 'Erro interno do servidor.', '/login', err);
     }
@@ -52,11 +52,12 @@ async function forgotPassword(req, res) {
     try{
         const user = await User.findOne({ where: { email_users: email } });
         if(!user){
-            return res.status(404).json({ message: 'Usuário não encontrado.' });
+            const message = 'Usuário não encontrado.';
+            return handleResponse(req, res, 404, message, '/login');
         }
 
         const resetToken = await authService.generateToken({ id: user.id_users }, '15m');
-        const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`;
+        const resetLink = `${process.env.FRONTEND_URL}/api/reset-password?token=${resetToken}`;
 
         const transporter = nodemailer.createTransport({
             host: process.env.MAILTRAP_HOST,
@@ -74,9 +75,11 @@ async function forgotPassword(req, res) {
             html: `<p>Clique no link para redefinir sua senha: <a href="${resetLink}">Redefinir Senha</a></p>`,
         });
 
-        res.status(200).json({ message: 'E-mail enviado com sucesso.' });
+        const message = 'E-mail enviado com sucesso.';
+        return handleResponse(req, res, 200, message, '/login');
     }catch(err){
         console.error('Erro ao enviar e-mail:', err);
+        const message = 'Erro ao enviar e-mail.';
         res.status(500).json({ message: 'Erro ao enviar e-mail.', error: err.message });
     }
 }
@@ -105,7 +108,7 @@ async function resetPassword(req, res) {
 
 // Helper function to handle response formats
 function handleResponse(req, res, statusCode, message, redirectUrl, data = null) {
-    if (req.headers['accept'] === 'application/json') {
+    if(req.headers['accept'] === 'application/json'){
         const response = { message, ...(data && { data }) };
         return res.status(statusCode).json(response);
     }

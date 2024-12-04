@@ -12,6 +12,8 @@ router.post('/logout', authenticateToken, authController.logout);
 
 // Password recovery route
 router.post('/forgot-password', authController.forgotPassword);
-router.post('/reset-password', resetPasswordViewController.getResetPasswordPage);
+router.get('/reset-password', resetPasswordViewController.getResetPasswordPage);
+router.post('/reset-password', authController.resetPassword);
+
 
 module.exports = router;
