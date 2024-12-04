@@ -17,7 +17,7 @@ async function insertUser(name, registration, email, password, profileName = 1, 
                 idProfile = foundProfile.id_profile;
 
                 if(profileName.toLowerCase() === 'Administrador'){
-                    storeNumber = 0;
+                    storeNumber = '0';
                 }
 
             }else{
@@ -27,6 +27,7 @@ async function insertUser(name, registration, email, password, profileName = 1, 
 
         //Fetch store ID based on number
         if(storeNumber){
+            storeNumber = storeNumber.toString();
             const foundStore = await Store.findOne({
                 where: { number_store: storeNumber },
             });
@@ -102,9 +103,9 @@ async function editUser(name, newRegistration, email, password, profile, store, 
             throw new Error(`Profile with name '${profile}' not found`);
         }
 
-        let storeNumber = store;
+        let storeNumber = store.toString();
         if(profile.toLowerCase() === 'Administrador') {
-            storeNumber = 0;
+            storeNumber = '0';
         }
 
         const foundStore = await Store.findOne({

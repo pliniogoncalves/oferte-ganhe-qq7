@@ -1,53 +1,55 @@
-// Lógica para envio do formulário de login
 document.getElementById('loginForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const matricula = document.getElementById('matricula').value;
     const senha = document.getElementById('senha').value;
 
-    try {
-        const response = await fetch('/api/auth/login', {
+    try{
+        const response = await fetch('/api/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ matricula, senha }),
         });
 
-        if (response.ok) {
+        if(response.ok){
             window.location.href = '/main';
-        } else {
+        }else{
             const data = await response.json();
-            exibirModalLoginMensagem('Erro', data.message || 'Falha no login.');
+            showModal('Erro', data.message || 'Falha no login.');
         }
-    } catch (error) {
+    }catch(error){
         console.error('Login error:', error);
-        exibirModalLoginMensagem('Erro', 'Ocorreu um erro ao tentar fazer login.');
+        showModal('Erro', 'Ocorreu um erro ao tentar fazer login.');
     }
 });
 
-// Lógica para envio do formulário de "Esqueci a senha"
 document.getElementById('formEsqueciSenha').addEventListener('submit', async (e) => {
     e.preventDefault();
 
+    console.log("Arquivo login.js carregado.");
+
     const email = document.getElementById('emailRecuperacao').value;
+    console.log('Formulário enviado. Email:', email);
 
     try{
-        const response = await fetch('/api/auth/forgot-password', {
+        const response = await fetch('/api/forgot-password', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email }),
         });
 
+        const data = await response.json();
+
         if(response.ok){
-            exibirModalLoginMensagem('Sucesso', 'Um e-mail de recuperação foi enviado para o endereço informado.');
+            showModal('Sucesso', 'Um e-mail de recuperação foi enviado para o endereço informado.');
             const modal = bootstrap.Modal.getInstance(document.getElementById('modalEsqueciSenha'));
             modal.hide();
         }else{
-            const data = await response.json();
-            exibirModalLoginMensagem('Erro', data.message || 'Falha ao solicitar recuperação de senha.');
+            showModal('Erro', data.message || 'Falha ao solicitar recuperação de senha.');
         }
     }catch(error){
         console.error('Erro na recuperação de senha:', error);
-        exibirModalLoginMensagem('Erro', 'Ocorreu um erro ao tentar recuperar a senha.');
+        showModal('Erro', 'Ocorreu um erro ao tentar recuperar a senha.');
     }
 });
 
