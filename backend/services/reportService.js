@@ -11,13 +11,11 @@ async function exportUsersReport() {
     
     return new Promise((resolve, reject) => {
         PythonShell.run(scriptPath, {}, (err, results) => {
-            if (err) {
+            if(err){
                 console.error('Erro ao executar o script Python:', err);
                 reject(err);
-            } else {
+            }else{
                 console.log('Script Python executado com sucesso:', results);
-                
-                // Ajustar o caminho do CSV para a pasta 'relatorios'
                 resolve(path.join(__dirname, '../../relatorios/usuarios.csv'));
             }
         });
