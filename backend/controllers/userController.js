@@ -1,5 +1,6 @@
 const userService = require('../services/userService.js');
 const { hashPassword } = require('../services/authService.js');
+const reportService = require('../services/reportService');
 
 const userController = {
     
@@ -91,7 +92,16 @@ const userController = {
         }catch(erro){
             res.status(500).json({ message: 'Error deleting user', error: erro.message });
         }
-    }
+    },
+
+    exportUsersCSV: async (req, res) =>{
+        try{
+            const csvFilePath = await reportService.exportUsersReport();
+            res.download(path.resolve(csvFilePath), 'usuarios.csv');
+        }catch(error){
+            res.status(500).json({ message: 'Error exporting CSV', error: error.message });
+        }
+    },
 };
 
 module.exports = userController;

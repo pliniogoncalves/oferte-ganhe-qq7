@@ -16,4 +16,7 @@ router.get('/users/list/:registration', authenticateToken, userController.search
 router.put('/users/edit/:registration', authenticateToken, userController.editUser);
 router.delete('/users/delete/:registration', authenticateToken, userController.removeUser);
 
+//Export CSV
+router.get('/users/export-csv', authenticateToken, userController.exportUsersCSV);
+
 module.exports = router;
