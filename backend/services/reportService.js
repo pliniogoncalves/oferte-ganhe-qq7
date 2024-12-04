@@ -1,8 +1,12 @@
 const { PythonShell } = require('python-shell');
 const path = require('path');
 
+const pythonExecutable = os.platform() === 'win32'
+    ? path.join(__dirname, '../../.venv/Scripts/python.exe') 
+    : path.join(__dirname, '../../.venv/bin/python');
+
 PythonShell.defaultOptions = {
-    pythonPath: path.join(__dirname, '../../.venv/bin/python'),
+    pythonPath: pythonExecutable,
 };
 
 // Export Users Report
