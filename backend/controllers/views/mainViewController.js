@@ -11,6 +11,7 @@ const mainViewController = {
                 'css/buttons.css',
                 'css/tables.css',
                 'css/notifications.css',
+                'css/modal.css',
                 'css/responsive.css',
             ], 
         });

@@ -1,16 +1,15 @@
 document.addEventListener("DOMContentLoaded", () => {
     const content = document.getElementById("content");
 
-    //Create
+    // Create
     document.addEventListener("click", async (event) => {
         const addUserBtn = event.target.closest("#addUserBtn");
         if(addUserBtn){
-            try{
+            try {
                 const url = '/users/add';
                 window.history.pushState({}, '', url);
     
                 const response = await fetch('/users/add');
-
                 if(!response.ok) throw new Error("Erro ao carregar o formulário.");
                 const formHTML = await response.text();
                 content.innerHTML = formHTML;
@@ -20,9 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     fetch('/api/profiles/list')
                 ]);
     
-                if(!storesResponse.ok || !rolesResponse.ok){
-                    throw new Error("Erro ao carregar dados de lojas ou perfis.");
-                }
+                if(!storesResponse.ok || !rolesResponse.ok) throw new Error("Erro ao carregar dados de lojas ou perfis.");
     
                 const stores = await storesResponse.json();
                 const roles = await rolesResponse.json();
@@ -46,11 +43,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 const userForm = document.getElementById("userForm");
                 userForm.addEventListener("submit", async (e) => {
                     e.preventDefault();
-    
                     const formData = new FormData(userForm);
                     const data = Object.fromEntries(formData.entries());
     
-                    try{
+                    try {
                         const saveResponse = await fetch('/api/users/register/', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
@@ -58,24 +54,23 @@ document.addEventListener("DOMContentLoaded", () => {
                         });
     
                         if(saveResponse.ok){
-                            alert('Usuário cadastrado com sucesso!');
-                    
+                            showModal('Sucesso', 'Usuário cadastrado com sucesso!');
                             const response = await fetch('/users/page');
                             if (!response.ok) throw new Error("Erro ao carregar a lista de usuários.");
                             const usersHTML = await response.text();
                             content.innerHTML = usersHTML;
-                        }else{
+                        } else {
                             const errorData = await saveResponse.json();
-                            alert(`Erro ao cadastrar usuário: ${errorData.message || "Erro desconhecido."}`);
+                            showModal('Erro', `Erro ao cadastrar usuário: ${errorData.message || "Erro desconhecido."}`);
                         }
-                    }catch(error){
+                    } catch(error) {
                         console.error("Erro ao cadastrar usuário:", error);
-                        alert("Erro inesperado ao cadastrar usuário.");
+                        showModal('Erro', "Erro inesperado ao cadastrar usuário.");
                     }
                 });
-            }catch(error){
+            } catch(error) {
                 console.error("Erro ao carregar o formulário:", error);
-                alert("Erro ao carregar o formulário de cadastro.");
+                showModal('Erro', "Erro ao carregar o formulário de cadastro.");
             }
         }
     });
@@ -86,30 +81,23 @@ document.addEventListener("DOMContentLoaded", () => {
             const searchInput = document.getElementById("search");
             const registration = searchInput?.value.trim();
     
-            let response;
-            try{
-                
-                if(!registration){
-                    response = await fetch(`/users/list`);
-                }else{
-                    response = await fetch(`/users/search?registration=${encodeURIComponent(registration)}`);
-                }
+            try {
+                const response = registration 
+                    ? await fetch(`/users/search?registration=${encodeURIComponent(registration)}`)
+                    : await fetch(`/users/list`);
     
                 if(response.ok){
                     const tableHTML = await response.text();
                     const tableBody = document.querySelector("table tbody");
-                    if(tableBody){
-                        tableBody.innerHTML = tableHTML;
-                    }else{
-                        console.error("Tabela de usuários não encontrada.");
-                    }
-                }else if(response.status === 404) {
-                    alert(registration ? 'Usuário não encontrado.' : 'Nenhum usuário disponível.');
-                }else{
-                    alert('Erro ao buscar usuários.');
+                    tableBody ? tableBody.innerHTML = tableHTML : console.error("Tabela de usuários não encontrada.");
+                } else if(response.status === 404) {
+                    showModal('Aviso', registration ? 'Usuário não encontrado.' : 'Nenhum usuário disponível.');
+                } else {
+                    showModal('Erro', 'Erro ao buscar usuários.');
                 }
-            }catch(error){
+            } catch(error) {
                 console.error('Erro ao buscar usuários:', error);
+                showModal('Erro', 'Erro inesperado ao buscar usuários.');
             }
         }
     });
@@ -123,28 +111,27 @@ document.addEventListener("DOMContentLoaded", () => {
             const url = `/users/edit/${registration}`;
             window.history.pushState({}, '', url);
     
-            try{
-                const response = await fetch(`/users/edit/${registration}`);
+            try {
+                const response = await fetch(url);
                 if(response.ok){
                     document.getElementById("content").innerHTML = await response.text();
-    
                     const userForm = document.getElementById("userForm");
+
                     userForm.addEventListener("submit", async (e) => {
                         e.preventDefault();
-    
-                        try{
-                            const formData = new FormData(userForm);
-                            const data = Object.fromEntries(formData.entries());
-    
-                            const payload = {
-                                name: data.name,
-                                newRegistration: data.registration,
-                                email: data.email,
-                                password: data.password,
-                                profile: data.profile,
-                                store: data.store,
-                            }
+                        const formData = new FormData(userForm);
+                        const data = Object.fromEntries(formData.entries());
 
+                        const payload = {
+                            name: data.name,
+                            newRegistration: data.registration,
+                            email: data.email,
+                            password: data.password,
+                            profile: data.profile,
+                            store: data.store,
+                        };
+
+                        try {
                             const saveResponse = await fetch(`/api/users/edit/${registration}`, {
                                 method: 'PUT',
                                 headers: { 'Content-Type': 'application/json' },
@@ -152,53 +139,52 @@ document.addEventListener("DOMContentLoaded", () => {
                             });
     
                             if(saveResponse.ok){
-                                alert('Usuário atualizado com sucesso!');
-    
+                                showModal('Sucesso', 'Usuário atualizado com sucesso!');
                                 const usersResponse = await fetch('/users/page');
-                                if (!usersResponse.ok) throw new Error("Erro ao carregar a lista de usuários após a atualização.");
-                                const usersHTML = await usersResponse.text();
-                                document.getElementById("content").innerHTML = usersHTML;
-                            }else{
+                                if (!usersResponse.ok) throw new Error("Erro ao carregar a lista de usuários.");
+                                document.getElementById("content").innerHTML = await usersResponse.text();
+                            } else {
                                 const errorDetails = await saveResponse.json();
-                                alert(`Erro ao atualizar usuário: ${errorDetails.message || 'Erro desconhecido.'}`);
+                                showModal('Erro', `Erro ao atualizar usuário: ${errorDetails.message || 'Erro desconhecido.'}`);
                             }
-                        }catch(error){
-                            console.error("Erro ao salvar as alterações:", error);
-                            alert("Erro ao atualizar o usuário. Verifique os dados e tente novamente.");
+                        } catch(error) {
+                            console.error("Erro ao salvar alterações:", error);
+                            showModal('Erro', "Erro ao atualizar o usuário.");
                         }
                     });
-                }else{
+                } else {
                     throw new Error("Erro ao carregar o formulário de edição.");
                 }
-            }catch(error){
+            } catch(error) {
                 console.error("Erro ao carregar o formulário de edição:", error);
-                alert("Não foi possível carregar o formulário de edição. Tente novamente mais tarde.");
+                showModal('Erro', "Não foi possível carregar o formulário de edição.");
             }
         }
     });
 
     // Delete
     document.addEventListener("click", async (event) => {
-        if(event.target.closest(".deletar")){
-            const registration = event.target.closest(".deletar").dataset.registration;
-            if(confirm('Tem certeza que deseja deletar este usuário?')){
+        const deleteUserBtn = event.target.closest(".deletar");
+        if(deleteUserBtn){
+            const registration = deleteUserBtn.dataset.registration;
+            showModal('Confirmação', 'Tem certeza que deseja deletar este usuário?', async () => {
                 try {
                     const response = await fetch(`/api/users/delete/${registration}`, {
                         method: 'DELETE',
                     });
     
                     if(response.ok){
-                        alert('Usuário deletado com sucesso!');
+                        showModal('Sucesso', 'Usuário deletado com sucesso!');
                         const usersResponse = await fetch('/users/page');
-                        document.getElementById("content").innerHTML = await usersResponse.text();
-                    }else{
-                        alert('Erro ao deletar usuário.');
+                        content.innerHTML = await usersResponse.text();
+                    } else {
+                        showModal('Erro', 'Erro ao deletar usuário.');
                     }
-                }catch(error){
+                } catch(error) {
                     console.error('Erro ao deletar usuário:', error);
+                    showModal('Erro', 'Erro inesperado ao deletar usuário.');
                 }
-            }
+            });
         }
     });    
-    
 });
