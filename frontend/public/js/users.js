@@ -9,35 +9,22 @@ document.addEventListener("DOMContentLoaded", () => {
                 const url = '/users/add';
                 window.history.pushState({}, '', url);
     
-                const response = await fetch('/users/add');
+                const response = await fetch(url);
                 if(!response.ok) throw new Error("Erro ao carregar o formulário.");
                 const formHTML = await response.text();
                 content.innerHTML = formHTML;
-
-                const [storesResponse, rolesResponse] = await Promise.all([
-                    fetch('/api/store/list'),
-                    fetch('/api/profiles/list')
-                ]);
-    
-                if(!storesResponse.ok || !rolesResponse.ok) throw new Error("Erro ao carregar dados de lojas ou perfis.");
-    
-                const stores = await storesResponse.json();
-                const roles = await rolesResponse.json();
     
                 const storeSelect = document.getElementById("store");
-                stores.forEach(store => {
-                    const option = document.createElement("option");
-                    option.value = store.number_store;
-                    option.textContent = store.number_store;
-                    storeSelect.appendChild(option);
-                });
-    
                 const profileSelect = document.getElementById("profile");
-                roles.forEach(profile => {
-                    const option = document.createElement("option");
-                    option.value = profile.name_profile;
-                    option.textContent = profile.name_profile;
-                    profileSelect.appendChild(option);
+    
+                profileSelect.addEventListener("change", () => {
+                    const selectedProfile = profileSelect.value;
+                    if(selectedProfile === 'Administrador') {
+                        storeSelect.value = '0';
+                        storeSelect.disabled = true;
+                    }else{
+                        storeSelect.disabled = false;
+                    }
                 });
     
                 const userForm = document.getElementById("userForm");
@@ -55,9 +42,9 @@ document.addEventListener("DOMContentLoaded", () => {
     
                         if(saveResponse.ok){
                             showModal('Sucesso', 'Usuário cadastrado com sucesso!');
-                            const response = await fetch('/users/page');
-                            if (!response.ok) throw new Error("Erro ao carregar a lista de usuários.");
-                            const usersHTML = await response.text();
+                            const usersResponse = await fetch('/users/page');
+                            if (!usersResponse.ok) throw new Error("Erro ao carregar a lista de usuários.");
+                            const usersHTML = await usersResponse.text();
                             content.innerHTML = usersHTML;
                         }else{
                             const errorData = await saveResponse.json();
@@ -117,6 +104,22 @@ document.addEventListener("DOMContentLoaded", () => {
                     document.getElementById("content").innerHTML = await response.text();
                     const userForm = document.getElementById("userForm");
 
+                    const profileSelect = document.getElementById("profile");
+                    const storeSelect = document.getElementById("store");
+
+                    if(profileSelect.value === 'Administrador'){
+                        storeSelect.value = '0';
+                    }
+
+                    profileSelect.addEventListener("change", () => {
+                        if(profileSelect.value === 'Administrador'){
+                            storeSelect.value = '0';
+                            storeSelect.disabled = true;
+                        }else{
+                            storeSelect.disabled = false;
+                        }
+                    });
+
                     userForm.addEventListener("submit", async (e) => {
                         e.preventDefault();
                         const formData = new FormData(userForm);
@@ -141,9 +144,9 @@ document.addEventListener("DOMContentLoaded", () => {
                             if(saveResponse.ok){
                                 showModal('Sucesso', 'Usuário atualizado com sucesso!');
                                 const usersResponse = await fetch('/users/page');
-                                if (!usersResponse.ok) throw new Error("Erro ao carregar a lista de usuários.");
+                                if(!usersResponse.ok) throw new Error("Erro ao carregar a lista de usuários.");
                                 document.getElementById("content").innerHTML = await usersResponse.text();
-                            } else {
+                            }else{
                                 const errorDetails = await saveResponse.json();
                                 showModal('Erro', `Erro ao atualizar usuário: ${errorDetails.message || 'Erro desconhecido.'}`);
                             }

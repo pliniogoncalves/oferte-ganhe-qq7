@@ -33,7 +33,7 @@
                     <tr>
                         <td><%= user.name_users %></td>
                         <td><%= user.profile.name_profile %></td>
-                        <td><%= user.store.number_store %></td>
+                        <td><%= user.store.number_store === '0' ? 'Matriz' : user.store.number_store %></td>
                         <td><%= user.email_users %></td>
                         <td class="text-center">
                             <button class="btn btn-sm btn-warning editar" data-registration="<%= user.registration_users %>" data-url="/users/edit">

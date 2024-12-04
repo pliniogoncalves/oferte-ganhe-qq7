@@ -12,32 +12,47 @@
     </div>
     
     <form id="userForm">
+
         <div class="mb-3">
             <label for="name" class="form-label">Nome</label>
             <input type="text" class="form-control" id="name" name="name" required>
         </div>
+
         <div class="mb-3">
             <label for="registration" class="form-label">Matrícula</label>
             <input type="text" class="form-control" id="registration" name="registration" required>
         </div>
+
         <div class="mb-3">
             <label for="email" class="form-label">E-mail</label>
             <input type="email" class="form-control" id="email" name="email" required>
         </div>
+
         <div class="mb-3">
             <label for="password" class="form-label">Senha</label>
             <input type="password" class="form-control" id="password" name="password" required>
         </div>
+
         <div class="mb-3">
             <label for="profile" class="form-label">Perfil</label>
             <select class="form-control" id="profile" name="profile" required>
+                <% profiles.forEach(profile => { %>
+                    <option value="<%= profile.name_profile %>"><%= profile.name_profile %></option>
+                <% }); %>
             </select>
         </div>
+        
         <div class="mb-3">
             <label for="store" class="form-label">Loja</label>
-            <select class="form-control" id="store" name="store" required>
+            <select class="form-control" id="store" name="store" disabled required>
+                <% stores.forEach(store => { %>
+                    <option value="<%= store.number_store %>">
+                        <%= store.number_store === '0' ? 'Matriz' : store.number_store %>
+                    </option>
+                <% }); %>
             </select>
         </div>
+        
         <div class="text-center mb-4">
             <div class="row justify-content-center">
               <div class="col-12 col-sm-6 col-md-3 mb-2">

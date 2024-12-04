@@ -19,11 +19,20 @@ const userViewController = {
         }
     },
 
-    getAddUserPage: (req, res) => {
-        res.render('partials/users/addUsers', {
-            layout: false,
-            title: 'Cadastrar Usuário',
-        });
+    getAddUserPage: async (req, res) => {
+        try{
+            const { profiles, stores } = await userViewService.getAddUserData();
+    
+            res.render('partials/users/addUsers', {
+                layout: false,
+                title: 'Cadastrar Usuário',
+                profiles,
+                stores,
+            });
+        }catch(error){
+            console.error('Erro ao carregar a página de cadastro de usuário:', error);
+            res.status(500).send('Erro ao carregar a página.');
+        }
     },
 
     getAllUsers: async (req, res) => {

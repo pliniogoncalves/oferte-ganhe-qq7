@@ -15,6 +15,11 @@ async function insertUser(name, registration, email, password, profileName = 1, 
             });
             if(foundProfile){
                 idProfile = foundProfile.id_profile;
+
+                if(profileName.toLowerCase() === 'Administrador'){
+                    storeNumber = 0;
+                }
+
             }else{
                 throw new Error(`Profile with name '${profileName}' not found.`);
             }
@@ -87,10 +92,8 @@ async function searchUserRegistration(registration) {
 
 //function Edit user
 async function editUser(name, newRegistration, email, password, profile, store, registration) {
-    console.log('Editing user:', { name, newRegistration, email, profile, store, registration });
 
-    try {
-        //Fetch profile ID based on name
+    try{
         const foundProfile = await Profile.findOne({
             where: { name_profile: profile },
         });
@@ -99,7 +102,11 @@ async function editUser(name, newRegistration, email, password, profile, store, 
             throw new Error(`Profile with name '${profile}' not found`);
         }
 
-        //Fetch store ID based on number
+        let storeNumber = store;
+        if(profile.toLowerCase() === 'Administrador') {
+            storeNumber = 0;
+        }
+
         const foundStore = await Store.findOne({
             where: { number_store: store },
         });
@@ -108,7 +115,6 @@ async function editUser(name, newRegistration, email, password, profile, store, 
             throw new Error(`Store with number '${store}' not found`);
         }
 
-        //Build dynamic fields for update
         const updateFields = {
             ...(name && { name_users: name }),
             ...(newRegistration && { registration_users: newRegistration }),
@@ -118,7 +124,6 @@ async function editUser(name, newRegistration, email, password, profile, store, 
             id_store: foundStore.id_store,      
         };
 
-        //Update user
         const [affectedRows, [updatedUser]] = await User.update(
             updateFields,
             {
@@ -133,7 +138,7 @@ async function editUser(name, newRegistration, email, password, profile, store, 
 
         console.log('User updated:', updatedUser);
         return updatedUser;
-    } catch (err) {
+    }catch (err){
         console.error('Error editing user:', err.message);
         throw err;
     }

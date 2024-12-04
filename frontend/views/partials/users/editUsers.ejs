@@ -43,9 +43,13 @@
 
         <div class="mb-3">
             <label for="store" class="form-label">Loja</label>
-            <select class="form-control" id="store" name="store" required>
+            <select class="form-control" id="store" name="store" 
+                    <%= users.id_profile === 1 ? 'disabled' : '' %> required>
                 <% stores.forEach(store => { %>
-                    <option value="<%= store.number_store %>" <%= store.id_store === users.id_store ? 'selected' : '' %>><%= store.number_store %></option>
+                    <option value="<%= store.number_store %>" 
+                            <%= store.id_store === users.id_store ? 'selected' : '' %>>
+                        <%= store.number_store === '0' ? 'Matriz' : store.number_store %>
+                    </option>
                 <% }); %>
             </select>
         </div>
