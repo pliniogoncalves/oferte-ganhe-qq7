@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener("click", async (event) => {
         const addUserBtn = event.target.closest("#addUserBtn");
         if(addUserBtn){
-            try {
+            try{
                 const url = '/users/add';
                 window.history.pushState({}, '', url);
     
@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     const formData = new FormData(userForm);
                     const data = Object.fromEntries(formData.entries());
     
-                    try {
+                    try{
                         const saveResponse = await fetch('/api/users/register/', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
@@ -59,16 +59,16 @@ document.addEventListener("DOMContentLoaded", () => {
                             if (!response.ok) throw new Error("Erro ao carregar a lista de usuários.");
                             const usersHTML = await response.text();
                             content.innerHTML = usersHTML;
-                        } else {
+                        }else{
                             const errorData = await saveResponse.json();
                             showModal('Erro', `Erro ao cadastrar usuário: ${errorData.message || "Erro desconhecido."}`);
                         }
-                    } catch(error) {
+                    }catch(error){
                         console.error("Erro ao cadastrar usuário:", error);
                         showModal('Erro', "Erro inesperado ao cadastrar usuário.");
                     }
                 });
-            } catch(error) {
+            }catch(error){
                 console.error("Erro ao carregar o formulário:", error);
                 showModal('Erro', "Erro ao carregar o formulário de cadastro.");
             }
@@ -77,11 +77,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Read
     document.addEventListener("click", async (event) => {
-        if (event.target.closest("#searchBtn")) {
+        if(event.target.closest("#searchBtn")){
             const searchInput = document.getElementById("search");
             const registration = searchInput?.value.trim();
     
-            try {
+            try{
                 const response = registration 
                     ? await fetch(`/users/search?registration=${encodeURIComponent(registration)}`)
                     : await fetch(`/users/list`);
@@ -90,12 +90,12 @@ document.addEventListener("DOMContentLoaded", () => {
                     const tableHTML = await response.text();
                     const tableBody = document.querySelector("table tbody");
                     tableBody ? tableBody.innerHTML = tableHTML : console.error("Tabela de usuários não encontrada.");
-                } else if(response.status === 404) {
+                }else if(response.status === 404) {
                     showModal('Aviso', registration ? 'Usuário não encontrado.' : 'Nenhum usuário disponível.');
-                } else {
+                }else{
                     showModal('Erro', 'Erro ao buscar usuários.');
                 }
-            } catch(error) {
+            }catch(error){
                 console.error('Erro ao buscar usuários:', error);
                 showModal('Erro', 'Erro inesperado ao buscar usuários.');
             }
@@ -111,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const url = `/users/edit/${registration}`;
             window.history.pushState({}, '', url);
     
-            try {
+            try{
                 const response = await fetch(url);
                 if(response.ok){
                     document.getElementById("content").innerHTML = await response.text();
@@ -131,7 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             store: data.store,
                         };
 
-                        try {
+                        try{
                             const saveResponse = await fetch(`/api/users/edit/${registration}`, {
                                 method: 'PUT',
                                 headers: { 'Content-Type': 'application/json' },
@@ -147,15 +147,15 @@ document.addEventListener("DOMContentLoaded", () => {
                                 const errorDetails = await saveResponse.json();
                                 showModal('Erro', `Erro ao atualizar usuário: ${errorDetails.message || 'Erro desconhecido.'}`);
                             }
-                        } catch(error) {
+                        }catch(error){
                             console.error("Erro ao salvar alterações:", error);
                             showModal('Erro', "Erro ao atualizar o usuário.");
                         }
                     });
-                } else {
+                }else{
                     throw new Error("Erro ao carregar o formulário de edição.");
                 }
-            } catch(error) {
+            }catch(error){
                 console.error("Erro ao carregar o formulário de edição:", error);
                 showModal('Erro', "Não foi possível carregar o formulário de edição.");
             }
@@ -168,7 +168,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if(deleteUserBtn){
             const registration = deleteUserBtn.dataset.registration;
             showModal('Confirmação', 'Tem certeza que deseja deletar este usuário?', async () => {
-                try {
+                try{
                     const response = await fetch(`/api/users/delete/${registration}`, {
                         method: 'DELETE',
                     });
@@ -180,7 +180,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     } else {
                         showModal('Erro', 'Erro ao deletar usuário.');
                     }
-                } catch(error) {
+                }catch(error){
                     console.error('Erro ao deletar usuário:', error);
                     showModal('Erro', 'Erro inesperado ao deletar usuário.');
                 }
