@@ -11,7 +11,7 @@ const frontendMiddleware = (app) => {
 
   // Middleware to define default layout
   app.use((req, res, next) => {
-    res.locals.layout = 'layouts/mainLayout';
+    res.locals.layout = 'layouts/indexLayout';
     next();
   });
 

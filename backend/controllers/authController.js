@@ -29,7 +29,7 @@ async function login(req, res) {
             maxAge: (parseInt(process.env.JWT_COOKIE_EXPIRES_HOURS) || 1) * 60 * 60 * 1000,
         });
 
-        return handleResponse(req, res, 200, 'Login bem-sucedido.', '/main', { token });
+        return handleResponse(req, res, 200, 'Login bem-sucedido.', '/index', { token });
     }catch(err){
         console.error('Login error:', err);
         return handleResponse(req, res, 500, 'Erro interno do servidor.', '/login', err);

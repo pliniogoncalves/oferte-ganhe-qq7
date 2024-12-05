@@ -57,7 +57,7 @@ app.get('/', (req, res) => {
     if(!req.cookies.token) {
         res.redirect('/login');
     }else{
-        res.redirect('/main');
+        res.redirect('/index');
     }
 });
 

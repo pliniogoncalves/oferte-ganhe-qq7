@@ -12,7 +12,7 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
         });
 
         if(response.ok){
-            window.location.href = '/main';
+            window.location.href = '/index';
         }else{
             const data = await response.json();
             showModal('Erro', data.message || 'Falha no login.');
