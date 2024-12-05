@@ -94,11 +94,13 @@ const userController = {
         }
     },
 
+    //Function export CSV
     exportUsersCSV: async (req, res) =>{
         try{
             const csvFilePath = await reportService.exportUsersReport();
-            res.download(path.resolve(csvFilePath), 'usuarios.csv');
+            res.download(csvFilePath, 'usuarios.csv');
         }catch(error){
+            console.error("Erro ao exportar CSV:", error);
             res.status(500).json({ message: 'Error exporting CSV', error: error.message });
         }
     },

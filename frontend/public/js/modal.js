@@ -6,7 +6,6 @@ function showModal(title, message, confirmCallback = null) {
     modalLabel.textContent = title;
     modalMessage.textContent = message;
 
-    // Mostrar botão de confirmação apenas se houver callback
     if (confirmCallback) {
         confirmButton.style.display = 'inline-block';
         confirmButton.onclick = () => {

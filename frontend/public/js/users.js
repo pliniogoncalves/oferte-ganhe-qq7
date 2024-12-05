@@ -195,7 +195,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener("click", async (event) => {
         const exportCsvBtn = event.target.closest("#exportCsvBtn");
         if(exportCsvBtn){
-            try {
+            try{
                 const response = await fetch('/api/users/export-csv', { method: 'GET' });
                 if (!response.ok) throw new Error("Erro ao exportar CSV.");
     
@@ -209,6 +209,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 a.click();
                 window.URL.revokeObjectURL(url);
                 document.body.removeChild(a);
+
+                showModal('Sucesso', 'O arquivo CSV foi exportado com sucesso.');
+
             }catch(error){
                 console.error('Erro ao exportar CSV:', error);
                 showModal('Erro', 'Erro inesperado ao exportar CSV.');
