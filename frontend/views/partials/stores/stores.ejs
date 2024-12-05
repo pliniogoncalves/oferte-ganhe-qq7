@@ -1,0 +1,69 @@
+<div class="text-center mb-4">
+    <h1 class="fw-bold">Gestão de Lojas</h1>
+    <p class="text-muted">Veja a lista de Lojas Cadastradas e suas respectivas situações.</p>
+</div>
+
+<div class="container mb-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-sm-12 mb-4">
+            <div class="input-group">
+                <input type="text" class="form-control" id="search" placeholder="Buscar por Número">
+                <div class="input-icon">
+                      <i class="fas fa-search"></i>
+                </div>
+                <button class="btn btn-success" id="searchStoreBtn" style="background-color: #269447; color: #fff;" >Buscar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<table class="table table-bordered table-hover">
+    <thead style="background-color: #269447; color: #fff;">
+        <tr>
+            <th>Nome</th>
+            <th>Número</th>
+            <th class="text-center">Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% if(stores && stores.length > 0){ %>
+            <% stores.forEach(store => { %>
+                <tr>
+                    <td><%= store.name_store %></td>
+                    <td><%= store.number_store %></td>
+                    <td class="text-center">
+                        <button class="btn btn-sm btn-warning editStore" data-number="<%= store.number_store %>" data-url="/stores/edit">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger deleteStore" data-number="<%= store.number_store %>">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            <% }) %>
+        <% }else{ %>
+            <tr>
+                <td colspan="5">Nenhuma loja encontrada.</td>
+            </tr>
+        <% } %>   
+    </tbody>
+</table>
+
+<div class="text-center">
+    <%- include('../../components/pagination', { currentPage, totalPages }) %>
+</div>
+
+<div class="text-center mb-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-sm-6 col-md-3 mb-2">
+            <button class="btn btn-custom w-100" type="button" id="addStoreBtn" data-url="/stores/add">
+                <i class="fas fa-plus-circle"></i> Cadastrar Nova Loja
+            </button>
+        </div>
+        <div class="col-12 col-sm-6 col-md-3 mb-2">
+            <button class="btn btn-secondary w-100" type="button" id="exportCsvBtn">
+                <i class="fas fa-file-export"></i> Exportar CSV
+            </button>
+        </div>
+    </div>
+</div>

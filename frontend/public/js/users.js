@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Read
     document.addEventListener("click", async (event) => {
-        if(event.target.closest("#searchBtn")){
+        if(event.target.closest("#searchUserBtn")){
             const searchInput = document.getElementById("search");
             const registration = searchInput?.value.trim();
     
@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Update
     document.addEventListener("click", async (event) => {
-        const editUserBtn = event.target.closest(".editar");
+        const editUserBtn = event.target.closest(".editUser");
         if(editUserBtn){
             const registration = editUserBtn.dataset.registration;
     
@@ -167,7 +167,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Delete
     document.addEventListener("click", async (event) => {
-        const deleteUserBtn = event.target.closest(".deletar");
+        const deleteUserBtn = event.target.closest(".deleteUser");
         if(deleteUserBtn){
             const registration = deleteUserBtn.dataset.registration;
             showModal('Confirmação', 'Tem certeza que deseja deletar este usuário?', async () => {

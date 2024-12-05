@@ -1,0 +1,36 @@
+<div class="container-fluid p-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        
+        <%- include('../../components/backButton.ejs') %>
+
+        <div class="w-100 text-center me-4 me-md-5">
+            <h1 class="fw-bold">Editar Loja</h1>
+            <p class="text-muted">Altere os dados abaixo para atualizar as informações da Loja.</p>
+        </div>
+
+    </div>
+
+    <form id="editForm">
+        <div class="mb-3">
+            <label for="name" class="form-label">Nome</label>
+            <input type="text" class="form-control" id="name" name="name" value="<%= stores.name_store %>" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="number" class="form-label">Número</label>
+            <input type="text" class="form-control" id="number" name="number" value="<%= stores.number_store %>" required>
+        </div>
+
+        <div class="text-center mb-4">
+            <div class="row justify-content-center">
+                <div class="col-12 col-sm-6 col-md-3 mb-2">
+                    <button type="submit" id="submitBtn" class="btn btn-custom w-100">
+                        <i class="fas fa-save"></i> Salvar Alterações
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+    </form>
+</div>

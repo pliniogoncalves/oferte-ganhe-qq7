@@ -11,7 +11,7 @@
                     <div class="input-icon">
                           <i class="fas fa-search"></i>
                     </div>
-                    <button class="btn btn-success" id="searchBtn" style="background-color: #269447; color: #fff;" >Buscar</button>
+                    <button class="btn btn-success" id="searchUserBtn" style="background-color: #269447; color: #fff;" >Buscar</button>
                 </div>
             </div>
         </div>
@@ -38,10 +38,10 @@
                         </td>
                         <td><%= user.email_users %></td>
                         <td class="text-center">
-                            <button class="btn btn-sm btn-warning editar" data-registration="<%= user.registration_users %>" data-url="/users/edit">
+                            <button class="btn btn-sm btn-warning editUser" data-registration="<%= user.registration_users %>" data-url="/users/edit">
                                 <i class="fas fa-edit"></i>
                             </button>
-                            <button class="btn btn-sm btn-danger deletar" data-registration="<%= user.registration_users %>">
+                            <button class="btn btn-sm btn-danger deleteUser" data-registration="<%= user.registration_users %>">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </td>
@@ -67,7 +67,7 @@
                 </button>
             </div>
             <div class="col-12 col-sm-6 col-md-3 mb-2">
-                <button class="btn btn-secondary w-100" type="button" id="exportCsvBtn">
+                <button class="btn btn-secondary w-100" type="button" id="exportUserCsvBtn">
                     <i class="fas fa-file-export"></i> Exportar CSV
                 </button>
             </div>

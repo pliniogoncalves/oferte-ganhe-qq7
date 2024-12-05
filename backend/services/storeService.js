@@ -65,10 +65,22 @@ async function removeStore(number) {
     }
 }
 
+//Function counts all stores
+async function countStores() {
+    try {
+        const count = await Store.count();
+        return count;
+    } catch (err) {
+        console.error('Error counting Stores:', err);
+        throw err;
+    }
+}
+
 module.exports = {
     insertStore,
     searchStore,
     searchStoreNumber,
     editStore,
     removeStore,
+    countStores
 };
