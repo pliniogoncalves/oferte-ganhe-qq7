@@ -193,8 +193,8 @@ document.addEventListener("DOMContentLoaded", () => {
     
     //Export CSV
     document.addEventListener("click", async (event) => {
-        const exportCsvBtn = event.target.closest("#exportCsvBtn");
-        if(exportCsvBtn){
+        const exportUserCsvBtn = event.target.closest("#exportUserCsvBtn");
+        if(exportUserCsvBtn){
             try{
                 const response = await fetch('/api/users/export-csv', { method: 'GET' });
                 if (!response.ok) throw new Error("Erro ao exportar CSV.");

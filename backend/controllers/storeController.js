@@ -1,4 +1,5 @@
 const storeService = require('../services/storeService.js')
+const reportService = require('../services/reportService');
 
 //Controller for the Stores page
 const storeController = {
@@ -75,6 +76,17 @@ const storeController = {
             }
         }catch(err){
             res.status(500).json({ message: 'Error deleting Store', error: err.message });
+        }
+    },
+
+    //Function export CSV
+    exportStoresCSV: async (req, res) =>{
+        try{
+            const csvFilePath = await reportService.exportStoresReport();
+            res.download(csvFilePath, 'lojas.csv');
+        }catch(error){
+            console.error("Erro ao exportar CSV:", error);
+            res.status(500).json({ message: 'Error exporting CSV', error: error.message });
         }
     },
 };

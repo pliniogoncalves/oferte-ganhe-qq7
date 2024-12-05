@@ -18,5 +18,8 @@ router.get('/store/list/:number', authenticateToken, storeController.searchStore
 router.put('/store/edit/:number', authenticateToken, storeController.editStore);
 router.delete('/store/delete/:number', authenticateToken, storeController.removeStore);
 
+//Export CSV
+router.get('/store/export-csv', authenticateToken, storeController.exportStoresCSV);
+
 module.exports = router;
 

@@ -161,10 +161,10 @@ document.addEventListener("DOMContentLoaded", () => {
     
     //Export CSV
     document.addEventListener("click", async (event) => {
-        const exportCsvBtn = event.target.closest("#exportCsvBtn");
-        if(exportCsvBtn){
+        const exportStoreCsvBtn = event.target.closest("#exportStoreCsvBtn");
+        if(exportStoreCsvBtn){
             try{
-                const response = await fetch('/api/users/export-csv', { method: 'GET' });
+                const response = await fetch('/api/store/export-csv', { method: 'GET' });
                 if (!response.ok) throw new Error("Erro ao exportar CSV.");
     
                 const blob = await response.blob();
@@ -172,7 +172,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = 'usuarios.csv';
+                a.download = 'lojas.csv';
                 document.body.appendChild(a);
                 a.click();
                 window.URL.revokeObjectURL(url);
