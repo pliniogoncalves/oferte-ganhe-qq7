@@ -15,6 +15,7 @@ router.post('/profile-permissions/register', profilePermissionController.insertP
 router.get('/profile-permissions/list', profilePermissionController.searchAllProfilesWithPermissions);
 router.get('/profile-permissions/list/:profileName', profilePermissionController.searchPermissionsByProfile);
 router.delete('/profile-permissions/delete/:profileName/:permissionName', profilePermissionController.removePermissionFromProfile);
+router.delete('/profile-permissions/delete', profilePermissionController.removeMultiplePermissionsFromProfile);
 
 module.exports = router;
 

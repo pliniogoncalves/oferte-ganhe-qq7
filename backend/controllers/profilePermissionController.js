@@ -66,6 +66,26 @@ const profilePermissionController = {
             res.status(500).json({ message: 'Error removing Permission from Profile', error: err.message });
         }
     },
+
+    //Function to remove multiple permissions from a profile
+    removeMultiplePermissionsFromProfile: async (req, res) => {
+        const { profileName } = req.body;
+        const { permissionNames } = req.body;
+    
+        if(!profileName || !Array.isArray(permissionNames) || permissionNames.length === 0) {
+            return res.status(400).json({ message: "Invalid input: profileName and permissionNames are required." });
+        }
+    
+        try{
+            const removedCount = await profilePermissionService.removeMultiplePermissionsFromProfile(profileName, permissionNames);
+            res.status(200).json({
+                message: `${removedCount} permissions removed from Profile successfully!`
+            });
+        }catch(err){
+            res.status(500).json({ message: 'Error removing Permissions from Profile', error: err.message });
+        }
+    },
+
 };
 
 module.exports = profilePermissionController;

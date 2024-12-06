@@ -120,9 +120,43 @@ async function removePermissionFromProfile(profileName, permissionName) {
     }
 }
 
+//Remove multiple permissions from a Profile by name
+async function removeMultiplePermissionsFromProfile(profileName, permissionNames) {
+    try{
+        
+        const profile = await Profile.findOne({ where: { name_profile: profileName } });
+        if(!profile){
+            throw new Error(`Profile with name '${profileName}' not found`);
+        }
+
+        const permissions = await Permission.findAll({
+            where: { name_permission: permissionNames }
+        });
+
+        if(permissions.length !== permissionNames.length) {
+            throw new Error("One or more permissions not found");
+        }
+
+        const permissionIds = permissions.map(permission => permission.id_permission);
+        const removedPermissions = await ProfilePermission.destroy({
+            where: {
+                id_profile: profile.id_profile,
+                id_permission: permissionIds
+            }
+        });
+
+        return removedPermissions;
+        
+    }catch(err){
+        console.error('Error removing Permissions from Profile:', err);
+        throw err;
+    }
+}
+
 module.exports = {
     insertProfilePermission,
     searchPermissionsByProfile,
     searchAllProfilesWithPermissions,
     removePermissionFromProfile,
+    removeMultiplePermissionsFromProfile,
 };

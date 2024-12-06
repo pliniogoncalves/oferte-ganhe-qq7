@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const url = `/profiles/edit/${nameProfile}`;
             window.history.pushState({}, '', url);
     
-            try {
+            try{
                 const response = await fetch(url);
                 if (response.ok) {
                     content.innerHTML = await response.text();
@@ -96,12 +96,18 @@ document.addEventListener("DOMContentLoaded", () => {
     
                         const formData = new FormData(profileForm);
                         const data = Object.fromEntries(formData.entries());
-                        data.permissions = Array.from(
+    
+                        const selectedPermissions = Array.from(
                             document.querySelectorAll('input[name="permissions"]:checked')
                         ).map(el => el.value);
     
-                        try {
-                            // Primeiro, atualiza o nome do perfil
+                        const allPermissions = Array.from(
+                            document.querySelectorAll('input[name="permissions"]')
+                        ).map(el => el.value);
+    
+                        const removedPermissions = allPermissions.filter(permission => !selectedPermissions.includes(permission));
+    
+                        try{
                             const profileResponse = await fetch(`/api/profiles/edit/${nameProfile}`, {
                                 method: 'PUT',
                                 headers: { 'Content-Type': 'application/json' },
@@ -110,24 +116,23 @@ document.addEventListener("DOMContentLoaded", () => {
                                 }),
                             });
     
-                            if (!profileResponse.ok) {
+                            if(!profileResponse.ok){
                                 const errorDetails = await profileResponse.json();
                                 showModal('Erro', `Erro ao atualizar perfil: ${errorDetails.message || "Erro desconhecido."}`);
                                 return;
                             }
     
-                            // Segundo, atualiza as permissões associadas ao perfil
-                            for (const permissionId of data.permissions) {
+                            for (const permissionName of selectedPermissions) {
                                 const permissionResponse = await fetch('/api/profile-permissions/register/', {
                                     method: 'POST',
                                     headers: { 'Content-Type': 'application/json' },
                                     body: JSON.stringify({
                                         profileName: data.name,
-                                        permissionName: data.permissions
+                                        permissionName
                                     }),
                                 });
     
-                                if (!permissionResponse.ok) {
+                                if(!permissionResponse.ok){
                                     const errorDetails = await permissionResponse.text();
                                     console.error("Erro ao associar permissão:", errorDetails);
                                     showModal('Erro', `Erro ao associar permissão: ${errorDetails}`);
@@ -135,24 +140,41 @@ document.addEventListener("DOMContentLoaded", () => {
                                 }
                             }
     
-                            // Se tudo for bem-sucedido
+                            if(removedPermissions.length > 0){
+                                const deleteResponse = await fetch('/api/profile-permissions/delete', {
+                                    method: 'DELETE',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({
+                                        profileName: data.name,
+                                        permissionNames: removedPermissions
+                                    }),
+                                });
+    
+                                if(!deleteResponse.ok){
+                                    const errorDetails = await deleteResponse.text();
+                                    console.error("Erro ao remover permissões:", errorDetails);
+                                    showModal('Erro', `Erro ao remover permissões: ${errorDetails}`);
+                                    return;
+                                }
+                            }
+    
                             showModal('Sucesso', 'Perfil e Permissões atualizados com sucesso!');
                             const profilesResponse = await fetch('/profiles/page');
                             content.innerHTML = await profilesResponse.text();
-                        } catch (error) {
+                        }catch(error){
                             console.error("Erro ao salvar alterações:", error);
                             showModal('Erro', "Erro ao atualizar o perfil e permissões.");
                         }
                     });
-                } else {
+                }else{
                     throw new Error("Erro ao carregar o formulário de edição.");
                 }
-            } catch (error) {
+            }catch(error){
                 console.error("Erro ao carregar o formulário de edição:", error);
                 showModal('Erro', "Não foi possível carregar o formulário de edição.");
             }
         }
-    });
+    });  
 
     // Delete
     document.addEventListener("click", async (event) => {
