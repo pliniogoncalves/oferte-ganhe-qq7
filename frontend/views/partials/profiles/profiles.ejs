@@ -1,48 +1,79 @@
-<div class="container-fluid p-4">
+<div class="text-center mb-4">
+    <h1 class="fw-bold">Gestão de Perfis</h1>
+    <p class="text-muted">Veja a lista de perfis cadastrados e suas respectivas permissões.</p>
+</div>
 
-    <div class="text-center mb-4">
-        <h1 class="fw-bold">Gestão de Perfis de Acesso</h1>
-        <p class="text-muted">Veja a lista de Perfis de Acesso e suas permissões.</p>
-    </div>
-
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <div class="input-group" style="max-width: 300px;">
-            <input type="text" id="search" class="form-control" placeholder="Procurar por perfil">
-            <button class="btn btn-success" id="searchBtn" style="background-color: #269447; color: #fff;" >Buscar</button>
+<div class="container mb-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-sm-12 mb-4">
+            <div class="input-group">
+                <input type="text" class="form-control" id="search" placeholder="Buscar por Nome">
+                <div class="input-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <button class="btn btn-success" id="searchProfileBtn" style="background-color: #269447; color: #fff;">
+                    Buscar
+                </button>
+            </div>
         </div>
     </div>
+</div>
 
-    <table class="table table-bordered table-hover">
-        <thead style="background-color: #269447; color: #fff;">
-            <tr>
-                <th>Nome</th>
-                <th class="text-center">Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% if(profiles && profiles.length > 0){ %>
-                <% profiles.forEach(profile => { %>
-                    <tr>
-                        <td><%= profile.name_profile %></td>
-                        <td class="text-center">
-                            <button class="btn btn-sm btn-warning editar" data-id="<%= profile.id %>">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="btn btn-sm btn-danger deletar" data-id="<%= profile.id %>">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                <% }) %>
-            <% }else{ %>
+<table class="table table-bordered table-hover">
+    <thead style="background-color: #269447; color: #fff;">
+        <tr>
+            <th>Nome do Perfil</th>
+            <th>Permissões</th>
+            <th class="text-center">Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% if (profiles && profiles.length > 0) { %>
+            <% profiles.forEach(profile => { %>
                 <tr>
-                    <td colspan="5">Nenhum Perfil encontrado.</td>
+                    <td><%= profile.name_profile %></td>
+                    <td>
+                        <% if (profile.Permissions && profile.Permissions.length > 0) { %>
+                            <% profile.Permissions.forEach(permission => { %>
+                                <span class="badge bg-primary"><%= permission.name_permission %></span>
+                            <% }); %>
+                        <% } else { %>
+                            <span class="text-muted">Nenhuma permissão</span>
+                        <% } %>
+                    </td>
+                    <td class="text-center">
+                        <button class="btn btn-sm btn-warning editProfile" data-name="<%= profile.name_profile %>" data-url="/profiles/edit">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger deleteProfile" data-name="<%= profile.name_profile %>">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
                 </tr>
-            <% } %>   
-        </tbody>
-    </table>
+            <% }) %>
+        <% } else { %>
+            <tr>
+                <td colspan="3">Nenhum perfil encontrado.</td>
+            </tr>
+        <% } %>
+    </tbody>
+</table>
 
-    <div class="text-end mb-3">
-        <button class="btn btn-success" id="addUserBtn">Cadastrar Novo Perfil</button>
+<div class="text-center">
+    <%- include('../../components/pagination', { currentPage, totalPages }) %>
+</div>
+
+<div class="text-center mb-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-sm-6 col-md-3 mb-2">
+            <button class="btn btn-custom w-100" type="button" id="addProfileBtn" data-url="/profiles/add">
+                <i class="fas fa-plus-circle"></i> Cadastrar Novo Perfil
+            </button>
+        </div>
+        <div class="col-12 col-sm-6 col-md-3 mb-2">
+            <button class="btn btn-secondary w-100" type="button" id="exportProfileCsvBtn" data-url="/profiles/export-csv">
+                <i class="fas fa-file-export"></i> Exportar CSV
+            </button>
+        </div>
     </div>
 </div>

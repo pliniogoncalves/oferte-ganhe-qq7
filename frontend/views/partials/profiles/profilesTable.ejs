@@ -1,0 +1,22 @@
+<% profiles.forEach(profile => { %>
+    <tr>
+        <td><%= profile.name_profile %></td>
+        <td>
+            <% if (profile.Permissions && profile.Permissions.length > 0) { %>
+                <% profile.Permissions.forEach(permission => { %>
+                    <span class="badge bg-primary"><%= permission.name_permission %></span>
+                <% }); %>
+            <% } else { %>
+                <span class="text-muted">Nenhuma permissão</span>
+            <% } %>
+        </td>
+        <td class="text-center">
+            <button class="btn btn-sm btn-warning editProfile" data-id="<%= profile.id_profile %>">
+                <i class="fas fa-edit"></i>
+            </button>
+            <button class="btn btn-sm btn-danger deleteProfile" data-id="<%= profile.id_profile %>">
+                <i class="fas fa-trash"></i>
+            </button>
+        </td>
+    </tr>
+<% }) %>

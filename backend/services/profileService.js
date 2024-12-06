@@ -63,10 +63,22 @@ async function removeProfile(name) {
   }
 }
 
+//Function counts all profiles
+async function countProfiles() {
+  try {
+      const count = await Profile.count();
+      return count;
+  } catch (err) {
+      console.error('Error counting profiles:', err);
+      throw err;
+  }
+}
+
 module.exports = {
   insertProfile,
   searchProfile,
   searchProfileName,
   editProfile,
   removeProfile,
+  countProfiles
 };
