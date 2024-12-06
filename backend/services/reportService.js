@@ -93,7 +93,7 @@ async function exportStoresReport() {
             const output = stdout.join('\n');
             if(code === 0 && output.includes("STATUS: SUCCESS")){
                 console.log("Processo Python concluído com sucesso.");
-                resolve(path.join(__dirname, '../../relatorios/usuarios.csv'));
+                resolve(path.join(__dirname, '../../relatorios/lojas.csv'));
             }else{
                 console.error(`Erro no script Python: ${stderr.join('\n')}`);
                 reject(new Error(`Erro ao exportar CSV: saída não reconhecida ou código de erro ${code}.`));
