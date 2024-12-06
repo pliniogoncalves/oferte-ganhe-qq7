@@ -70,8 +70,8 @@ const profileViewService = {
             const permissions = await permissionService.searchPermission();
             const profilePermissions = await profilePermissionService.searchPermissionsByProfile(profile.name_profile);
 
-            const profilePermissionIds = Array.isArray(profilePermissions)
-            ? profilePermissions
+            const profilePermissionIds = Array.isArray(profilePermissions.permissions)
+            ? profilePermissions.permissions.map(p => p.id_permission)
             : [];
 
             return { profile, permissions, profilePermissions: profilePermissionIds };

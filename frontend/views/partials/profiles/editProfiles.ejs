@@ -24,12 +24,12 @@
                 <% permissions.forEach(permission => { %>
                     <div class="form-check">
                         <input 
-                        class="form-check-input" 
-                        type="checkbox" 
-                        id="perm-<%= permission.id_permission %>" 
-                        name="permissions" 
-                        value="<%= permission.id_permission %>"
-                        <%= profilePermissions.includes(permission.id_permission) ? 'checked' : '' %>>
+                            class="form-check-input" 
+                            type="checkbox" 
+                            id="perm-<%= permission.id_permission %>" 
+                            name="permissions" 
+                            value="<%= permission.id_permission %>"
+                            <%= profilePermissions.includes(permission.id_permission) ? 'checked' : '' %>>
                         <label class="form-check-label" for="perm-<%= permission.id_permission %>"><%= permission.name_permission %></label>
                     </div>
                 <% }); %>

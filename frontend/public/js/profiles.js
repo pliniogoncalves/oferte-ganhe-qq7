@@ -81,40 +81,65 @@ document.addEventListener("DOMContentLoaded", () => {
         const editProfileBtn = event.target.closest(".editProfile");
         if (editProfileBtn) {
             const nameProfile = editProfileBtn.dataset.name;
-
+    
             const url = `/profiles/edit/${nameProfile}`;
             window.history.pushState({}, '', url);
-
+    
             try {
                 const response = await fetch(url);
                 if (response.ok) {
                     content.innerHTML = await response.text();
                     const profileForm = document.getElementById("profileForm");
-
+    
                     profileForm.addEventListener("submit", async (e) => {
                         e.preventDefault();
                         const formData = new FormData(profileForm);
                         const data = Object.fromEntries(formData.entries());
                         data.permissions = Array.from(document.querySelectorAll('input[name="permissions"]:checked')).map(el => el.value);
-
+    
                         try {
-                            const saveResponse = await fetch(`/api/profiles/edit/${nameProfile}`, {
+                            // Primeiro, atualiza o nome do perfil
+                            const profileResponse = await fetch(`/api/profiles/edit/${nameProfile}`, {
                                 method: 'PUT',
                                 headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify(data)
+                                body: JSON.stringify({
+                                    newName: data.name
+                                }),
                             });
-
-                            if (saveResponse.ok) {
-                                showModal('Sucesso', 'Perfil atualizado com sucesso!');
-                                const profilesResponse = await fetch('/profiles/page');
-                                content.innerHTML = await profilesResponse.text();
-                            } else {
-                                const errorDetails = await saveResponse.json();
+    
+                            if (!profileResponse.ok) {
+                                const errorDetails = await profileResponse.json();
                                 showModal('Erro', `Erro ao atualizar perfil: ${errorDetails.message || "Erro desconhecido."}`);
+                                return;
                             }
+    
+                            // Segundo, atualiza as permissões associadas ao perfil
+                            const permissionPayload = data.permissions.map(permissionName => ({
+                                profileName: data.name, // Nome do perfil atualizado
+                                permissionName // Nome da permissão
+                            }));
+    
+                            for (const permission of permissionPayload) {
+                                const permissionResponse = await fetch('/profile-permissions/register', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify(permission),
+                                });
+    
+                                if (!permissionResponse.ok) {
+                                    const errorDetails = await permissionResponse.json();
+                                    showModal('Erro', `Erro ao atualizar permissão ${permission.permissionName}: ${errorDetails.message || "Erro desconhecido."}`);
+                                    return;
+                                }
+                            }
+    
+                            // Se ambos forem bem-sucedidos
+                            showModal('Sucesso', 'Perfil e permissões atualizados com sucesso!');
+                            const profilesResponse = await fetch('/profiles/page');
+                            content.innerHTML = await profilesResponse.text();
                         } catch (error) {
                             console.error("Erro ao salvar alterações:", error);
-                            showModal('Erro', "Erro ao atualizar o perfil.");
+                            showModal('Erro', "Erro ao atualizar o perfil e permissões.");
                         }
                     });
                 } else {
