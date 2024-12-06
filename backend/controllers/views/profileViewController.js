@@ -50,17 +50,20 @@ const profileViewController = {
         const { name } = req.query;
     
         try{
-            const profiles = name 
-                ? await profileViewService.getProfileByname(name)
-                : await profileViewService.getPaginatedProfiles(1, 10);
-    
-            if(name && !profiles){
-                return res.status(404).send("Perfil não encontrado.");
+            let profiles;
+            if(name){
+                profiles = await profileViewService.getProfileByname(name);
+                if(!profiles){
+                    return res.status(404).send("Perfil não encontrado.");
+                }
+                profiles = Array.isArray(profiles) ? profiles : [profiles];
+            }else{
+                profiles = await profileViewService.getAllProfiles();
             }
     
-            res.render("partials/profiles/profilesTable", { 
-                layout: false, 
-                profiles: Array.isArray(profiles) ? profiles : [profiles],
+            res.render("partials/profiles/profilesTable", {
+                layout: false,
+                profiles
             });
         }catch(error){
             console.error("Erro ao buscar perfil por nome:", error.message);
