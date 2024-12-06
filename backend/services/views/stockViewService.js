@@ -4,18 +4,15 @@ const talonService = require('../../services/talonService');
 
 const stockViewService = {
     getPaginatedStocks: async (page, itemsPerPage) => {
-        try {
+        try{
             const currentPage = parseInt(page, 10) || 1;
             const offset = (currentPage - 1) * itemsPerPage;
 
-            // Obter a contagem total de registros
             const totalItems = await stockService.countStocks();
             const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-            // Buscar os estoques com paginação e associações
             const stocks = await stockService.searchStocks({ itemsPerPage, offset });
 
-            // Formatar os resultados e ajustar os nomes das lojas e talões
             const formattedStocks = stocks.map(stock => ({
                 id_stock: stock.id_stock,
                 id_store: stock.id_store,
@@ -29,8 +26,54 @@ const stockViewService = {
             }));
 
             return { stocks: formattedStocks, currentPage, totalPages };
-        } catch (error) {
+        }catch(error){
             console.error('Erro ao buscar estoques paginados:', error.message);
+            throw error;
+        }
+    },
+
+    getAddStockData: async () => {
+        try{
+            const stores = await storeService.getAllStores();
+            const talons = await talonService.getAllTalons();
+            return { stores, talons };
+        }catch(error){
+            console.error('Erro ao buscar dados para adicionar novo estoque:', error.message);
+            throw error;
+        }
+    },
+
+    getStockById: async (id_stock) => {
+        try{
+            const stock = await stockService.getStockById(id_stock);
+            if (!stock) throw new Error('Estoque não encontrado.');
+
+            const store = await storeService.getStoreById(stock.id_store);
+            const talon = await talonService.getTalonById(stock.id_talon);
+
+            return{
+                ...stock.dataValues,
+                Store: store ? store.name_store : 'Loja não encontrada',
+                Talon: talon ? talon.name_talon : 'Talão não encontrado',
+            };
+        }catch(error){
+            console.error(`Erro ao buscar estoque por ID ${id_stock}:`, error.message);
+            throw error;
+        }
+    },
+
+    // Método para buscar dados para editar um estoque
+    getEditStockData: async (id_stock) => {
+        try{
+            const stock = await stockService.getStockById(id_stock);
+            const stores = await storeService.getAllStores();
+            const talons = await talonService.getAllTalons();
+
+            if (!stock) throw new Error('Estoque não encontrado.');
+
+            return { stock, stores, talons };
+        }catch(error){
+            console.error('Erro ao buscar dados para edição do estoque:', error.message);
             throw error;
         }
     },
