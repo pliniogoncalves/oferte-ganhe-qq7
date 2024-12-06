@@ -28,7 +28,7 @@
                             type="checkbox" 
                             id="perm-<%= permission.id_permission %>" 
                             name="permissions" 
-                            value="<%= permission.id_permission %>"
+                            value="<%= permission.name_permission%>"
                             <%= profilePermissions.includes(permission.id_permission) ? 'checked' : '' %>>
                         <label class="form-check-label" for="perm-<%= permission.id_permission %>"><%= permission.name_permission %></label>
                     </div>

@@ -93,9 +93,12 @@ document.addEventListener("DOMContentLoaded", () => {
     
                     profileForm.addEventListener("submit", async (e) => {
                         e.preventDefault();
+    
                         const formData = new FormData(profileForm);
                         const data = Object.fromEntries(formData.entries());
-                        data.permissions = Array.from(document.querySelectorAll('input[name="permissions"]:checked')).map(el => el.value);
+                        data.permissions = Array.from(
+                            document.querySelectorAll('input[name="permissions"]:checked')
+                        ).map(el => el.value);
     
                         try {
                             // Primeiro, atualiza o nome do perfil
@@ -114,27 +117,26 @@ document.addEventListener("DOMContentLoaded", () => {
                             }
     
                             // Segundo, atualiza as permissões associadas ao perfil
-                            const permissionPayload = data.permissions.map(permissionName => ({
-                                profileName: data.name, // Nome do perfil atualizado
-                                permissionName // Nome da permissão
-                            }));
-    
-                            for (const permission of permissionPayload) {
-                                const permissionResponse = await fetch('/profile-permissions/register', {
+                            for (const permissionId of data.permissions) {
+                                const permissionResponse = await fetch('/api/profile-permissions/register/', {
                                     method: 'POST',
                                     headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify(permission),
+                                    body: JSON.stringify({
+                                        profileName: data.name,
+                                        permissionName: data.permissions
+                                    }),
                                 });
     
                                 if (!permissionResponse.ok) {
-                                    const errorDetails = await permissionResponse.json();
-                                    showModal('Erro', `Erro ao atualizar permissão ${permission.permissionName}: ${errorDetails.message || "Erro desconhecido."}`);
+                                    const errorDetails = await permissionResponse.text();
+                                    console.error("Erro ao associar permissão:", errorDetails);
+                                    showModal('Erro', `Erro ao associar permissão: ${errorDetails}`);
                                     return;
                                 }
                             }
     
-                            // Se ambos forem bem-sucedidos
-                            showModal('Sucesso', 'Perfil e permissões atualizados com sucesso!');
+                            // Se tudo for bem-sucedido
+                            showModal('Sucesso', 'Perfil e Permissões atualizados com sucesso!');
                             const profilesResponse = await fetch('/profiles/page');
                             content.innerHTML = await profilesResponse.text();
                         } catch (error) {
