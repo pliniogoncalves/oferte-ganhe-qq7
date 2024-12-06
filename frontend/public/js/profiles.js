@@ -8,35 +8,62 @@ document.addEventListener("DOMContentLoaded", () => {
             try {
                 const url = '/profiles/add';
                 window.history.pushState({}, '', url);
-
+    
                 const response = await fetch(url);
                 if (!response.ok) throw new Error("Erro ao carregar o formulário.");
                 content.innerHTML = await response.text();
-
+    
                 const profileForm = document.getElementById("profileForm");
-                
+    
                 profileForm.addEventListener("submit", async (e) => {
                     e.preventDefault();
+    
                     const formData = new FormData(profileForm);
                     const data = Object.fromEntries(formData.entries());
-                    data.permissions = Array.from(document.querySelectorAll('input[name="permissions"]:checked')).map(el => el.value);
-
+    
+                    // Coletar permissões selecionadas
+                    const selectedPermissions = Array.from(
+                        document.querySelectorAll('input[name="permissions"]:checked')
+                    ).map(el => el.value);
+    
                     try {
-                        const saveResponse = await fetch('/api/profiles/register/', {
+                        // Primeiro, cria o perfil
+                        const createProfileResponse = await fetch('/api/profiles/register/', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(data)
+                            body: JSON.stringify({ name: data.name })
                         });
-
-                        if (saveResponse.ok) {
-                            showModal('Sucesso', 'Perfil cadastrado com sucesso!');
-                            const profilesResponse = await fetch('/profiles/page');
-                            if (!profilesResponse.ok) throw new Error("Erro ao carregar a lista de perfis.");
-                            content.innerHTML = await profilesResponse.text();
-                        } else {
-                            const errorData = await saveResponse.json();
-                            showModal('Erro', `Erro ao cadastrar perfil: ${errorData.message || "Erro desconhecido."}`);
+    
+                        if (!createProfileResponse.ok) {
+                            const errorDetails = await createProfileResponse.json();
+                            showModal('Erro', `Erro ao cadastrar perfil: ${errorDetails.message || "Erro desconhecido."}`);
+                            return;
                         }
+    
+                        // Associar permissões ao perfil criado
+                        for (const permissionName of selectedPermissions) {
+                            const permissionResponse = await fetch('/api/profile-permissions/register/', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    profileName: data.name,
+                                    permissionName
+                                }),
+                            });
+    
+                            if (!permissionResponse.ok) {
+                                const errorDetails = await permissionResponse.text();
+                                console.error("Erro ao associar permissão:", errorDetails);
+                                showModal('Erro', `Erro ao associar permissão: ${errorDetails}`);
+                                return;
+                            }
+                        }
+    
+                        // Se tudo for bem-sucedido
+                        showModal('Sucesso', 'Perfil cadastrado com sucesso!');
+                        const profilesResponse = await fetch('/profiles/page');
+                        if (!profilesResponse.ok) throw new Error("Erro ao carregar a lista de perfis.");
+                        content.innerHTML = await profilesResponse.text();
                     } catch (error) {
                         console.error("Erro ao cadastrar perfil:", error);
                         showModal('Erro', "Erro inesperado ao cadastrar perfil.");
