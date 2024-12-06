@@ -1,6 +1,6 @@
 const profileService = require('../../services/profileService');
 const permissionService = require('../../services/permissionService');
-const profilePermissionService = require('../../services/profilePermissionService')
+const profilePermissionService = require('../../services/profilePermissionService');
 
 const profileViewService = {
     getPaginatedProfiles: async (page, itemsPerPage) => {
@@ -70,7 +70,11 @@ const profileViewService = {
             const permissions = await permissionService.searchPermission();
             const profilePermissions = await profilePermissionService.searchPermissionsByProfile(profile.name_profile);
 
-            return { profile, permissions, profilePermissions };
+            const profilePermissionIds = Array.isArray(profilePermissions)
+            ? profilePermissions
+            : [];
+
+            return { profile, permissions, profilePermissions: profilePermissionIds };
         }catch(error){
             console.error('Erro ao buscar dados para edição do perfil:', error.message);
             throw error;

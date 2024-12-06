@@ -85,6 +85,7 @@ const profileViewController = {
                 permissions,
                 profilePermissions,
             });
+            
         }catch(error){
             console.error('Erro ao carregar página de edição:', error);
             res.status(500).send('Erro ao carregar a página de edição.');
