@@ -6,15 +6,17 @@ const profileViewService = {
     getPaginatedProfiles: async (page, itemsPerPage) => {
         try{
             const currentPage = parseInt(page, 10) || 1;
+            const offset = (currentPage - 1) * itemsPerPage;
+
             const totalItems = await profileService.countProfiles();
             const totalPages = Math.ceil(totalItems / itemsPerPage);
-            const offset = (currentPage - 1) * itemsPerPage;
             
-            const profiles = await profileService.searchProfile({ limit: itemsPerPage, offset })
+            
+            const profiles = await profileService.searchProfile({ itemsPerPage, offset })
 
             for (let profile of profiles) {
-                const profilePermissions = await profilePermissionService.searchPermissionsByProfile(profile.name_profile);
-                profile.Permissions = profilePermissions;
+                const profileWithPermissions = await profilePermissionService.searchPermissionsByProfile(profile.name_profile);
+                profile.Permissions = profileWithPermissions.permissions;
             }
 
             return { profiles, currentPage, totalPages };

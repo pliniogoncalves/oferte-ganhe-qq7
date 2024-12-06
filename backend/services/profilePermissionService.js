@@ -73,7 +73,14 @@ async function searchAllProfilesWithPermissions() {
                 through: { attributes: [] },
             },
         });
-        return profiles;
+        return profiles.map(profile => ({
+            id_profile: profile.id_profile,
+            name_profile: profile.name_profile,
+            Permissions: profile.Permissions.map(permission => ({
+                id_permission: permission.id_permission,
+                name_permission: permission.name_permission,
+            })) || [],
+        }));
     }catch(err){
         console.error('Error fetching Profiles with Permissions:', err);
         throw err;

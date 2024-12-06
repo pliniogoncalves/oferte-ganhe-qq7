@@ -36,16 +36,13 @@ const profileViewController = {
     },
 
     getAllProfiles: async (req, res) => {
-        try{
-            const profiles = await profileViewService.getAllProfiles();
-            res.status(200).render("partials/profiles/profilesTable", { 
-                layout: false,
-                profiles: profiles || [],
-                cssFiles: [],
-            });
-        }catch(error){
+        try {
+            const profiles = await profilePermissionService.searchAllProfilesWithPermissions();
+    
+            res.status(200).json(profiles);
+        } catch (error) {
             console.error("Erro ao listar perfis:", error);
-            res.status(500).send("Erro ao listar perfis.");
+            res.status(500).json({ message: "Erro ao listar perfis." });
         }
     },
 
