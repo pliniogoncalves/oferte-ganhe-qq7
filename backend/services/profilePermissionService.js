@@ -32,7 +32,6 @@ async function insertProfilePermission(profileName, permissionName) {
 //Search for permissions associated with a Profile by name
 async function searchPermissionsByProfile(profileName) {
     try{
-        //Search for profile ID by name
         const profile = await Profile.findOne({ 
             where: { name_profile: profileName },
             include: [

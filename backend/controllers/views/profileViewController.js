@@ -48,23 +48,22 @@ const profileViewController = {
 
     searchProfilesByName: async (req, res) => {
         const { name } = req.query;
-
+    
         try{
             const profiles = name 
                 ? await profileViewService.getProfileByname(name)
-                : await profileViewService.getAllProfiles();
-
+                : await profileViewService.getPaginatedProfiles(1, 10);
+    
             if(name && !profiles){
-                return res.status(404).send("Perfil não encontrado");
+                return res.status(404).send("Perfil não encontrado.");
             }
-
+    
             res.render("partials/profiles/profilesTable", { 
-                layout: false,
+                layout: false, 
                 profiles: Array.isArray(profiles) ? profiles : [profiles],
-                cssFiles: [],
             });
         }catch(error){
-            console.error("Erro ao buscar perfil por nome:", error);
+            console.error("Erro ao buscar perfil por nome:", error.message);
             res.status(500).send("Erro ao buscar perfil.");
         }
     },

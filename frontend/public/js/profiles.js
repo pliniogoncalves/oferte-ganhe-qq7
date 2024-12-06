@@ -77,18 +77,20 @@ document.addEventListener("DOMContentLoaded", () => {
         if (event.target.closest("#searchProfileBtn")) {
             const searchInput = document.getElementById("search");
             const query = searchInput?.value.trim();
-
+    
             try{
-                const response = query
-                    ? await fetch(`/profiles/search?query=${encodeURIComponent(query)}`)
-                    : await fetch(`/profiles/list`);
-
-                if(response.ok){
+                const response = await fetch(`/profiles/search?name=${encodeURIComponent(query || '')}`);
+                
+                if (response.ok) {
                     const tableHTML = await response.text();
                     const tableBody = document.querySelector("table tbody");
-                    tableBody ? tableBody.innerHTML = tableHTML : console.error("Tabela de perfis não encontrada.");
+                    if(tableBody) {
+                        tableBody.innerHTML = tableHTML;
+                    }else{
+                        console.error("Tabela de perfis não encontrada.");
+                    }
                 }else if(response.status === 404) {
-                    showModal('Aviso', query ? 'Perfil não encontrado.' : 'Nenhum perfil disponível.');
+                    showModal('Aviso', 'Perfil não encontrado.');
                 }else{
                     showModal('Erro', 'Erro ao buscar perfis.');
                 }

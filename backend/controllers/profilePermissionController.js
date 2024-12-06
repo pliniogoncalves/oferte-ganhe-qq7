@@ -27,8 +27,7 @@ const profilePermissionController = {
         const { profileName } = req.params;
 
         try{
-            const profileWithPermissions = await profilePermissionService.searchPermissionsByProfile(profileName);
-            
+            const profileWithPermissions = await profilePermissionService.searchPermissionsByProfile(profileName); 
             res.status(200).json(profileWithPermissions);
         }catch(err){
             res.status(500).json({ message: 'Error fetching permissions for profile', error: err.message });
