@@ -8,6 +8,7 @@ const mainViewRoutes = require('./views/mainViewRoutes');
 const userViewRoutes = require('./views/userViewRoutes');
 const profileViewRoutes = require('./views/profileViewRoutes');
 const storeViewRoutes = require('./views/storeViewRoutes');
+const stockViewRoutes = require('./views/stockViewRoutes');
 
 // Mount the view routes
 router.use('/login', loginViewRoutes);
@@ -16,5 +17,6 @@ router.use('/main', mainViewRoutes);
 router.use('/users', userViewRoutes);
 router.use('/profiles', profileViewRoutes);
 router.use('/stores', storeViewRoutes);
+router.use('/stock', stockViewRoutes);
 
 module.exports = router;

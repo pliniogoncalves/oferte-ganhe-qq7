@@ -90,10 +90,22 @@ async function removeStock(stockId) {
     }
 }
 
+//Function counts all Stocks
+async function countStocks() {
+    try{
+        const count = await Stock.count();
+        return count;
+    }catch(err){
+        console.error('Error counting profiles:', err);
+        throw err;
+    }
+}
+
 module.exports = { 
     insertStock, 
     searchStocks, 
     searchStockById, 
     editStock, 
-    removeStock 
+    removeStock,
+    countStocks 
 };

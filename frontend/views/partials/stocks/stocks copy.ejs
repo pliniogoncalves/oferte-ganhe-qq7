@@ -1,0 +1,45 @@
+<div class="text-center mb-4">
+    <h1 class="fw-bold">Gestão de Estoques</h1>
+    <p class="text-muted">Veja a lista de estoques cadastrados com as lojas e talões associados.</p>
+</div>
+
+<table class="table table-bordered table-hover">
+    <thead style="background-color: #269447; color: #fff;">
+        <tr>
+            <th>Loja</th>
+            <th>Talão</th>
+            <th>Estoque Atual</th>
+            <th>Estoque Mínimo</th>
+            <th>Estoque Recomendado</th>
+            <th>Status</th>
+            <th class="text-center">Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% if (stocks && stocks.length > 0) { %>
+            <% stocks.forEach(stock => { %>
+                <tr>
+                    <td><%= stock.Store %></td>
+                    <td><%= stock.Talon %></td>
+                    <td><%= stock.current_stock %></td>
+                    <td><%= stock.minimum_stock %></td>
+                    <td><%= stock.recommended_stock %></td>
+                    <td><%= stock.status_stock %></td>
+                    <td class="text-center">
+                        <button class="btn btn-sm btn-warning editStock" data-id="<%= stock.id_stock %>">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </td>
+                </tr>
+            <% }) %>
+        <% } else { %>
+            <tr>
+                <td colspan="7">Nenhum estoque encontrado.</td>
+            </tr>
+        <% } %>
+    </tbody>
+</table>
+
+<div class="text-center">
+    <%- include('../../components/pagination', { currentPage, totalPages }) %>
+</div>
