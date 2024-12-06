@@ -15,5 +15,8 @@ router.get('/profiles/list/:name', authenticateToken, profileController.searchPr
 router.put('/profiles/edit/:name', authenticateToken, profileController.editProfile);
 router.delete('/profiles/delete/:name', authenticateToken, profileController.removeProfile);
 
+//Export CSV
+router.get('/profiles/export-csv', authenticateToken, profileController.exportProfilesCSV);
+
 module.exports = router;
 

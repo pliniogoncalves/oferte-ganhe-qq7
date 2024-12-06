@@ -231,8 +231,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Export CSV
     document.addEventListener("click", async (event) => {
         const exportProfileCsvBtn = event.target.closest("#exportProfileCsvBtn");
-        if (exportProfileCsvBtn) {
-            try {
+        if(exportProfileCsvBtn) {
+            try{
                 const response = await fetch('/api/profiles/export-csv', { method: 'GET' });
                 if (!response.ok) throw new Error("Erro ao exportar CSV.");
 
@@ -248,7 +248,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.body.removeChild(a);
 
                 showModal('Sucesso', 'O arquivo CSV foi exportado com sucesso.');
-            } catch (error) {
+            }catch(error){
                 console.error('Erro ao exportar CSV:', error);
                 showModal('Erro', 'Erro inesperado ao exportar CSV.');
             }

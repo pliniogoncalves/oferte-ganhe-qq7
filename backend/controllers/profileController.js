@@ -1,4 +1,5 @@
-const profileService = require('../services/profileService.js')
+const profileService = require('../services/profileService.js');
+const reportService = require('../services/reportService');
 
 //Controller for the profile page
 const profileController = {
@@ -71,6 +72,17 @@ const profileController = {
             }
         }catch(error){
             res.status(500).json({ message: 'Error deleting Profile', error: error.message });
+        }
+    },
+
+     //Function export CSV
+     exportProfilesCSV: async (req, res) =>{
+        try{
+            const csvFilePath = await reportService.exportProfilesReport();
+            res.download(csvFilePath, 'perfis.csv');
+        }catch(error){
+            console.error("Erro ao exportar CSV:", error);
+            res.status(500).json({ message: 'Error exporting CSV', error: error.message });
         }
     },
 
