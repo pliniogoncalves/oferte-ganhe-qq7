@@ -4,13 +4,13 @@ document.addEventListener("DOMContentLoaded", () => {
     // Create
     document.addEventListener("click", async (event) => {
         const addProfileBtn = event.target.closest("#addProfileBtn");
-        if (addProfileBtn) {
-            try {
+        if(addProfileBtn) {
+            try{
                 const url = '/profiles/add';
                 window.history.pushState({}, '', url);
     
                 const response = await fetch(url);
-                if (!response.ok) throw new Error("Erro ao carregar o formulário.");
+                if(!response.ok) throw new Error("Erro ao carregar o formulário.");
                 content.innerHTML = await response.text();
     
                 const profileForm = document.getElementById("profileForm");
@@ -21,27 +21,24 @@ document.addEventListener("DOMContentLoaded", () => {
                     const formData = new FormData(profileForm);
                     const data = Object.fromEntries(formData.entries());
     
-                    // Coletar permissões selecionadas
                     const selectedPermissions = Array.from(
                         document.querySelectorAll('input[name="permissions"]:checked')
                     ).map(el => el.value);
     
-                    try {
-                        // Primeiro, cria o perfil
+                    try{
                         const createProfileResponse = await fetch('/api/profiles/register/', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ name: data.name })
                         });
     
-                        if (!createProfileResponse.ok) {
+                        if(!createProfileResponse.ok){
                             const errorDetails = await createProfileResponse.json();
                             showModal('Erro', `Erro ao cadastrar perfil: ${errorDetails.message || "Erro desconhecido."}`);
                             return;
                         }
     
-                        // Associar permissões ao perfil criado
-                        for (const permissionName of selectedPermissions) {
+                        for(const permissionName of selectedPermissions) {
                             const permissionResponse = await fetch('/api/profile-permissions/register/', {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
@@ -51,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                 }),
                             });
     
-                            if (!permissionResponse.ok) {
+                            if(!permissionResponse.ok){
                                 const errorDetails = await permissionResponse.text();
                                 console.error("Erro ao associar permissão:", errorDetails);
                                 showModal('Erro', `Erro ao associar permissão: ${errorDetails}`);
@@ -59,17 +56,16 @@ document.addEventListener("DOMContentLoaded", () => {
                             }
                         }
     
-                        // Se tudo for bem-sucedido
                         showModal('Sucesso', 'Perfil cadastrado com sucesso!');
                         const profilesResponse = await fetch('/profiles/page');
                         if (!profilesResponse.ok) throw new Error("Erro ao carregar a lista de perfis.");
                         content.innerHTML = await profilesResponse.text();
-                    } catch (error) {
+                    }catch(error){
                         console.error("Erro ao cadastrar perfil:", error);
                         showModal('Erro', "Erro inesperado ao cadastrar perfil.");
                     }
                 });
-            } catch (error) {
+            }catch(error){
                 console.error("Erro ao carregar o formulário:", error);
                 showModal('Erro', "Erro ao carregar o formulário de cadastro.");
             }
@@ -82,21 +78,21 @@ document.addEventListener("DOMContentLoaded", () => {
             const searchInput = document.getElementById("search");
             const query = searchInput?.value.trim();
 
-            try {
+            try{
                 const response = query
                     ? await fetch(`/profiles/search?query=${encodeURIComponent(query)}`)
                     : await fetch(`/profiles/list`);
 
-                if (response.ok) {
+                if(response.ok){
                     const tableHTML = await response.text();
                     const tableBody = document.querySelector("table tbody");
                     tableBody ? tableBody.innerHTML = tableHTML : console.error("Tabela de perfis não encontrada.");
-                } else if (response.status === 404) {
+                }else if(response.status === 404) {
                     showModal('Aviso', query ? 'Perfil não encontrado.' : 'Nenhum perfil disponível.');
-                } else {
+                }else{
                     showModal('Erro', 'Erro ao buscar perfis.');
                 }
-            } catch (error) {
+            }catch(error){
                 console.error('Erro ao buscar perfis:', error);
                 showModal('Erro', 'Erro inesperado ao buscar perfis.');
             }
@@ -206,22 +202,23 @@ document.addEventListener("DOMContentLoaded", () => {
     // Delete
     document.addEventListener("click", async (event) => {
         const deleteProfileBtn = event.target.closest(".deleteProfile");
-        if (deleteProfileBtn) {
-            const profileId = deleteProfileBtn.dataset.id;
+        if(deleteProfileBtn) {
+            const profileName = deleteProfileBtn.dataset.name;
             showModal('Confirmação', 'Tem certeza que deseja deletar este perfil?', async () => {
-                try {
-                    const response = await fetch(`/api/profiles/delete/${profileId}`, {
+                try{
+                    const response = await fetch(`/api/profiles/delete/${profileName}`, {
                         method: 'DELETE',
                     });
-
-                    if (response.ok) {
+    
+                    if(response.ok){
                         showModal('Sucesso', 'Perfil deletado com sucesso!');
                         const profilesResponse = await fetch('/profiles/page');
                         content.innerHTML = await profilesResponse.text();
-                    } else {
-                        showModal('Erro', 'Erro ao deletar perfil.');
+                    }else{
+                        const errorDetails = await response.json();
+                        showModal('Erro', `Erro ao deletar perfil: ${errorDetails.message || 'Erro desconhecido.'}`);
                     }
-                } catch (error) {
+                }catch(error){
                     console.error('Erro ao deletar perfil:', error);
                     showModal('Erro', 'Erro inesperado ao deletar perfil.');
                 }

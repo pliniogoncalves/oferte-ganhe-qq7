@@ -1,4 +1,5 @@
 const Profile = require('../models/Profile');
+const ProfilePermission = require('../models/ProfilePermission')
 
 //Insert new Profile
 async function insertProfile(name) {
@@ -53,13 +54,29 @@ async function editProfile(newName, name) {
 }
 
 //Remove Profile
+async function removePermissionsByProfileName(profileName) {
+  try{
+      const profile = await Profile.findOne({ where: { name_profile: profileName } });
+      if(!profile){
+          throw new Error(`Profile with name '${profileName}' not found`);
+      }
+
+      await ProfilePermission.destroy({ where: { id_profile: profile.id_profile } });
+  }catch(err){
+      console.error('Error removing permissions from Profile:', err);
+      throw err;
+  }
+}
+
 async function removeProfile(name) {
   try{
-    const deleted = await Profile.destroy({ where: { name_profile: name } });
-    return deleted > 0;
+      await removePermissionsByProfileName(name);
+
+      const deleted = await Profile.destroy({ where: { name_profile: name } });
+      return deleted > 0;
   }catch(err){
-    console.error('Error deleting Profile:', err);
-    throw err;
+      console.error('Error deleting Profile:', err);
+      throw err;
   }
 }
 

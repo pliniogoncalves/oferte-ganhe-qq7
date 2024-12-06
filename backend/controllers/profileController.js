@@ -61,18 +61,19 @@ const profileController = {
     //Function to delete a Profile
     removeProfile: async (req, res) => {
         const { name } = req.params;
-
+    
         try{
             const removedProfile = await profileService.removeProfile(name);
             if(removedProfile){
-                res.status(200).json({ message: 'Profile deleted successfully!', profile: removedProfile });
+                res.status(200).json({ message: 'Profile deleted successfully!' });
             }else{
                 res.status(404).json({ message: 'Profile not found.' });
             }
-        }catch(erro){
-            res.status(500).json({ message: 'Error deleting Profile', error: erro.message });
+        }catch(error){
+            res.status(500).json({ message: 'Error deleting Profile', error: error.message });
         }
     },
+
 };
 
 module.exports = profileController;
