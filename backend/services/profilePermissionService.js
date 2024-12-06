@@ -33,20 +33,31 @@ async function insertProfilePermission(profileName, permissionName) {
 async function searchPermissionsByProfile(profileName) {
     try{
         //Search for profile ID by name
-        const profile = await Profile.findOne({ where: { name_profile: profileName } });
+        const profile = await Profile.findOne({ 
+            where: { name_profile: profileName },
+            include: [
+                {
+                    model: Permission,
+                    required: false,
+                    through: { attributes: [] },
+                },
+            ],
+         });
+
         if(!profile){
             throw new Error(`Profile with name '${profileName}' not found`);
         }
 
         //Fetch associated permissions
-        const permissions = await Permission.findAll({
-            include: {
-                model: Profile,
-                where: { id_profile: profile.id_profile },
-                through: { attributes: [] },
-            },
-        });
-        return permissions;
+        const result = {
+            name_profile: profile.name_profile,
+            permissions: profile.Permissions.map(permission => ({
+                id_permission: permission.id_permission,
+                name_permission: permission.name_permission,
+            })),
+        };
+
+        return result;
     }catch(err){
         console.error('Error fetching permissions for Profile:', err);
         throw err;

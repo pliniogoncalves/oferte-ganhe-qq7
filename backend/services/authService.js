@@ -10,21 +10,30 @@ async function generateToken(payload, expiresIn = process.env.JWT_EXPIRES_IN || 
 
 // Function to generate an access token for authentication
 async function generateAuthToken(user) {
-    const userProfile = await Profile.findOne({ where: { id_profile: user.id_profile } });
-    if(!userProfile){
-        throw new Error(`Profile with ID '${user.id_profile}' not found`);
+    try{
+        
+        const userProfile = await Profile.findOne({ where: { id_profile: user.id_profile } });
+        
+        if(!userProfile){
+            throw new Error(`Profile with ID '${user.id_profile}' not found`);
+        }
+        
+        const { permissions } = await searchPermissionsByProfile(userProfile.name_profile);
+
+        const permissionNames = permissions.map(permission => permission.name_permission);
+
+        const payload = { 
+            id: user.id_users, 
+            registration: user.registration_users,
+            id_profile: user.id_profile,
+            permissions: permissionNames
+        };
+
+        return generateToken(payload);
+    }catch(err){
+        console.error('Erro ao gerar token de autenticação:', err.message);
+        throw err;
     }
-
-    const permissions = await searchPermissionsByProfile(userProfile.name_profile);
-
-    const payload = { 
-        id: user.id_users, 
-        registration: user.registration_users,
-        id_profile: user.id_profile,
-        permissions: permissions.map(permission => permission.name_permission)
-    };
-    
-    return generateToken(payload);
 }
 
 // Function for password hashing

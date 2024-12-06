@@ -12,10 +12,12 @@ const profilePermissionController = {
     insertProfilePermission: async (req, res) => {
         const { profileName, permissionName } = req.body;
 
-        try {
+        try{
             const newProfilePermission = await profilePermissionService.insertProfilePermission(profileName, permissionName);
+
             res.status(201).json({ message: 'Permission associated to Profile successfully!', profilePermission: newProfilePermission });
-        } catch (err) {
+
+        }catch(err){
             res.status(500).json({ message: 'Error associating Permission to Profile', error: err.message });
         }
     },
@@ -24,24 +26,27 @@ const profilePermissionController = {
     searchPermissionsByProfile: async (req, res) => {
         const { profileName } = req.params;
 
-        try {
-            const permissions = await profilePermissionService.searchPermissionsByProfile(profileName);
-            if (permissions.length) {
-                res.status(200).json(permissions);
-            } else {
-                res.status(404).json({ message: 'No permissions found for this profile.' });
-            }
-        } catch (err) {
+        try{
+            const profileWithPermissions = await profilePermissionService.searchPermissionsByProfile(profileName);
+            
+            res.status(200).json(profileWithPermissions);
+        }catch(err){
             res.status(500).json({ message: 'Error fetching permissions for profile', error: err.message });
+
+            if(err.message.includes("not found")){
+                res.status(404).json({ message: err.message });
+            }else{
+                res.status(500).json({ message: 'Error fetching permissions for profile.', error: err.message });
+            }
         }
     },
 
     //Function to list all profiles with their permissions
     searchAllProfilesWithPermissions: async (req, res) => {
-        try {
+        try{
             const profilesWithPermissions = await profilePermissionService.searchAllProfilesWithPermissions();
             res.status(200).json(profilesWithPermissions);
-        } catch (err) {
+        }catch(err){
             res.status(500).json({ message: 'Error fetching all profiles with permissions', error: err.message });
         }
     },
@@ -50,14 +55,14 @@ const profilePermissionController = {
     removePermissionFromProfile: async (req, res) => {
         const { profileName, permissionName } = req.params;
 
-        try {
+        try{
             const removedProfilePermission = await profilePermissionService.removePermissionFromProfile(profileName, permissionName);
-            if (removedProfilePermission) {
+            if(removedProfilePermission){
                 res.status(200).json({ message: 'Permission removed from Profile successfully!', profilePermission: removedProfilePermission });
-            } else {
+            }else{
                 res.status(404).json({ message: 'Permission not found for this profile.' });
             }
-        } catch (err) {
+        }catch(err){
             res.status(500).json({ message: 'Error removing Permission from Profile', error: err.message });
         }
     },

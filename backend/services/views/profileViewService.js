@@ -10,7 +10,7 @@ const profileViewService = {
             const totalPages = Math.ceil(totalItems / itemsPerPage);
             const offset = (currentPage - 1) * itemsPerPage;
             
-            const profiles = await profileService.searchProfile({ limit: itemsPerPage, offset });
+            const profiles = await profileService.searchProfile({ limit: itemsPerPage, offset })
 
             for (let profile of profiles) {
                 const profilePermissions = await profilePermissionService.searchPermissionsByProfile(profile.name_profile);
@@ -45,7 +45,17 @@ const profileViewService = {
 
     getProfileByname: async (name) => {
         try{
-            return await profileService.searchProfileName(name);
+            const profileWithPermissions = await profilePermissionService.searchPermissionsByProfile(name);
+            
+            if(!profileWithPermissions){
+            throw new Error(`Perfil com nome '${name}' não encontrado.`);
+            }
+
+        return{
+            name_profile: profileWithPermissions.name_profile,
+            Permissions: profileWithPermissions.permissions || [],
+        };
+
         }catch(error){
             console.error(`Erro ao buscar Perfil por nome ${name}:`, error.message);
             throw error;
@@ -56,7 +66,7 @@ const profileViewService = {
         try{
             const profile = await profileService.searchProfileName(name);
             const permissions = await permissionService.searchPermission();
-            const profilePermissions = await profileService.getPermissionsByProfile(name);
+            const profilePermissions = await profilePermissionService.searchPermissionsByProfile(profile.name_profile);
 
             return { profile, permissions, profilePermissions };
         }catch(error){

@@ -14,10 +14,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 content.innerHTML = await response.text();
 
                 const profileForm = document.getElementById("profileForm");
+                
                 profileForm.addEventListener("submit", async (e) => {
                     e.preventDefault();
                     const formData = new FormData(profileForm);
                     const data = Object.fromEntries(formData.entries());
+                    data.permissions = Array.from(document.querySelectorAll('input[name="permissions"]:checked')).map(el => el.value);
 
                     try {
                         const saveResponse = await fetch('/api/profiles/register/', {
@@ -46,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
     });
-
+    
     // Read
     document.addEventListener("click", async (event) => {
         if (event.target.closest("#searchProfileBtn")) {
@@ -78,9 +80,9 @@ document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener("click", async (event) => {
         const editProfileBtn = event.target.closest(".editProfile");
         if (editProfileBtn) {
-            const profileId = editProfileBtn.dataset.id;
+            const nameProfile = editProfileBtn.dataset.name;
 
-            const url = `/profiles/edit/${profileId}`;
+            const url = `/profiles/edit/${nameProfile}`;
             window.history.pushState({}, '', url);
 
             try {
@@ -93,9 +95,10 @@ document.addEventListener("DOMContentLoaded", () => {
                         e.preventDefault();
                         const formData = new FormData(profileForm);
                         const data = Object.fromEntries(formData.entries());
+                        data.permissions = Array.from(document.querySelectorAll('input[name="permissions"]:checked')).map(el => el.value);
 
                         try {
-                            const saveResponse = await fetch(`/api/profiles/edit/${profileId}`, {
+                            const saveResponse = await fetch(`/api/profiles/edit/${nameProfile}`, {
                                 method: 'PUT',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify(data)

@@ -4,6 +4,7 @@ const profileViewController = {
     getProfilePage: async (req, res) => {
         try{
             const itemsPerPage = 10;
+
             const { profiles, currentPage, totalPages } = await profileViewService.getPaginatedProfiles(req.query.page, itemsPerPage);
 
             res.render('partials/profiles/profiles', {
@@ -53,7 +54,7 @@ const profileViewController = {
 
         try{
             const profiles = name 
-                ? await profileViewService.getProfileByname(name) 
+                ? await profileViewService.getProfileByname(name)
                 : await profileViewService.getAllProfiles();
 
             if(name && !profiles){

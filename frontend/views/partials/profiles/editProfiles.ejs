@@ -1,11 +1,23 @@
 <div class="container-fluid p-4">
-    <h1 class="fw-bold">Editar Perfil</h1>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <%- include('../../components/backButton.ejs') %>
+
+        <div class="w-100 text-center me-4 me-md-5">
+            <h1 class="fw-bold">Editar Perfil</h1>
+            <p class="text-muted">Altere os dados abaixo para atualizar as informações do Perfil.</p>
+        </div>   
+    </div>
+   
     <form id="profileForm">
+
         <input type="hidden" id="idProfile" name="idProfile" value="<%= profile.id_profile %>">
         <div class="mb-3">
             <label for="name" class="form-label">Nome do Perfil</label>
             <input type="text" class="form-control" id="name" name="name" value="<%= profile.name_profile %>" required>
         </div>
+
         <div class="mb-3">
             <label class="form-label">Permissões</label>
             <div>
@@ -13,11 +25,21 @@
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="perm-<%= permission.id_permission %>" name="permissions" value="<%= permission.id_permission %>"
                             <%= profilePermissions.includes(permission.id_permission) ? 'checked' : '' %>>
-                        <label class="form-check-label" for="perm-<%= permission.id_permission %>"><%= permission.name_permision %></label>
+                        <label class="form-check-label" for="perm-<%= permission.id_permission %>"><%= permission.name_permission %></label>
                     </div>
                 <% }); %>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+
+        <div class="text-center mb-4">
+            <div class="row justify-content-center">
+                <div class="col-12 col-sm-6 col-md-3 mb-2">
+                    <button type="submit" id="submitBtn" class="btn btn-custom w-100">
+                        <i class="fas fa-save"></i> Salvar Alterações
+                    </button>
+                </div>
+            </div>
+        </div>
+        
     </form>
 </div>
