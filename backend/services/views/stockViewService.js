@@ -4,29 +4,32 @@ const talonService = require('../../services/talonService');
 
 const stockViewService = {
     getPaginatedStocks: async (page, itemsPerPage) => {
-        try{
+        try {
             const currentPage = parseInt(page, 10) || 1;
             const offset = (currentPage - 1) * itemsPerPage;
 
-            const totalItems = await stockService.countStocks();
+            const totalItems = await storeService.countStores();
             const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-            const stocks = await stockService.searchStocks({ itemsPerPage, offset });
-
-            const formattedStocks = stocks.map(stock => ({
-                id_stock: stock.id_stock,
-                id_store: stock.id_store,
-                id_talon: stock.id_talon,
-                current_stock: stock.current_stock,
-                minimum_stock: stock.minimum_stock,
-                recommended_stock: stock.recommended_stock,
-                status_stock: stock.status_stock,
-                storeName: stock.Store ? stock.Store.name_store : 'Loja não encontrada',
-                talonName: stock.Talon ? stock.Talon.name_talon : 'Talão não encontrado',
-            }));
+            const stores = await storeService.getPaginatedStores(offset, itemsPerPage);
+            
+            const formattedStocks = await Promise.all(
+                stores.map(async store => {
+                    const stock = await stockService.searchStockByStoreId(store.id_store);
+                    return {
+                        id_store: store.id_store,
+                        storeName: store.name_store,
+                        storeNumber: store.number_store,
+                        current_stock: stock ? stock.current_stock : 0,
+                        minimum_stock: stock ? stock.minimum_stock : 0,
+                        recommended_stock: stock ? stock.recommended_stock : 0,
+                        status_stock: stock ? stock.status_stock : 'Sem Estoque',
+                    };
+                })
+            );
 
             return { stocks: formattedStocks, currentPage, totalPages };
-        }catch(error){
+        } catch (error) {
             console.error('Erro ao buscar estoques paginados:', error.message);
             throw error;
         }
@@ -35,8 +38,8 @@ const stockViewService = {
     getAddStockData: async () => {
         try{
             const stores = await storeService.getAllStores();
-            const talons = await talonService.getAllTalons();
-            return { stores, talons };
+            //const talons = await talonService.getAllTalons();
+            return { stores, /*talons*/ };
         }catch(error){
             console.error('Erro ao buscar dados para adicionar novo estoque:', error.message);
             throw error;
@@ -54,7 +57,7 @@ const stockViewService = {
             return{
                 ...stock.dataValues,
                 Store: store ? store.name_store : 'Loja não encontrada',
-                Talon: talon ? talon.name_talon : 'Talão não encontrado',
+                Talon: talon ? talon.id_talon : 'Talão não encontrado',
             };
         }catch(error){
             console.error(`Erro ao buscar estoque por ID ${id_stock}:`, error.message);
@@ -62,22 +65,22 @@ const stockViewService = {
         }
     },
 
-    // Método para buscar dados para editar um estoque
-    getEditStockData: async (id_stock) => {
+    getEditStockData: async (storeNumber) => {
         try{
-            const stock = await stockService.getStockById(id_stock);
-            const stores = await storeService.getAllStores();
-            const talons = await talonService.getAllTalons();
+            const store = await storeService.getStoreByNumber(storeNumber);
+            if (!store) throw new Error('Loja não encontrada.');
+        
+            //const talons = await talonService.getAllTalons();
 
+            const stock = await stockService.getStockById(id_stock);
             if (!stock) throw new Error('Estoque não encontrado.');
 
-            return { stock, stores, talons };
+            return { stock, store, /*talons*/ };
         }catch(error){
             console.error('Erro ao buscar dados para edição do estoque:', error.message);
             throw error;
         }
     },
-
 
 };
 

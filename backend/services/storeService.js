@@ -76,11 +76,27 @@ async function countStores() {
     }
 }
 
+//Function to fetch paginated stores
+async function getPaginatedStores(offset, limit) {
+    try{
+        const stores = await Store.findAll({
+            offset,
+            limit,
+            order: [['id_store', 'ASC']],
+        });
+        return stores;
+    }catch(err){
+        console.error('Error fetching paginated stores:', err);
+        throw err;
+    }
+}
+
 module.exports = {
     insertStore,
     searchStore,
     searchStoreNumber,
     editStore,
     removeStore,
-    countStores
+    countStores,
+    getPaginatedStores
 };

@@ -38,15 +38,15 @@ const stockViewController = {
 
     getEditStockPage: async (req, res) => {
         try{
-            const { id_stock } = req.params;
-            const { stock, stores, talons } = await stockViewService.getEditStockData(id_stock);
+            const { storeNumber } = req.params;
+            const { stock, store, /*talons*/ } = await stockViewService.getEditStockData(storeNumber);
 
             res.render('partials/stocks/editStocks', {
                 layout: false,
                 title: 'Editar Estoque',
                 stock,
-                stores,
-                talons,
+                store,
+                /*talons*/
             });
         }catch(error){
             console.error('Erro ao carregar página de edição:', error);

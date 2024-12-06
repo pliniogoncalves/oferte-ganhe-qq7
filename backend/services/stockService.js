@@ -25,8 +25,15 @@ async function searchStocks() {
     try{
         const stocks = await Stock.findAll({
             include: [
-                { model: Store, attributes: ['name_store'], required: false },
-                { model: Talon, attributes: ['status_talon'], required: false },
+                { 
+                    model: Store, 
+                    attributes: ['name_store', 'number_store'], 
+                    required: false 
+                },
+                { 
+                    model: Talon, 
+                    attributes: ['status_talon'], 
+                    required: false },
             ],
         });
         return stocks;
@@ -49,6 +56,23 @@ async function searchStockById(stockId) {
         return stock;
     }catch(err){
         console.error('Error fetching stock by ID:', err);
+        throw err;
+    }
+}
+
+// Function to search for a stock by Store ID
+async function searchStockByStoreId(storeId) {
+    try {
+        const stock = await Stock.findOne({
+            where: { id_store: storeId },
+            include: [
+                { model: Store, attributes: ['name_store', 'number_store'], required: false },
+                { model: Talon, attributes: ['id_talon'], required: false },
+            ],
+        });
+        return stock;
+    } catch (err) {
+        console.error('Error fetching stock by Store ID:', err);
         throw err;
     }
 }
@@ -104,7 +128,8 @@ async function countStocks() {
 module.exports = { 
     insertStock, 
     searchStocks, 
-    searchStockById, 
+    searchStockById,
+    searchStockByStoreId, 
     editStock, 
     removeStock,
     countStocks 

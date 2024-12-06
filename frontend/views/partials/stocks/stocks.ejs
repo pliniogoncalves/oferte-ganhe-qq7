@@ -32,16 +32,20 @@
         <% if (stocks && stocks.length > 0) { %>
             <% stocks.forEach(stock => { %>
                 <tr>
-                    <td><%= stock.Store %></td>
-                    <td><%= stock.current_stock %></td>
-                    <td><%= stock.minimum_stock %></td>
-                    <td><%= stock.recommended_stock %></td>
-                    <td><%= stock.status_stock %></td>
-                    <td class="text-center">
-                        <button class="btn btn-sm btn-warning editStock" data-number="<%= stock.number_store %>" data-url="/stores/edit">
+                    <% if (stock.storeNumber !== '000') { %>
+                        <td>
+                            <%= stock.storeNumber === '0' ? 'Matriz' : stock.storeNumber %>
+                        </td>
+                        <td><%= stock.current_stock %></td>
+                        <td><%= stock.minimum_stock %></td>
+                        <td><%= stock.recommended_stock %></td>
+                        <td><%= stock.status_stock %></td>
+                        <td class="text-center">
+                            <button   button class="btn btn-sm btn-warning editStock" data-number="<%= stock.       storeNumber %>" data-url="/stores/edit">
                             <i class="fas fa-edit"></i>
-                        </button>
-                    </td>
+                            </button>
+                        </td>
+                    <% } %>                  
                 </tr>
             <% }) %>
         <% } else { %>

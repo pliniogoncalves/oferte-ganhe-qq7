@@ -89,6 +89,48 @@ const storeController = {
             res.status(500).json({ message: 'Error exporting CSV', error: error.message });
         }
     },
+
+    // Function to get paginated stores
+    getPaginatedStores: async (req, res) => {
+        const{ page, itemsPerPage } = req.query;
+
+        try{
+            const currentPage = parseInt(page, 10) || 1;
+            const limit = parseInt(itemsPerPage, 10) || 10;
+            const offset = (currentPage - 1) * limit;
+    
+            const totalItems = await storeService.countStores();
+            const stores = await storeService.getPaginatedStores(offset, limit);
+            const totalPages = Math.ceil(totalItems / limit);
+    
+            if(stores.length > 0){
+                res.status(200).json({
+                    message: 'Stores retrieved successfully!',
+                    stores,
+                    pagination: {
+                        currentPage,
+                        itemsPerPage: limit,
+                        totalPages,
+                        totalItems,
+                    },
+                });
+            }else{
+                res.status(404).json({
+                    message: 'No stores found.',
+                    stores: [],
+                    pagination: {
+                        currentPage,
+                        itemsPerPage: limit,
+                        totalPages: 0,
+                        totalItems: 0,
+                    },
+                });
+            }
+        }catch(err){
+            console.error('Error fetching paginated stores:', err.message);
+            res.status(500).json({ message: 'Error fetching paginated stores.', error: err.message });
+        }
+    },  
 };
 
 module.exports = storeController;

@@ -45,6 +45,22 @@ const stockController = {
         }
     },
 
+    //Function to search for a stock record by ID Store
+    searchStockByStoreId: async (req, res) => {
+        const { id } = req.params;
+    
+        try{
+            const stock = await stockService.searchStockByStoreId(id);
+            if(stock){
+                res.status(200).json(stock);
+            }else{
+                res.status(404).json({ message: 'Stock record not found' });
+            }
+        }catch(err){
+            res.status(500).json({ message: 'Error fetching stock record', error: err.message });
+        }
+    },
+
     //Function to edit a stock record
     editStock: async (req, res) => {
         const { id } = req.params;
