@@ -29,16 +29,18 @@
         <% if(stores && stores.length > 0){ %>
             <% stores.forEach(store => { %>
                 <tr>
-                    <td><%= store.name_store %></td>
-                    <td><%= store.number_store %></td>
-                    <td class="text-center">
-                        <button class="btn btn-sm btn-warning editStore" data-number="<%= store.number_store %>" data-url="/stores/edit">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="btn btn-sm btn-danger deleteStore" data-number="<%= store.number_store %>">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
+                    <% if (store.number_store !== '000') { %>
+                        <td><%= store.name_store %></td>
+                        <td><%= store.number_store %></td>
+                        <td class="text-center">
+                            <button class="btn btn-sm btn-warning editStore" data-number="<%= store.number_store %>" data-url="/stores/edit">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger deleteStore" data-number="<%= store.number_store %>">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    <% } %>                      
                 </tr>
             <% }) %>
         <% }else{ %>

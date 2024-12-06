@@ -1,15 +1,20 @@
 <% stores.forEach(store => { %>
     <tr>
-        <td><%= store.name_store %></td>
-        <td><%= store.number_store %></td>
-        <td class="text-center">
-            <button class="btn btn-sm btn-warning editar" data-number="<%= store.number_stores %>">
-                <i class="fas fa-edit"></i>
-            </button>
-            <button class="btn btn-sm btn-danger deletar" data-number="<%= store.number_stores %>">
-                <i class="fas fa-trash"></i>
-            </button>
-        </td>
+        <% if (store.number_store !== '000') { %>
+            <td><%= store.name_store %></td>
+            <td><%= store.number_store %></td>
+            <td class="text-center">
+                <button class="btn btn-sm btn-warning editar" data-number="<%= store.number_stores %>">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-sm btn-danger deletar" data-number="<%= store.number_stores %>">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
+        <% }else{ %> 
+            <tr>
+                <td colspan="5">Nenhuma loja encontrada.</td>
+            </tr>    
+        <% } %>         
     </tr>
-    <% }) %>
     
