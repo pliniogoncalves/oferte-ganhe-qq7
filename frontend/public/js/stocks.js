@@ -145,7 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const exportStockCsvBtn = event.target.closest("#exportStockCsvBtn");
         if (exportStockCsvBtn) {
             try {
-                const response = await fetch('/api/stocks/export-csv', { method: 'GET' });
+                const response = await fetch('/api/stock/export-csv', { method: 'GET' });
                 if (!response.ok) throw new Error("Erro ao exportar CSV.");
 
                 const blob = await response.blob();

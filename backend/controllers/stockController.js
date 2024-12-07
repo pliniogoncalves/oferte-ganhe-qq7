@@ -1,4 +1,5 @@
 const stockService = require('../services/stockService.js');
+const reportService = require('../services/reportService.js')
 
 //Controller for the Stock page
 const stockController = {
@@ -114,24 +115,33 @@ const stockController = {
         }
     },
 
-    // Função para buscar os stocks com paginação
+    // Function to search for stocks with pagination
     getPaginatedStocks: async (req, res) => {
-    const { offset, limit } = req.query; // Pega os parâmetros da requisição (offset e limit)
+        const { offset, limit } = req.query;
     
-    try {
-        // Chama o serviço de paginar os stocks
-        const stocks = await stockService.getPaginatedStocks(offset, limit);
+        try{
+            const stocks = await stockService.getPaginatedStocks(offset, limit);
         
-        // Verifica se encontrou stocks
-        if (stocks && stocks.length > 0) {
-            res.status(200).json({ message: 'Stocks retrieved successfully', stocks });
-        } else {
-            res.status(404).json({ message: 'No stocks found' });
+            if(stocks && stocks.length > 0){
+                res.status(200).json({ message: 'Stocks retrieved successfully', stocks });
+            }else{
+                res.status(404).json({ message: 'No stocks found' });
+            }
+        }catch(err){
+            res.status(500).json({ message: 'Error fetching stocks', error: err.message });
         }
-    } catch (err) {
-        res.status(500).json({ message: 'Error fetching stocks', error: err.message });
-    }
-},
+    },
+
+    //Export CSV
+    exportStocksCSV: async (req, res) =>{
+        try{
+            const csvFilePath = await reportService.exportStocksReport();
+            res.download(csvFilePath, 'estoques.csv');
+        }catch(error){
+            console.error("Erro ao exportar CSV:", error);
+            res.status(500).json({ message: 'Error exporting CSV', error: error.message });
+        }
+    },
 
 };
 

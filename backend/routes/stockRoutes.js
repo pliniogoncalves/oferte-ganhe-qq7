@@ -16,4 +16,7 @@ router.get('/stock/list/:id', authenticateToken, stockController.searchStockById
 router.put('/stock/edit/:id?', authenticateToken, stockController.editStock);
 router.delete('/stock/delete/:id', authenticateToken, stockController.removeStock);
 
+//Export CSV
+router.get('/stock/export-csv', authenticateToken, stockController.exportStocksCSV);
+
 module.exports = router;
