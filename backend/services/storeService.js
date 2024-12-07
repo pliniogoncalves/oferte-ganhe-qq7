@@ -1,4 +1,5 @@
 const Store = require('../models/Store');
+const stockService = require('./stockService');
 
 //Function to insert a new store
 async function insertStore(name, number) {
@@ -7,6 +8,16 @@ async function insertStore(name, number) {
             name_store: name,
             number_store: number,
         });
+
+        await stockService.insertStock(
+            newStore.id_store,
+            null,              
+            0,                 
+            0,                 
+            0,                 
+            'active'           
+        );
+        
         return newStore;
     }catch(err){
         console.error('Error inserting store:', err);

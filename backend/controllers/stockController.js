@@ -4,22 +4,20 @@ const stockService = require('../services/stockService.js');
 const stockController = {
 
     //Function to register a new stock
-    
     insertStock: async (req, res) => {
         const { storeId, talonId, currentStock, minStock, recommendedStock } = req.body;
 
-        try {
-            console.log('Requisição recebida no insertStock:', req.body);
-
-            if (!storeId || currentStock === undefined || minStock === undefined || recommendedStock === undefined) {
-                return res.status(400).json({ message: 'Missing required fields' });
-            }
-
+        try{
             const stockStatus = await stockService.calculateStockStatus(currentStock, minStock, recommendedStock);
-            console.log('Status calculado para o estoque:', stockStatus);
 
-            const newStock = await stockService.insertStock(storeId, talonId, currentStock, minStock, recommendedStock, stockStatus);
-            console.log('Novo estoque criado:', newStock);
+            const newStock = await stockService.insertStock(
+                storeId, 
+                talonId, 
+                currentStock, 
+                minStock, 
+                recommendedStock, 
+                stockStatus
+            );
 
             res.status(201).json({ message: 'Stock record created successfully!', stock: newStock });
         } catch (err) {
@@ -54,32 +52,11 @@ const stockController = {
         }
     },
 
-    //Function to search for a stock record by ID Store
-    searchStockByStoreId: async (req, res) => {
-        const { id } = req.params;
-    
-        try{
-            const stock = await stockService.searchStockByStoreId(id);
-            if(stock){
-                res.status(200).json(stock);
-            }else{
-                res.status(404).json({ message: 'Stock record not found' });
-            }
-        }catch(err){
-            res.status(500).json({ message: 'Error fetching stock record', error: err.message });
-        }
-    },
-
     //Function to edit a stock record
     editStock: async (req, res) => {
         const { stockId, storeId, talonId, currentStock, minStock, recommendedStock } = req.body;
 
-        try {
-            console.log('Dados recebidos no editStock:', req.body);
-
-            if (typeof stockId !== 'number' && typeof stockId !== 'string') {
-                console.error('Erro: stockId não é um número ou string válido:', stockId);
-            }
+        try{
 
             const parsedCurrentStock = parseFloat(currentStock);
             const parsedMinStock = parseFloat(minStock);
@@ -97,7 +74,6 @@ const stockController = {
                 parsedRecommendedStock,
                 stockStatus
             );
-            console.log('Estoque atualizado:', updatedStock);
 
             res.status(200).json({ message: 'Stock record updated successfully!', stock: updatedStock });
         } catch (err) {
@@ -121,6 +97,26 @@ const stockController = {
             res.status(500).json({ message: 'Error deleting stock record', error: err.message });
         }
     },
+
+    // Função para buscar os stocks com paginação
+    getPaginatedStocks: async (req, res) => {
+    const { offset, limit } = req.query; // Pega os parâmetros da requisição (offset e limit)
+    
+    try {
+        // Chama o serviço de paginar os stocks
+        const stocks = await stockService.getPaginatedStocks(offset, limit);
+        
+        // Verifica se encontrou stocks
+        if (stocks && stocks.length > 0) {
+            res.status(200).json({ message: 'Stocks retrieved successfully', stocks });
+        } else {
+            res.status(404).json({ message: 'No stocks found' });
+        }
+    } catch (err) {
+        res.status(500).json({ message: 'Error fetching stocks', error: err.message });
+    }
+},
+
 };
 
 module.exports = stockController;

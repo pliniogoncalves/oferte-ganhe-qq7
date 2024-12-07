@@ -33,10 +33,14 @@ async function searchStocks() {
                 { 
                     model: Talon, 
                     attributes: ['status_talon'], 
-                    required: false },
+                    required: false 
+                },
             ],
         });
-        return stocks;
+        return stocks.map(stock => ({
+            ...stock.toJSON(),
+            Store: stock.Store || { name_store: 'Sem loja associada', number_store: 'Sem loja' },
+        }));
     }catch(err){
         console.error('Error fetching stocks:', err);
         throw err;
@@ -49,7 +53,7 @@ async function searchStockById(stockId) {
         const stock = await Stock.findOne({
             where: { id_stock: stockId },
             include: [
-                { model: Store, attributes: ['name_store'], required: false },
+                { model: Store, attributes: ['name_store', 'number_store'], required: false },
                 { model: Talon, attributes: ['status_talon'], required: false },
             ],
         });
@@ -60,25 +64,6 @@ async function searchStockById(stockId) {
     }
 }
 
-async function searchStockByStoreId(storeId) {
-    try {
-        console.log('Buscando estoque pelo Store ID:', storeId);
-
-        const stock = await Stock.findOne({
-            where: { id_store: storeId },
-            include: [
-                { model: Store, attributes: ['name_store', 'number_store'], required: false },
-                { model: Talon, attributes: ['id_talon'], required: false },
-            ],
-        });
-
-        console.log('Resultado da busca de estoque:', stock);
-        return stock;
-    } catch (err) {
-        console.error('Erro ao buscar estoque pelo Store ID:', err);
-        throw err;
-    }
-}
 
 //Function to update a stock
 async function editStock(stockId, storeId, talonId, currentStock, minStock, recommendedStock, stockStatus) {
@@ -128,36 +113,29 @@ async function countStocks() {
     }
 }
 
-async function saveStock(stockId, storeId, talonId, currentStock, minStock, recommendedStock, stockStatus) {
-    try {
-        console.log('Dados recebidos no saveStock:', { stockId, storeId, talonId, currentStock, minStock, recommendedStock, stockStatus });
-
-        if (stockId) {
-            console.log('Verificando tipo de stockId antes do update:', { stockId, type: typeof stockId });
-
-            const updatedStock = await Stock.update(
-                { id_store: storeId, id_talon: talonId || null, current_stock: currentStock, minimum_stock: minStock, recommended_stock: recommendedStock, status_stock: stockStatus },
-                { where: { id_stock: stockId }, returning: true }
-            );
-
-            console.log('Estoque atualizado com sucesso:', updatedStock[1][0]);
-            return updatedStock[1][0];
-        } else {
-            console.log('Criando novo estoque...');
-            const newStock = await Stock.create({
-                id_store: storeId,
-                id_talon: talonId || null,
-                current_stock: currentStock,
-                minimum_stock: minStock,
-                recommended_stock: recommendedStock,
-                status_stock: stockStatus,
-            });
-
-            console.log('Novo estoque criado com sucesso:', newStock);
-            return newStock;
-        }
-    } catch (err) {
-        console.error('Erro no saveStock:', err);
+//Function to fetch paginated stocks
+async function getPaginatedStocks(offset, limit) {
+    try{
+        const stocks = await Stock.findAll({
+            offset: Number(offset),
+            limit: Number(limit),
+            order: [['id_stock', 'ASC']],
+            include: [
+                {
+                    model: Store,
+                    attributes: ['name_store', 'number_store'],
+                    required: false,
+                },
+                {
+                    model: Talon,
+                    attributes: ['status_talon'],
+                    required: false,
+                },
+            ],
+        });
+        return stocks;
+    }catch(err){
+        console.error('Error fetching paginated stocks:', err);
         throw err;
     }
 }
@@ -171,11 +149,10 @@ async function calculateStockStatus(currentStock, minStock, recommendedStock) {
 module.exports = { 
     insertStock, 
     searchStocks, 
-    searchStockById,
-    searchStockByStoreId, 
+    searchStockById, 
     editStock, 
     removeStock,
     countStocks,
-    saveStock,
+    getPaginatedStocks,
     calculateStockStatus 
 };

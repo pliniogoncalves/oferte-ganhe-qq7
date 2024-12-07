@@ -90,6 +90,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     const stockForm = document.getElementById("stockForm");
                     stockForm.storeId.value = storeData.id_store;
+                    stockForm.stockId.value = storeData.id_stock || '';
+                    stockForm.storeName.value = storeData.storeNumber === '0' ? 'Matriz' : storeData.storeNumber;
                     stockForm.currentStock.value = storeData.current_stock;
                     stockForm.minStock.value = storeData.minimum_stock;
                     stockForm.recommendedStock.value = storeData.recommended_stock;
@@ -111,9 +113,9 @@ document.addEventListener("DOMContentLoaded", () => {
                         console.log("Payload enviado:", payload);
 
                         try{
-                            const editStockApiUrl = `/api/stock/edit/${storeData.id_stock || ''}`;
+                            const editStockApiUrl = `/api/stock/edit/${data.stockId || ''}`;
                             const stockResponse = await fetch(editStockApiUrl, {
-                                method: storeData.id_stock? 'POST':'PUT',
+                                method: data.stockId? 'POST':'PUT',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify(payload),
                             });

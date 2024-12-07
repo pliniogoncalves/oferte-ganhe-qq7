@@ -8,9 +8,6 @@ router.get('/', (req, res) =>{
     res.send('Active Store Route');
 });
 
-// Route to the Stores page
-router.get('/store/page', storeController.getStorePage);
-
 //Define the routes and trigger the controller
 router.post('/store/register', authenticateToken, storeController.insertStore);
 router.get('/store/list', authenticateToken, storeController.searchStore);

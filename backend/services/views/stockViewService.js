@@ -4,41 +4,16 @@ const talonService = require('../../services/talonService');
 
 const stockViewService = {
     getPaginatedStocks: async (page, itemsPerPage) => {
-        try {
+        try{
             const currentPage = parseInt(page, 10) || 1;
+            const totalItems = await stockService.countStocks();
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
             const offset = (currentPage - 1) * itemsPerPage;
 
-            console.log('Calculando paginação:', { currentPage, offset, itemsPerPage });
+            const stocks = await stockService.searchStocks({limit: itemsPerPage, offset})
 
-            const totalItems = await storeService.countStores();
-            const totalPages = Math.ceil(totalItems / itemsPerPage);
-
-            console.log('Dados gerais de paginação:', { totalItems, totalPages });
-
-            const stores = await storeService.getPaginatedStores(offset, itemsPerPage);
-            console.log('Lojas paginadas:', stores);
-
-            const formattedStocks = await Promise.all(
-                stores.map(async store => {
-                    const stock = await stockService.searchStockByStoreId(store.id_store);
-                    console.log(`Estoque para loja ${store.id_store}:`, stock);
-
-                    return {
-                        id_store: store.id_store,
-                        storeName: store.name_store,
-                        storeNumber: store.number_store,
-                        current_stock: stock ? stock.current_stock : 0,
-                        minimum_stock: stock ? stock.minimum_stock : 0,
-                        recommended_stock: stock ? stock.recommended_stock : 0,
-                        status_stock: stock ? stock.status_stock : 'Sem Estoque',
-                    };
-                })
-            );
-
-            console.log('Estoques formatados:', formattedStocks);
-
-            return { stocks: formattedStocks, currentPage, totalPages };
-        } catch (error) {
+            return {stocks, currentPage, totalPages};
+        }catch(error){
             console.error('Erro ao buscar estoques paginados:', error.message);
             throw error;
         }

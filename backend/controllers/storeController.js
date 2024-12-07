@@ -3,10 +3,6 @@ const reportService = require('../services/reportService');
 
 //Controller for the Stores page
 const storeController = {
-    
-    getStorePage: (req, res) => {
-        res.send("Página das Lojas");
-    },
 
     //Function to register a new Store
     insertStore: async (req, res) => {

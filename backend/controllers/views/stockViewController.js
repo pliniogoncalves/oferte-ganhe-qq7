@@ -10,7 +10,7 @@ const stockViewController = {
             res.render('partials/stocks/stocks', {
                 layout: false,
                 title: 'Gestão de Estoques',
-                stocks,
+                stocks: stocks,
                 currentPage,
                 totalPages,
             });
@@ -32,7 +32,10 @@ const stockViewController = {
             res.render('partials/stocks/editStocks', {
                 layout: false,
                 title: 'Editar Estoque',
-                stock,
+                stock: {
+                    ...stock,
+                    storeNumber: stock.storeNumber || '0',
+                },
                 store,
             });
         }catch(error){

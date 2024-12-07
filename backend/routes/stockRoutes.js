@@ -11,6 +11,7 @@ router.get('/', (req, res) =>{
 //Define the routes and trigger the controller
 router.post('/stock/register', authenticateToken, stockController.insertStock);
 router.get('/stock/list', authenticateToken, stockController.searchStocks);
+router.get('/stock/paginated', authenticateToken, stockController.getPaginatedStocks);
 router.get('/stock/list/:id', authenticateToken, stockController.searchStockById);
 router.put('/stock/edit/:id?', authenticateToken, stockController.editStock);
 router.delete('/stock/delete/:id', authenticateToken, stockController.removeStock);
