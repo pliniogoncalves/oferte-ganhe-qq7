@@ -17,6 +17,6 @@ router.use('/main', mainViewRoutes);
 router.use('/users', userViewRoutes);
 router.use('/profiles', profileViewRoutes);
 router.use('/stores', storeViewRoutes);
-router.use('/stock', stockViewRoutes);
+router.use('/stocks', stockViewRoutes);
 
 module.exports = router;

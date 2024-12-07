@@ -2,10 +2,6 @@ const stockService = require('../services/stockService.js');
 
 //Controller for the Stock page
 const stockController = {
-    
-    getStockPage: (req, res) => {
-        res.send("Página do estoque");
-    },
 
     //Function to register a new stock
     insertStock: async (req, res) => {
@@ -64,10 +60,27 @@ const stockController = {
     //Function to edit a stock record
     editStock: async (req, res) => {
         const { id } = req.params;
-        const { storeId, talonId, currentStock, minStock, recommendedStock, stockStatus } = req.body;
+        const { storeId, talonId, currentStock, minStock, recommendedStock } = req.body;
     
         try{
-            const updatedStock = await stockService.editStock(id, storeId, talonId, currentStock, minStock, recommendedStock, stockStatus);
+            
+            const stockStatus = stockService.calculateStockStatus(currentStock, minStock, recommendedStock);
+
+            let updatedStock;
+
+            if(!id || id === 'null'){
+                updatedStock = await stockService.insertStock({
+                    storeId,
+                    talonId,
+                    currentStock,
+                    minStock,
+                    recommendedStock,
+                    stockStatus
+                });
+            }else{
+                updatedStock = await stockService.editStock(id, storeId, talonId, currentStock, minStock, recommendedStock, stockStatus);
+            }
+            
             if(updatedStock){
                 res.status(200).json({ message: 'Stock record updated successfully!', stock: updatedStock });
             }else{

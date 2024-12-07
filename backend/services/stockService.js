@@ -125,6 +125,12 @@ async function countStocks() {
     }
 }
 
+async function calculateStockStatus(currentStock, minStock, recommendedStock) {
+    if (currentStock <= minStock) return 'Baixo';
+    if (currentStock > minStock && currentStock <= recommendedStock) return 'Médio';
+    return 'Ok';
+}
+
 module.exports = { 
     insertStock, 
     searchStocks, 
@@ -132,5 +138,6 @@ module.exports = {
     searchStockByStoreId, 
     editStock, 
     removeStock,
-    countStocks 
+    countStocks,
+    calculateStockStatus 
 };

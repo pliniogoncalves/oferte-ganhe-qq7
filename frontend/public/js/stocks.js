@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     const content = document.getElementById("content");
 
-    // Criar estoque
+    // Create
     document.addEventListener("click", async (event) => {
         const addStockBtn = event.target.closest("#addStockBtn");
         if (addStockBtn) {
@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Buscar estoque
+    // Read
     document.addEventListener("click", async (event) => {
         const searchStockBtn = event.target.closest("#searchStockBtn");
         if (searchStockBtn) {
@@ -74,17 +74,19 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Editar estoque
+    // Update
     document.addEventListener("click", async (event) => {
         const editStockBtn = event.target.closest(".editStock");
         if (editStockBtn) {
+            const stockNumber = editStockBtn.dataset.number;
             const stockId = editStockBtn.dataset.id;
-            const url = `/stocks/edit/${stockId}`;
+
+            const url = `/stocks/edit/${stockNumber}`;
             window.history.pushState({}, '', url);
 
-            try {
+            try{
                 const response = await fetch(url);
-                if (response.ok) {
+                if(response.ok){
                     content.innerHTML = await response.text();
                     const stockForm = document.getElementById("stockForm");
 
@@ -94,9 +96,10 @@ document.addEventListener("DOMContentLoaded", () => {
                         const formData = new FormData(stockForm);
                         const data = Object.fromEntries(formData.entries());
 
-                        try {
-                            const stockResponse = await fetch(`/api/stocks/edit/${stockId}`, {
-                                method: 'PUT',
+                        try{
+                            const apiUrl = `/api/stock/edit/${stockId || ''}`;
+                            const stockResponse = await fetch(apiUrl, {
+                                method: stockId ? 'PUT' : 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify(data),
                             });
@@ -115,41 +118,17 @@ document.addEventListener("DOMContentLoaded", () => {
                             showModal('Erro', "Erro ao atualizar o estoque.");
                         }
                     });
-                } else {
+                }else{
                     throw new Error("Erro ao carregar o formulário de edição.");
                 }
-            } catch (error) {
+            }catch(error){
                 console.error("Erro ao carregar o formulário de edição:", error);
                 showModal('Erro', "Erro ao carregar o formulário de edição.");
             }
         }
     });
 
-    // Excluir estoque
-    document.addEventListener("click", async (event) => {
-        const deleteStockBtn = event.target.closest(".deleteStock");
-        if (deleteStockBtn) {
-            const stockId = deleteStockBtn.dataset.id;
-            showModal('Confirmação', 'Tem certeza que deseja deletar este estoque?', async () => {
-                try {
-                    const response = await fetch(`/api/stocks/delete/${stockId}`, { method: 'DELETE' });
-                    if (response.ok) {
-                        showModal('Sucesso', 'Estoque deletado com sucesso!');
-                        const stocksResponse = await fetch('/stocks/page');
-                        content.innerHTML = await stocksResponse.text();
-                    } else {
-                        const errorDetails = await response.json();
-                        showModal('Erro', `Erro ao deletar estoque: ${errorDetails.message || 'Erro desconhecido.'}`);
-                    }
-                } catch (error) {
-                    console.error('Erro ao deletar estoque:', error);
-                    showModal('Erro', 'Erro inesperado ao deletar estoque.');
-                }
-            });
-        }
-    });
-
-    // Exportar CSV de estoque
+    //Export CSV
     document.addEventListener("click", async (event) => {
         const exportStockCsvBtn = event.target.closest("#exportStockCsvBtn");
         if (exportStockCsvBtn) {

@@ -39,14 +39,20 @@ const stockViewController = {
     getEditStockPage: async (req, res) => {
         try{
             const { storeNumber } = req.params;
-            const { stock, store, /*talons*/ } = await stockViewService.getEditStockData(storeNumber);
+            const { id_stock } = req.query;
+
+            if (!storeNumber) throw new Error('Número da loja inválido.');
+
+            console.log('storeNumber recebido:', storeNumber);
+            console.log('id_stock recebido:', id_stock);
+
+            const { stock, store } = await stockViewService.getEditStockData(storeNumber);
 
             res.render('partials/stocks/editStocks', {
                 layout: false,
                 title: 'Editar Estoque',
                 stock,
                 store,
-                /*talons*/
             });
         }catch(error){
             console.error('Erro ao carregar página de edição:', error);
