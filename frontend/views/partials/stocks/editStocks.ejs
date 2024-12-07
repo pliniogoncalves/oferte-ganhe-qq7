@@ -21,24 +21,42 @@
                 class="form-control" 
                 id="storeName" 
                 name="storeName" 
-                value="<%= stock.Store && stock.Store.number_store === '0' ? 'Matriz' : (stock.Store ? stock.Store.number_store : 'Sem loja associada') %>"  
+                value="<%= stock.storeNumber === '0' ? 'Matriz' : stock.storeNumber %>"   
                 readonly>
         </div>
     
 
         <div class="mb-3">
             <label for="edit_current_stock">Estoque Atual</label>
-            <input type="number" id="currentStock" name="currentStock" value="<%= stock.current_stock %>" required />
+            <input 
+                type="number" 
+                class="form-control" 
+                id="currentStock" 
+                name="currentStock" 
+                value="<%= stock.current_stock %>" 
+                required />
         </div>
 
         <div class="mb-3">
             <label for="edit_current_stock">Estoque Mínimo</label>
-            <input type="number" id="minStock" name="minStock" value="<%= stock.minimum_stock %>" required />
+            <input 
+                type="number"
+                class="form-control" 
+                id="minStock" 
+                name="minStock" 
+                value="<%= stock.minimum_stock %>" 
+                required />
         </div>
 
         <div class="mb-3">
             <label for="edit_current_stock">Estoque Recomendado</label>
-            <input type="number" id="recommendedStock" name="recommendedStock" value="<%= stock.recommended_stock %>" required />
+            <input 
+                type="number" 
+                id="recommendedStock"
+                class="form-control" 
+                name="recommendedStock" 
+                value="<%= stock.recommended_stock %>" 
+                required />
         </div>
 
         <div class="text-center mb-4">

@@ -50,7 +50,7 @@ async function searchStocks() {
 //Function to search for a stock by ID
 async function searchStockById(stockId) {
     
-    if (!stockId) {
+    if(!stockId){
         throw new Error("ID do estoque não pode ser vazio ou indefinido.");
     }
 
@@ -69,11 +69,19 @@ async function searchStockById(stockId) {
             ],
         });
         
-        if (!stock) {
+        if(!stock){
             throw new Error(`Estoque não encontrado para a loja com número: ${stockId}`);
         }
 
-        return stock;
+        return {
+            id_stock: stock.id_stock,
+            current_stock: stock.current_stock,
+            minimum_stock: stock.minimum_stock,
+            recommended_stock: stock.recommended_stock,
+            storeNumber: stock.Store?.number_store || '0',
+            storeName: stock.Store?.name_store || 'Sem loja associada',
+            talonStatus: stock.Talon?.status_talon || null,
+        };
     }catch(err){
         console.error('Error fetching stock by ID:', err);
         throw err;
@@ -81,7 +89,7 @@ async function searchStockById(stockId) {
 }
 
 async function searchStockByStoreNumber(storeNumber) {
-    try {
+    try{
         const stock = await Stock.findOne({
             include: [
                 {
@@ -98,12 +106,12 @@ async function searchStockByStoreNumber(storeNumber) {
             ],
         });
 
-        if (!stock) {
+        if(!stock){
             throw new Error(`Estoque não encontrado para a loja com número: ${storeNumber}`);
         }
 
         return stock;
-    } catch (err) {
+    }catch(err){
         console.error('Error fetching stock by store number:', err);
         throw err;
     }

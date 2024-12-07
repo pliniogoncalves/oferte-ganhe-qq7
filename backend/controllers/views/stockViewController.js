@@ -34,10 +34,7 @@ const stockViewController = {
             res.render('partials/stocks/editStocks', {
                 layout: false,
                 title: 'Editar Estoque',
-                stock: {
-                    ...stock,
-                    storeNumber: stock.storeNumber || '0',
-                },
+                stock
             });
         }catch(error){
             console.error('Erro ao carregar página de edição:', error);
