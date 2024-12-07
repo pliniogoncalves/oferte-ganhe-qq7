@@ -5,12 +5,20 @@ const stockController = {
 
     //Function to register a new stock
     insertStock: async (req, res) => {
-        const { storeId, talonId, currentStock, minStock, recommendedStock, stockStatus } = req.body;
+        const { storeId, talonId, currentStock, minStock, recommendedStock } = req.body;
     
         try{
+            if(storeId === undefined || currentStock === undefined || minStock === undefined || recommendedStock === undefined) {
+                return res.status(400).json({ message: 'Missing required fields' });
+            }
+    
+            const stockStatus = await stockService.calculateStockStatus(currentStock, minStock, recommendedStock);
+
             const newStock = await stockService.insertStock(storeId, talonId, currentStock, minStock, recommendedStock, stockStatus);
+    
             res.status(201).json({ message: 'Stock record created successfully!', stock: newStock });
         }catch(err){
+            console.error('Error creating stock:', err);
             res.status(500).json({ message: 'Error creating stock record', error: err.message });
         }
     },

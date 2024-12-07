@@ -97,8 +97,8 @@ document.addEventListener("DOMContentLoaded", () => {
                         const data = Object.fromEntries(formData.entries());
 
                         try{
-                            const apiUrl = `/api/stock/edit/${stockId || ''}`;
-                            const stockResponse = await fetch(apiUrl, {
+                            const editStockApiUrl = `/api/stock/edit/${stockId || ''}`;
+                            const stockResponse = await fetch(editStockApiUrl, {
                                 method: stockId ? 'PUT' : 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify(data),

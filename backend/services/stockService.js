@@ -7,7 +7,7 @@ async function insertStock(storeId, talonId, currentStock, minStock, recommended
     try{
         const stock = await Stock.create({
             id_store: storeId,
-            id_talon: talonId,
+            id_talon: talonId || null,
             current_stock: currentStock,
             minimum_stock: minStock,
             recommended_stock: recommendedStock,

@@ -38,8 +38,7 @@ const stockViewService = {
     getAddStockData: async () => {
         try{
             const stores = await storeService.getAllStores();
-            //const talons = await talonService.getAllTalons();
-            return { stores, /*talons*/ };
+            return { stores };
         }catch(error){
             console.error('Erro ao buscar dados para adicionar novo estoque:', error.message);
             throw error;
