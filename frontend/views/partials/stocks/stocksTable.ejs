@@ -1,0 +1,20 @@
+<% stocks.forEach(stock => { %>
+    <tr>
+        <td>
+            <%= stock.Store && stock.Store.number_store === '0' ? 'Matriz' : (stock.Store ? stock.Store.number_store : 'Sem loja associada') %>
+        </td>
+        <td><%= stock.current_stock %></td>
+        <td><%= stock.minimum_stock %></td>
+        <td><%= stock.recommended_stock %></td>
+        <td><%= stock.status_stock %></td>
+        <td class="text-center">
+            <button 
+                class="btn btn-sm btn-warning editStock" 
+                data-id="<%= stock.id_stock ? stock.id_stock : '' %>" 
+                data-url="/stocks/edit">
+                <i class="fas fa-edit"></i>
+            </button>
+        </td>                
+    </tr>
+<% }) %>
+    

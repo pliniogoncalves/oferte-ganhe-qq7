@@ -20,6 +20,43 @@ const stockViewController = {
         }
     },
 
+    getAllStocks: async (req, res) => {
+        try{
+            const stocks = await stockViewService.getAllStocks();
+            res.status(200).render("partials/stocks/stocksTable", { 
+                layout: false,
+                stocks: stocks || [],
+                cssFiles: [],
+            });
+        }catch(error){
+            console.error("Erro ao listar estoques:", error);
+            res.status(500).send("Erro ao listar estoques.");
+        }
+    },
+
+    searchStocksByNumberStore: async (req, res) => {
+        const { numberStore } = req.query;
+
+        try{
+            const stocks = numberStore
+                ? await stockViewService.getStockByStoreNumber(numberStore) 
+                : await stockViewService.getAllStocks();
+
+            if(numberStore && !stocks){
+                return res.status(404).send("Estoque não encontrado");
+            }
+
+            res.render("partials/stocks/stocksTable", { 
+                layout: false,
+                stocks: Array.isArray(stocks) ? stocks : [stocks],
+                cssFiles: [],
+            });
+        }catch(error){
+            console.error("Erro ao buscar estoque por numero:", error);
+            res.status(500).send("Erro ao buscar estoque.");
+        }
+    },
+
     getEditStockPage: async (req, res) => {
         try{
             const { stockId } = req.params;

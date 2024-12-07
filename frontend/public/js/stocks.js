@@ -54,10 +54,13 @@ document.addEventListener("DOMContentLoaded", () => {
         const searchStockBtn = event.target.closest("#searchStockBtn");
         if (searchStockBtn) {
             const searchInput = document.getElementById("search");
-            const query = searchInput?.value.trim();
+            const numberStore = searchInput?.value.trim();
 
             try {
-                const response = await fetch(`/stocks/search?store=${encodeURIComponent(query || '')}`);
+                const response = numberStore
+                ? await fetch(`/stocks/search?numberStore=${encodeURIComponent(numberStore)}`)
+                : await fetch(`/stocks/list`);
+                
                 if (response.ok) {
                     const tableHTML = await response.text();
                     const tableBody = document.querySelector("table tbody");

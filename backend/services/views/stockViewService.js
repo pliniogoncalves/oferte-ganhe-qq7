@@ -19,6 +19,24 @@ const stockViewService = {
         }
     },
 
+    getAllStocks: async () => {
+        try{
+            return await stockService.searchStocks();
+        }catch(error){
+            console.error('Erro ao buscar todos os estoques:', error.message);
+            throw error;
+        }
+    },
+
+    getStockByStoreNumber: async (numberStore) => {
+        try{
+            return await stockService.searchStockByStoreNumber(numberStore);
+        }catch(error){
+            console.error(`Erro ao buscar estoque com numero ${numberStore}:`, error.message);
+            throw error;
+        }
+    },
+
     getEditStockData: async (stockId) => {
         try {
 
