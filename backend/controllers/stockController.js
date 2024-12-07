@@ -4,20 +4,25 @@ const stockService = require('../services/stockService.js');
 const stockController = {
 
     //Function to register a new stock
+    
     insertStock: async (req, res) => {
         const { storeId, talonId, currentStock, minStock, recommendedStock } = req.body;
-    
-        try{
-            if(storeId === undefined || currentStock === undefined || minStock === undefined || recommendedStock === undefined) {
+
+        try {
+            console.log('Requisição recebida no insertStock:', req.body);
+
+            if (!storeId || currentStock === undefined || minStock === undefined || recommendedStock === undefined) {
                 return res.status(400).json({ message: 'Missing required fields' });
             }
-    
+
             const stockStatus = await stockService.calculateStockStatus(currentStock, minStock, recommendedStock);
+            console.log('Status calculado para o estoque:', stockStatus);
 
             const newStock = await stockService.insertStock(storeId, talonId, currentStock, minStock, recommendedStock, stockStatus);
-    
+            console.log('Novo estoque criado:', newStock);
+
             res.status(201).json({ message: 'Stock record created successfully!', stock: newStock });
-        }catch(err){
+        } catch (err) {
             console.error('Error creating stock:', err);
             res.status(500).json({ message: 'Error creating stock record', error: err.message });
         }
@@ -67,34 +72,36 @@ const stockController = {
 
     //Function to edit a stock record
     editStock: async (req, res) => {
-        const { id } = req.params;
-        const { storeId, talonId, currentStock, minStock, recommendedStock } = req.body;
-    
-        try{
-            
-            const stockStatus = stockService.calculateStockStatus(currentStock, minStock, recommendedStock);
+        const { stockId, storeId, talonId, currentStock, minStock, recommendedStock } = req.body;
 
-            let updatedStock;
+        try {
+            console.log('Dados recebidos no editStock:', req.body);
 
-            if(!id || id === 'null'){
-                updatedStock = await stockService.insertStock({
-                    storeId,
-                    talonId,
-                    currentStock,
-                    minStock,
-                    recommendedStock,
-                    stockStatus
-                });
-            }else{
-                updatedStock = await stockService.editStock(id, storeId, talonId, currentStock, minStock, recommendedStock, stockStatus);
+            if (typeof stockId !== 'number' && typeof stockId !== 'string') {
+                console.error('Erro: stockId não é um número ou string válido:', stockId);
             }
-            
-            if(updatedStock){
-                res.status(200).json({ message: 'Stock record updated successfully!', stock: updatedStock });
-            }else{
-                res.status(404).json({ message: 'Stock record not found' });
-            }
-        }catch(err){
+
+            const parsedCurrentStock = parseFloat(currentStock);
+            const parsedMinStock = parseFloat(minStock);
+            const parsedRecommendedStock = parseFloat(recommendedStock);
+
+            const stockStatus = await stockService.calculateStockStatus(parsedCurrentStock, parsedMinStock, parsedRecommendedStock);
+            console.log('Status calculado no editStock:', stockStatus);
+
+            const updatedStock = await stockService.saveStock(
+                stockId,
+                storeId,
+                talonId,
+                parsedCurrentStock,
+                parsedMinStock,
+                parsedRecommendedStock,
+                stockStatus
+            );
+            console.log('Estoque atualizado:', updatedStock);
+
+            res.status(200).json({ message: 'Stock record updated successfully!', stock: updatedStock });
+        } catch (err) {
+            console.error('Error updating stock record:', err);
             res.status(500).json({ message: 'Error updating stock record', error: err.message });
         }
     },

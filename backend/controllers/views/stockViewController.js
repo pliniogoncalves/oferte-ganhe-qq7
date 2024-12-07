@@ -20,31 +20,12 @@ const stockViewController = {
         }
     },
 
-    getAddStockPage: async (req, res) => {
-        try{
-            const { stores, talons } = await stockViewService.getAddStockData();
-
-            res.render('partials/stocks/addStocks', {
-                layout: false,
-                title: 'Cadastrar Estoque',
-                stores,
-                talons,
-            });
-        }catch(error){
-            console.error('Erro ao carregar a página de cadastro de estoque:', error);
-            res.status(500).send('Erro ao carregar a página.');
-        }
-    },
-
     getEditStockPage: async (req, res) => {
         try{
-            const { storeNumber } = req.params;
-            const { id_stock } = req.query;
-
+            const { storeNumber } = req.params;;
             if (!storeNumber) throw new Error('Número da loja inválido.');
 
             console.log('storeNumber recebido:', storeNumber);
-            console.log('id_stock recebido:', id_stock);
 
             const { stock, store } = await stockViewService.getEditStockData(storeNumber);
 

@@ -8,14 +8,21 @@ const stockViewService = {
             const currentPage = parseInt(page, 10) || 1;
             const offset = (currentPage - 1) * itemsPerPage;
 
+            console.log('Calculando paginação:', { currentPage, offset, itemsPerPage });
+
             const totalItems = await storeService.countStores();
             const totalPages = Math.ceil(totalItems / itemsPerPage);
 
+            console.log('Dados gerais de paginação:', { totalItems, totalPages });
+
             const stores = await storeService.getPaginatedStores(offset, itemsPerPage);
-            
+            console.log('Lojas paginadas:', stores);
+
             const formattedStocks = await Promise.all(
                 stores.map(async store => {
                     const stock = await stockService.searchStockByStoreId(store.id_store);
+                    console.log(`Estoque para loja ${store.id_store}:`, stock);
+
                     return {
                         id_store: store.id_store,
                         storeName: store.name_store,
@@ -28,6 +35,8 @@ const stockViewService = {
                 })
             );
 
+            console.log('Estoques formatados:', formattedStocks);
+
             return { stocks: formattedStocks, currentPage, totalPages };
         } catch (error) {
             console.error('Erro ao buscar estoques paginados:', error.message);
@@ -35,59 +44,35 @@ const stockViewService = {
         }
     },
 
-    getAddStockData: async () => {
-        try{
-            const stores = await storeService.getAllStores();
-            return { stores };
-        }catch(error){
-            console.error('Erro ao buscar dados para adicionar novo estoque:', error.message);
-            throw error;
-        }
-    },
-
-    getStockById: async (id_stock) => {
-        try{
-            const stock = await stockService.getStockById(id_stock);
-            if (!stock) throw new Error('Estoque não encontrado.');
-
-            const store = await storeService.getStoreById(stock.id_store);
-            const talon = await talonService.getTalonById(stock.id_talon);
-
-            return{
-                ...stock.dataValues,
-                Store: store ? store.name_store : 'Loja não encontrada',
-                Talon: talon ? talon.id_talon : 'Talão não encontrado',
-            };
-        }catch(error){
-            console.error(`Erro ao buscar estoque por ID ${id_stock}:`, error.message);
-            throw error;
-        }
-    },
-
     getEditStockData: async (storeNumber) => {
-        try{
+        try {
+            console.log('Buscando dados para edição com storeNumber:', storeNumber);
+
             const store = await storeService.searchStoreNumber(storeNumber);
+            console.log('Loja encontrada:', store);
+
             if (!store) throw new Error('Loja não encontrada.');
 
-            const stock = await stockService.searchStockByStoreId(store.id_store);;
+            const stock = await stockService.searchStockByStoreId(store.id_store);
+            console.log(`Estoque encontrado para loja ${store.id_store}:`, stock);
 
-            const stockData = stock || {
-                id_stock: null,
-                id_store: store.id_store,
-                storeNumber: store.number_store,
-                current_stock: 0,
-                minimum_stock: 0,
-                recommended_stock: 0,
-                status_stock: 'Indefinido',
+            return {
+                stock: stock || {
+                    id_stock: null,
+                    id_store: store.id_store,
+                    storeNumber: store.number_store,
+                    current_stock: 0,
+                    minimum_stock: 0,
+                    recommended_stock: 0,
+                    status_stock: 'Indefinido',
+                },
+                store,
             };
-
-            return { stock: stockData, store };
-        }catch(error){
+        } catch (error) {
             console.error('Erro ao buscar dados para edição do estoque:', error.message);
             throw error;
         }
     },
-
 };
 
 module.exports = stockViewService;

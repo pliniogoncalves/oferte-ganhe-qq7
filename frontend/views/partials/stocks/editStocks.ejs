@@ -12,7 +12,7 @@
    
     <form id="stockForm">
 
-        <input type="hidden" id="idStock" name="idStock" value="<%= stock.id_stock || '' %>">
+        <input type="hidden" id="storeId" name="storeId" value="<%= stock.id_store || '' %>">
         
         <div class="mb-3">
             <label for="storeName" class="form-label">Loja</label>
@@ -28,17 +28,17 @@
 
         <div class="mb-3">
             <label for="edit_current_stock">Estoque Atual</label>
-            <input type="number" id="current_stock" name="current_stock" value="<%= stock.current_stock %>" required />
+            <input type="number" id="currentStock" name="currentStock" value="<%= stock.current_stock %>" required />
         </div>
 
         <div class="mb-3">
             <label for="edit_current_stock">Estoque Mínimo</label>
-            <input type="number" id="minimum_stock" name="minimum_stock" value="<%= stock.minimum_stock %>" required />
+            <input type="number" id="minStock" name="minStock" value="<%= stock.minimum_stock %>" required />
         </div>
 
         <div class="mb-3">
             <label for="edit_current_stock">Estoque Recomendado</label>
-            <input type="number" id="recommended_stock" name="recommended_stock" value="<%= stock.recommended_stock %>" required />
+            <input type="number" id="recommendedStock" name="recommendedStock" value="<%= stock.recommended_stock %>" required />
         </div>
 
         <div class="text-center mb-4">

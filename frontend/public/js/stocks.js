@@ -78,30 +78,44 @@ document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener("click", async (event) => {
         const editStockBtn = event.target.closest(".editStock");
         if (editStockBtn) {
-            const stockNumber = editStockBtn.dataset.number;
-            const stockId = editStockBtn.dataset.id;
+            const storeData = JSON.parse(editStockBtn.getAttribute('data-store'));
 
-            const url = `/stocks/edit/${stockNumber}`;
+            const url = `/stocks/edit/${storeData.storeNumber}`;
             window.history.pushState({}, '', url);
 
             try{
                 const response = await fetch(url);
                 if(response.ok){
                     content.innerHTML = await response.text();
+
                     const stockForm = document.getElementById("stockForm");
+                    stockForm.storeId.value = storeData.id_store;
+                    stockForm.currentStock.value = storeData.current_stock;
+                    stockForm.minStock.value = storeData.minimum_stock;
+                    stockForm.recommendedStock.value = storeData.recommended_stock;
 
                     stockForm.addEventListener("submit", async (e) => {
                         e.preventDefault();
-
                         const formData = new FormData(stockForm);
                         const data = Object.fromEntries(formData.entries());
 
+                        const payload = {
+                            stockId: data.stockId || null,
+                            storeId: data.storeId,
+                            talonId: data.talonId || null,
+                            currentStock: parseFloat(data.currentStock),
+                            minStock: parseFloat(data.minStock),
+                            recommendedStock: parseFloat(data.recommendedStock),
+                        };
+
+                        console.log("Payload enviado:", payload);
+
                         try{
-                            const editStockApiUrl = `/api/stock/edit/${stockId || ''}`;
+                            const editStockApiUrl = `/api/stock/edit/${storeData.id_stock || ''}`;
                             const stockResponse = await fetch(editStockApiUrl, {
-                                method: stockId ? 'PUT' : 'POST',
+                                method: storeData.id_stock? 'POST':'PUT',
                                 headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify(data),
+                                body: JSON.stringify(payload),
                             });
 
                             if (!stockResponse.ok) {
