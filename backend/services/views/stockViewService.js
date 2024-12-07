@@ -19,30 +19,14 @@ const stockViewService = {
         }
     },
 
-    getEditStockData: async (storeNumber) => {
+    getEditStockData: async (stockId) => {
         try {
-            console.log('Buscando dados para edição com storeNumber:', storeNumber);
 
-            const store = await storeService.searchStoreNumber(storeNumber);
-            console.log('Loja encontrada:', store);
+            const stock = await stockService.searchStockById(stockId);
 
-            if (!store) throw new Error('Loja não encontrada.');
+            if (!stock) throw new Error('Estoque não encontrado.');
 
-            const stock = await stockService.searchStockByStoreId(store.id_store);
-            console.log(`Estoque encontrado para loja ${store.id_store}:`, stock);
-
-            return {
-                stock: stock || {
-                    id_stock: null,
-                    id_store: store.id_store,
-                    storeNumber: store.number_store,
-                    current_stock: 0,
-                    minimum_stock: 0,
-                    recommended_stock: 0,
-                    status_stock: 'Indefinido',
-                },
-                store,
-            };
+            return {stock};
         } catch (error) {
             console.error('Erro ao buscar dados para edição do estoque:', error.message);
             throw error;

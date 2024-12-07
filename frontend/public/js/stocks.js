@@ -74,64 +74,57 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Update
-    document.addEventListener("click", async (event) => {
+     // Update
+     document.addEventListener("click", async (event) => {
         const editStockBtn = event.target.closest(".editStock");
-        if (editStockBtn) {
-            const storeData = JSON.parse(editStockBtn.getAttribute('data-store'));
+        if(editStockBtn){
+            const id = editStockBtn.dataset.id;
 
-            const url = `/stocks/edit/${storeData.storeNumber}`;
+            if (!id) {
+                console.error("ID do estoque está indefinido ou inválido.");
+                return alert("Erro: não foi possível identificar o estoque para edição.");
+            }
+    
+            const url = `/stocks/edit/${id}`;
             window.history.pushState({}, '', url);
-
+    
             try{
                 const response = await fetch(url);
                 if(response.ok){
-                    content.innerHTML = await response.text();
+                    document.getElementById("content").innerHTML = await response.text();
+                    const editForm = document.getElementById("editForm");
 
-                    const stockForm = document.getElementById("stockForm");
-                    stockForm.storeId.value = storeData.id_store;
-                    stockForm.stockId.value = storeData.id_stock || '';
-                    stockForm.storeName.value = storeData.storeNumber === '0' ? 'Matriz' : storeData.storeNumber;
-                    stockForm.currentStock.value = storeData.current_stock;
-                    stockForm.minStock.value = storeData.minimum_stock;
-                    stockForm.recommendedStock.value = storeData.recommended_stock;
-
-                    stockForm.addEventListener("submit", async (e) => {
+                    editForm.addEventListener("submit", async (e) => {
                         e.preventDefault();
-                        const formData = new FormData(stockForm);
+                        const formData = new FormData(editForm);
                         const data = Object.fromEntries(formData.entries());
 
                         const payload = {
-                            stockId: data.stockId || null,
-                            storeId: data.storeId,
-                            talonId: data.talonId || null,
-                            currentStock: parseFloat(data.currentStock),
-                            minStock: parseFloat(data.minStock),
-                            recommendedStock: parseFloat(data.recommendedStock),
+                            stockId: data.stockId,
+                            currentStock: parseInt(data.currentStock, 10),
+                            minStock: parseInt(data.minStock, 10),
+                            recommendedStock: parseInt(data.recommendedStock, 10),
                         };
 
-                        console.log("Payload enviado:", payload);
-
                         try{
-                            const editStockApiUrl = `/api/stock/edit/${data.stockId || ''}`;
-                            const stockResponse = await fetch(editStockApiUrl, {
-                                method: data.stockId? 'POST':'PUT',
+                            const saveResponse = await fetch(`/api/stock/edit/${id}`, {
+                                method: 'PUT',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify(payload),
                             });
-
-                            if (!stockResponse.ok) {
-                                const errorDetails = await stockResponse.json();
-                                showModal('Erro', `Erro ao atualizar estoque: ${errorDetails.message || "Erro desconhecido."}`);
-                                return;
+    
+                            if(saveResponse.ok){
+                                showModal('Sucesso', 'Estoque atualizado com sucesso!');
+                                const stockResponse = await fetch('/stocks/page');
+                                if(!stockResponse.ok) throw new Error("Erro ao carregar a lista de estoques.");
+                                document.getElementById("content").innerHTML = await stockResponse.text();
+                            }else{
+                                const errorDetails = await saveResponse.json();
+                                showModal('Erro', `Erro ao atualizar estoque: ${errorDetails.message || 'Erro desconhecido.'}`);
                             }
-
-                            showModal('Sucesso', 'Estoque atualizado com sucesso!');
-                            const stocksResponse = await fetch('/stocks/page');
-                            content.innerHTML = await stocksResponse.text();
-                        } catch (error) {
+                        }catch(error){
                             console.error("Erro ao salvar alterações:", error);
-                            showModal('Erro', "Erro ao atualizar o estoque.");
+                            showModal('Erro', "Erro ao atualizar a estoque.");
                         }
                     });
                 }else{
@@ -139,7 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }catch(error){
                 console.error("Erro ao carregar o formulário de edição:", error);
-                showModal('Erro', "Erro ao carregar o formulário de edição.");
+                showModal('Erro', "Não foi possível carregar o formulário de edição.");
             }
         }
     });

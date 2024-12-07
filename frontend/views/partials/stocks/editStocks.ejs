@@ -10,7 +10,7 @@
         </div>   
     </div>
    
-    <form id="stockForm">
+    <form id="editForm">
 
         <input type="hidden" id="stockId" name="stockId" value="<%= stock.id_stock || '' %>">
         
@@ -21,7 +21,7 @@
                 class="form-control" 
                 id="storeName" 
                 name="storeName" 
-                value="<%= stock.storeNumber === '0' ? 'Matriz' : stock.storeNumber %>" 
+                value="<%= stock.Store && stock.Store.number_store === '0' ? 'Matriz' : (stock.Store ? stock.Store.number_store : 'Sem loja associada') %>"  
                 readonly>
         </div>
     

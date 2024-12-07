@@ -5,6 +5,6 @@ const authenticateToken = require('../../middlewares/authMiddleware');
 
 // Render the Stocks pages
 router.get('/page', authenticateToken, stockViewController.getStockPage);
-router.get('/edit/:storeNumber', authenticateToken, stockViewController.getEditStockPage);
+router.get('/edit/:stockId', authenticateToken, stockViewController.getEditStockPage);
 
 module.exports = router;

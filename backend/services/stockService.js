@@ -49,14 +49,30 @@ async function searchStocks() {
 
 //Function to search for a stock by ID
 async function searchStockById(stockId) {
+    
+    if (!stockId) {
+        throw new Error("ID do estoque não pode ser vazio ou indefinido.");
+    }
+
     try{
         const stock = await Stock.findOne({
             where: { id_stock: stockId },
             include: [
-                { model: Store, attributes: ['name_store', 'number_store'], required: false },
-                { model: Talon, attributes: ['status_talon'], required: false },
+                { model: Store, 
+                    attributes: ['name_store', 'number_store'], 
+                    required: false, 
+                },
+                { model: Talon, 
+                    attributes: ['status_talon'], 
+                    required: false 
+                },
             ],
         });
+        
+        if (!stock) {
+            throw new Error(`Estoque não encontrado para a loja com número: ${stockId}`);
+        }
+
         return stock;
     }catch(err){
         console.error('Error fetching stock by ID:', err);
@@ -64,13 +80,42 @@ async function searchStockById(stockId) {
     }
 }
 
+async function searchStockByStoreNumber(storeNumber) {
+    try {
+        const stock = await Stock.findOne({
+            include: [
+                {
+                    model: Store,
+                    attributes: ['name_store', 'number_store'],
+                    where: { number_store: storeNumber },
+                    required: true,
+                },
+                {
+                    model: Talon,
+                    attributes: ['status_talon'],
+                    required: false,
+                },
+            ],
+        });
+
+        if (!stock) {
+            throw new Error(`Estoque não encontrado para a loja com número: ${storeNumber}`);
+        }
+
+        return stock;
+    } catch (err) {
+        console.error('Error fetching stock by store number:', err);
+        throw err;
+    }
+}
+
 
 //Function to update a stock
-async function editStock(stockId, storeId, talonId, currentStock, minStock, recommendedStock, stockStatus) {
+async function editStock(stockId, talonId, currentStock, minStock, recommendedStock) {
+    const stockStatus = await calculateStockStatus(currentStock, minStock, recommendedStock)
     try {
         const stock = await Stock.update(
-            { 
-                id_store: storeId, 
+            {  
                 id_talon: talonId || null, 
                 current_stock: currentStock, 
                 minimum_stock: minStock, 
@@ -149,7 +194,8 @@ async function calculateStockStatus(currentStock, minStock, recommendedStock) {
 module.exports = { 
     insertStock, 
     searchStocks, 
-    searchStockById, 
+    searchStockById,
+    searchStockByStoreNumber, 
     editStock, 
     removeStock,
     countStocks,

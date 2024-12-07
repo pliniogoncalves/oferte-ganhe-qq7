@@ -54,31 +54,47 @@ const stockController = {
 
     //Function to edit a stock record
     editStock: async (req, res) => {
-        const { stockId, storeId, talonId, currentStock, minStock, recommendedStock } = req.body;
-
         try{
-
+            const stockId = req.params.id;
+            const { talonId, currentStock, minStock, recommendedStock } = req.body;
+    
+            if(!stockId || !currentStock || !minStock || !recommendedStock) {
+                return res.status(400).json({
+                    message: 'Parâmetros obrigatórios ausentes. Certifique-se de enviar stockId, storeId, currentStock, minStock e recommendedStock.',
+                });
+            }
+    
+            const stock = await stockService.searchStockById(stockId);
+            if(!stock){
+                return res.status(404).json({ message: `Estoque com ID ${stockId} não encontrado.` });
+            }
+    
             const parsedCurrentStock = parseFloat(currentStock);
             const parsedMinStock = parseFloat(minStock);
             const parsedRecommendedStock = parseFloat(recommendedStock);
-
-            const stockStatus = await stockService.calculateStockStatus(parsedCurrentStock, parsedMinStock, parsedRecommendedStock);
-            console.log('Status calculado no editStock:', stockStatus);
-
-            const updatedStock = await stockService.saveStock(
+    
+            const updatedStock = await stockService.editStock(
                 stockId,
-                storeId,
                 talonId,
                 parsedCurrentStock,
                 parsedMinStock,
                 parsedRecommendedStock,
-                stockStatus
             );
-
-            res.status(200).json({ message: 'Stock record updated successfully!', stock: updatedStock });
-        } catch (err) {
-            console.error('Error updating stock record:', err);
-            res.status(500).json({ message: 'Error updating stock record', error: err.message });
+    
+            if(!updatedStock){
+                return res.status(500).json({ message: 'Falha ao atualizar o estoque. Verifique os dados enviados.' });
+            }
+    
+            res.status(200).json({
+                message: 'Registro de estoque atualizado com sucesso!',
+                stock: updatedStock,
+            });
+        }catch(err){
+            console.error('Erro ao atualizar o registro de estoque:', err.message);
+            res.status(500).json({
+                message: 'Erro ao atualizar o registro de estoque.',
+                error: err.message,
+            });
         }
     },
 

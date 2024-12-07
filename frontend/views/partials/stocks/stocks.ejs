@@ -40,17 +40,9 @@
                     <td><%= stock.recommended_stock %></td>
                     <td><%= stock.status_stock %></td>
                     <td class="text-center">
-                        <button   
-                            class="btn btn-sm btn-warning editStock"
-                            data-store='{
-                                "id_store": "<%= stock.id_store %>",
-                                "id_stock": "<%= stock.id_stock %>",
-                                "storeNumber": "<%= stock.storeNumber %>",
-                                "current_stock": <%= stock.current_stock || 0 %>,
-                                "minimum_stock": <%= stock.minimum_stock || 0 %>,
-                                "recommended_stock": <%= stock.recommended_stock || 0 %>,
-                                "status_stock": "<%= stock.status_stock || 'Indefinido' %>"
-                            }' 
+                        <button 
+                            class="btn btn-sm btn-warning editStock" 
+                            data-id="<%= stock.id_stock ? stock.id_stock : '' %>" 
                             data-url="/stocks/edit">
                             <i class="fas fa-edit"></i>
                         </button>
