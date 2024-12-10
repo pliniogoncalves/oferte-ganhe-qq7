@@ -30,30 +30,34 @@
         <% if (profiles && profiles.length > 0) { %>
             <% profiles.forEach(profile => { %>
                 <tr>
-                    <td><%= profile.name_profile %></td>
-                    <td>
-                        <% if (profile.Permissions && profile.Permissions.length > 0) { %>
-                            <% profile.Permissions.forEach(permission => { %>
-                                <span class="badge bg-primary"><%= permission.name_permission %></span>
-                            <% }); %>
-                        <% } else { %>
-                            <span class="text-muted">Nenhuma permissão</span>
-                        <% } %>
-                    </td>
-                    <td class="text-center">
-                        <button class="btn btn-sm btn-warning editProfile" 
+                    <% if (profile.id_profile !== 1) { %>
+                        <td>
+                            <%= profile.name_profile %>
+                        </td>
+                        <td>
+                            <% if(profile.Permissions && profile.Permissions.length > 0){ %>
+                                <% profile.Permissions.forEach(permission => { %>
+                                        <span class="badge bg-primary"><%= permission.name_permission %></span>
+                                    <% }); %>
+                            <% }else{ %>
+                                <span class="text-muted">Nenhuma permissão</span>
+                            <% } %>
+                        </td>
+                        <td class="text-center">
+                            <button class="btn btn-sm btn-warning editProfile" 
                                 data-name="<%= profile.name_profile %>" 
                                 data-url="/profiles/edit">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="btn btn-sm btn-danger deleteProfile" 
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger deleteProfile" 
                                 data-name="<%= profile.name_profile %>">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                </tr>
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    <% } %> 
+                </tr>        
             <% }) %>
-        <% } else { %>
+        <% }else{ %>
             <tr>
                 <td colspan="3">Nenhum perfil encontrado.</td>
             </tr>
