@@ -1,0 +1,117 @@
+<div class="text-center mb-4">
+    <h1 class="fw-bold">Gestão de Talões</h1>
+    <p class="text-muted">Veja a lista de talões e suas respectivas situações.</p>
+</div>
+
+<div class="container mb-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-sm-12 mb-4">
+            <div class="input-group">
+                <input type="text" class="form-control" id="search" placeholder="Buscar por ID">
+                <div class="input-icon">
+                      <i class="fas fa-search"></i>
+                </div>
+                <button class="btn btn-success" id="searchTalonBtn" style="background-color: #269447; color: #fff;" >Buscar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<table class="table table-bordered table-hover">
+    <thead style="background-color: #269447; color: #fff;">
+        <tr>
+            <th>ID</th>
+            <th>Loja</th>
+            <th>Data de Envio</th>
+            <th>Funcionário que Enviou</th>
+            <th>Data de Recebimento</th>
+            <th>Funcionário que Recebeu</th>
+            <th>Quantidade</th>
+            <th>Status</th>
+            <th class="text-center">Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% if(talons && talons.length > 0){ %>
+            <% talons.forEach(talon => { %>
+                <tr>
+                    <td>
+                        <%= talon.id_talon %>
+                    </td>
+                    <td>
+                        <%= talon.Store.number_store === '000' ? 'Nenhuma' : talon.Store.number_store === '0' ? 'Matriz' : talon.Store.number_store %>
+                    </td>
+                    <td>
+                        <%= new Date(talon.date_send).toLocaleDateString('pt-BR') %>
+                    </td>
+                    <td>
+                        <%= talon.Sender ? talon.Sender.name_users : '' %>
+                    </td>
+                    <td>
+                        <%= talon.date_received ? new Date(talon.date_received).toLocaleDateString('pt-BR') : '' %>
+                    </td>
+                    <td>
+                        <%= talon.Receiver ? talon.Receiver.name_users : '' %>
+                    </td>
+                    <td>
+                        <%= talon.quantity_talon %>
+                    </td>
+                    <td>
+                        <%= talon.status_talon %>
+                    </td>
+                    <td class="text-center">
+                        <button 
+                            class="btn btn-sm btn-warning detailsTalon" 
+                            data-id="<%= talon.id_talon %>">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button 
+                            class="btn btn-sm btn-warning editTalon" 
+                            data-id="<%= talon.id_talon %>" 
+                            data-url="/users/edit">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button 
+                            class="btn btn-sm btn-warning exportTalon" 
+                            data-id="<%= talon.id_talon %>">
+                            <i class="fas fa-file-export"></i>
+                        </button>
+                        <button 
+                            class="btn btn-sm btn-danger deleteTalon" 
+                            data-id="<%= talon.id_talon %>">
+                            <i class="fas fa-trash"></i>
+                        </button>  
+                    </td>
+                </tr>
+            <% }) %>
+        <% }else{ %>
+            <tr>
+                <td colspan="5">Nenhum Talão encontrado.</td>
+            </tr>
+        <% } %>   
+    </tbody>
+</table>
+
+<div class="text-center">
+        <%- include('../../components/pagination', { currentPage, totalPages }) %>
+</div>
+
+<div class="text-center mb-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-sm-6 col-md-3 mb-2">
+            <button class="btn btn-custom w-100" type="button" id="addTalonBtn" data-url="/talons/add">
+                <i class="fas fa-plus-circle"></i> Registrar Envio
+            </button>
+        </div>
+        <div class="col-12 col-sm-6 col-md-3 mb-2">
+            <button class="btn btn-recebimento btn-custom w-100" type="button" id="editTalonBtn" data-url="/talons/edit">
+                <i class="fas fa-plus-circle"></i> Registrar Recebimendo
+            </button>
+        </div>
+        <div class="col-12 col-sm-6 col-md-3 mb-2">
+            <button class="btn btn-secondary w-100" type="button" id="exportTalonCsvBtn">
+                <i class="fas fa-file-export"></i> Exportar CSV
+            </button>
+        </div>
+    </div>
+</div>

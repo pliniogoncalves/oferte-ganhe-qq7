@@ -3,10 +3,10 @@ const Store = require('../models/Store');
 const User = require('../models/User');
 
 //Function to insert a new Talon
-async function insertTalon(store = 1, dateSend, userSend, quantity, status = 'Enviado') {
+async function insertTalon(storeId = 1, dateSend, userSend, quantity, status = 'Enviado') {
     try{
         const talon = await Talon.create({
-            id_store: store,
+            id_store: storeId,
             date_send: dateSend,
             user_send: userSend,
             quantity_talon: quantity,
@@ -24,9 +24,20 @@ async function searchTalons() {
     try{
         const talons = await Talon.findAll({
             include: [
-                { model: Store, attributes: ['name_store'], required: false },
-                { model: User, as: 'Sender', attributes: ['name_users'], required: false },
-                { model: User, as: 'Receiver', attributes: ['name_users'], required: false },
+                { 
+                    model: Store, 
+                    attributes: ['name_store','number_store'], 
+                    required: false 
+                },
+                { 
+                    model: User, as: 'Sender', 
+                    attributes: ['name_users'], 
+                    required: false 
+                },
+                { model: User, as: 'Receiver', 
+                    attributes: ['name_users'], 
+                    required: false 
+                },
             ],
         });
         return talons;
@@ -81,10 +92,22 @@ async function removeTalon(talonId) {
     }
 }
 
+//Function counts all talons
+async function countTalons() {
+    try {
+        const count = await Talon.count();
+        return count;
+    } catch (err) {
+        console.error('Error counting talons:', err);
+        throw err;
+    }
+}
+
 module.exports = {
     insertTalon,
     searchTalons,
     searchTalonId,
     updateTalon,
     removeTalon,
+    countTalons
 };

@@ -2,10 +2,6 @@ const talonService = require('../services/talonService.js');
 
 // Controller for the Talon page
 const talonController = {
-    
-    getTalonPage: (req, res) => {
-        res.send("Página dos talões");
-    },
 
     // Function to register a new Talon
     insertTalon: async (req, res) => {

@@ -8,9 +8,6 @@ router.get('/', (req, res) => {
     res.send('Talon route is active');
 });
 
-//Route to the Talon page
-router.get('/talons/page', talonController.getTalonPage);
-
 //Define the routes and trigger the controller
 router.post('/talons/register', authenticateToken, talonController.insertTalon);
 router.get('/talons/list', authenticateToken, talonController.searchTalons);
