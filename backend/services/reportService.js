@@ -194,9 +194,23 @@ async function exportStocksReport() {
     });
 }
 
+//Function get all reports
+const reports = [
+    { name: "Relatório de Usuários Cadastrados", view: "showReportUsers", download: "exportUsersCSV" },
+    { name: "Relatório de Perfis de Usuários", view: "showReportProfiles", download: "exportarProfilesCSV" },
+    { name: "Relatório de Manutenção e Recebimento de Talões", view: "showReportTalons", download: "exportTalonsCSV" },
+    { name: "Relatório de Gestão de Estoque", view: "showReportStocks", download: "exportStockCSV" },
+    { name: "Relatório de Gestão de Loja", view: "showReportStores", download: "exportStoreCSV" }
+];
+
+const getAllReports = () => {
+    return reports;
+};
+
 module.exports = {
     exportUsersReport,
     exportStoresReport,
     exportProfilesReport,
     exportStocksReport,
+    getAllReports
 };
