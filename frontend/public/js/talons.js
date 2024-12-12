@@ -14,8 +14,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 const formHTML = await response.text();
                 content.innerHTML = formHTML;
     
-                const { role, storeId } = JSON.parse(document.getElementById('userDetails').textContent);
-    
                 const talonForm = document.getElementById("talonForm");
                 talonForm.addEventListener("submit", async (e) => {
                     e.preventDefault();
@@ -23,14 +21,22 @@ document.addEventListener("DOMContentLoaded", () => {
                     const formData = new FormData(talonForm);
                     const data = Object.fromEntries(formData.entries());
 
-                    data.date_send = `${data.date}T${data.time}:00`;
+                    data.dateSend = `${data.date}T${data.time}:00`;
                     delete data.date;
                     delete data.time;
     
-                    data.user_send = role === 'Administrador' ? data.user : storeId;
+                    const storeSelect = document.getElementById("store");
+                    const selectedOption = storeSelect.options[storeSelect.selectedIndex];
+                    data.storeId = selectedOption.getAttribute("data-id");
+                    delete data.store;
+
+                    const userDetails = JSON.parse(document.getElementById('userDetails').textContent);
+                    data.userSend = parseInt(userDetails.id, 10);
+
+                    data.quantity = parseInt(data.quantity, 10);
     
                     try{
-                        const saveResponse = await fetch('/api/talons/request/', {
+                        const saveResponse = await fetch('/api/talons/register', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify(data),

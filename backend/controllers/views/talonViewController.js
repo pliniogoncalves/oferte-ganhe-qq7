@@ -35,6 +35,7 @@ const talonViewController = {
                 stores,
                 user,
                 userDetails: {
+                    id: user?.id_users || 'ID não encontrado',
                     role: user.profile?.name_profile || 'Usuário',
                     storeId: user?.store?.number_store || null,
                 },

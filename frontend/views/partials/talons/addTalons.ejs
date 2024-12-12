@@ -15,8 +15,9 @@
 
         <div id="userDetails" style="display: none;">
             {
-                "role": "{{userDetails.role}}",
-                "storeId": "{{userDetails.storeId}}"
+                "id": "<%= userDetails.id ? userDetails.id : '' %>",
+                "role": "<%= userDetails.role ? userDetails.role : 'Usuário' %>",
+                "storeId": "<%= userDetails.storeId ? userDetails.storeId : null %>"
             }
         </div>
 
@@ -24,7 +25,7 @@
             <label for="store" class="form-label">Loja</label>
             <select class="form-control" id="store" name="store" <%= userDetails.role !== 'Administrador' ? 'disabled' : '' %> required>
                 <% stores.forEach(store => { %>
-                    <option value="<%= store.number_store %>" <%= userDetails.storeId == store.number_store ? 'selected' : '' %>>
+                    <option value="<%= store.number_store %>" data-id="<%= store.id_store %>" <%= userDetails.storeId == store.number_store ? 'selected' : '' %>>
                         <%= store.id_store === 1 ? store.name_store : (store.number_store === '0' ? 'Matriz' : store.number_store) %>
                     </option>
                 <% }); %>
