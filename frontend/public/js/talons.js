@@ -64,4 +64,30 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+     // Delete
+     document.addEventListener("click", async (event) => {
+        const deleteTalonBtn = event.target.closest(".deleteTalon");
+        if(deleteTalonBtn){
+            const talonId = deleteTalonBtn.dataset.id;
+            showModal('Confirmação', 'Tem certeza que deseja deletar este talão?', async () => {
+                try{
+                    const response = await fetch(`/api/talons/delete/${talonId}`, {
+                        method: 'DELETE',
+                    });
+    
+                    if(response.ok){
+                        showModal('Sucesso', 'Talão deletado com sucesso!');
+                        const talonsResponse = await fetch('/talons/page');
+                        content.innerHTML = await talonsResponse.text();
+                    } else {
+                        showModal('Erro', 'Erro ao deletar talão.');
+                    }
+                }catch(error){
+                    console.error('Erro ao deletar talão:', error);
+                    showModal('Erro', 'Erro inesperado ao deletar talão.');
+                }
+            });
+        }
+    });
+
 });
