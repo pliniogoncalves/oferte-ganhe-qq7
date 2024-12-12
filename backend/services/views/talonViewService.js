@@ -29,6 +29,18 @@ const talonViewService = {
             throw error;
         }
     },
+
+    getEditTalonData: async (talonId) => {
+        try{
+            const talon = await talonService.searchTalonId(talonId);
+            const users = await userService.searchUser();
+            return { talon, users };
+        }catch(error){
+            console.error(`Erro ao buscar dados para edição de talões:`, error.message);
+            throw error;
+        }
+    },
+
 }
 
 module.exports = talonViewService;

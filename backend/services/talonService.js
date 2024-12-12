@@ -69,9 +69,17 @@ async function searchTalonId(talonId) {
 async function updateTalon(talonId, dateReceived, userReceived, status = 'Recebido') {
     try{
         const talon = await Talon.update(
-            { date_received: dateReceived, user_received: userReceived, status_talon: status },
-            { where: { id_talon: talonId }, returning: true }
+            { 
+                date_received: dateReceived, 
+                user_received: userReceived, 
+                status_talon: status 
+            },
+            { 
+                where: { id_talon: talonId }, 
+                returning: true 
+            }
         );
+
         return talon[1][0];
     }catch(err){
         console.error('Error updating talon:', err);

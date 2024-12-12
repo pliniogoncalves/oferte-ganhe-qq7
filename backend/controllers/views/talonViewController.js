@@ -45,6 +45,27 @@ const talonViewController = {
             res.status(500).send('Erro ao carregar a página.');
         }
     },
+
+    getEditTalonPage: async (req, res) => {
+        try {
+            const { id } = req.params;
+            const { talon, users } = await talonViewService.getEditTalonData(id);
+    
+            if (!talon) {
+                return res.status(404).send('Talão não encontrado');
+            }
+    
+            res.render('partials/talons/editTalons', {
+                layout: false,
+                talon,
+                users,
+                title: 'Editar Talão',
+            });
+        } catch (error) {
+            console.error('Erro ao carregar edição de talão:', error.message);
+            res.status(500).send('Erro ao carregar a página de edição do talão');
+        }
+    }
 }
 
 module.exports = talonViewController;

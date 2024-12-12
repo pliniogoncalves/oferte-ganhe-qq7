@@ -64,6 +64,63 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+     //update
+     document.addEventListener('click', async (event) => {
+        const editTalonBtn = event.target.closest('.editTalon');
+        if (editTalonBtn) {
+            const id = editTalonBtn.dataset.id;
+    
+            const url = `/talons/edit/${id}`;
+            window.history.pushState({}, '', url);
+    
+            try {
+                const response = await fetch(url);
+                if (response.ok) {
+                    document.getElementById("content").innerHTML = await response.text();
+                    const talonForm = document.getElementById("talonForm");
+    
+                    talonForm.addEventListener("submit", async (e) => {
+                        e.preventDefault();
+                        const formData = new FormData(talonForm);
+                        const data = Object.fromEntries(formData.entries());
+    
+                        const payload = {
+                            dateReceived: data.dateReceived,
+                            userReceived: data.userReceived,
+                            status: data.status || 'Recebido',
+                        };
+    
+                        try {
+                            const saveResponse = await fetch(`/api/talons/edit/${id}`, {
+                                method: 'PUT',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(payload),
+                            });
+    
+                            if (saveResponse.ok) {
+                                showModal('Sucesso', 'Talão atualizado com sucesso!');
+                                const talonsResponse = await fetch('/talons/page');
+                                if (!talonsResponse.ok) throw new Error("Erro ao carregar a lista de talões.");
+                                document.getElementById("content").innerHTML = await talonsResponse.text();
+                            } else {
+                                const errorDetails = await saveResponse.json();
+                                showModal('Erro', `Erro ao atualizar talão: ${errorDetails.message || 'Erro desconhecido.'}`);
+                            }
+                        } catch (error) {
+                            console.error("Erro ao salvar alterações:", error);
+                            showModal('Erro', "Erro ao atualizar o talão.");
+                        }
+                    });
+                } else {
+                    throw new Error("Erro ao carregar o formulário de edição.");
+                }
+            } catch (error) {
+                console.error("Erro ao carregar o formulário de edição:", error);
+                showModal('Erro', "Não foi possível carregar o formulário de edição.");
+            }
+        }
+    });   
+
      // Delete
      document.addEventListener("click", async (event) => {
         const deleteTalonBtn = event.target.closest(".deleteTalon");
