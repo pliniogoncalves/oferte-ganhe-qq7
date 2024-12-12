@@ -5,5 +5,6 @@ const authenticateToken = require('../../middlewares/authMiddleware.js');
 
 // Render the Talon pages
 router.get('/page', authenticateToken, talonViewController.getTalonPage);
+router.get('/add', authenticateToken, talonViewController.getAddTalonPage);
 
 module.exports = router;

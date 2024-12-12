@@ -18,6 +18,32 @@ const talonViewController = {
             res.status(500).send('Erro ao carregar a página de talões');
         }
     },
+
+    getAddTalonPage: async (req, res) => {
+        try{
+            const userRegistration = req.user?.registration;
+            
+            if(!userRegistration){
+                throw new Error('Usuário não autenticado ou token inválido.');
+            }
+
+            const { stores, user } = await talonViewService.getAddTalonData(userRegistration);
+    
+            res.render('partials/talons/addTalons', {
+                layout: false,
+                title: 'Solicitar Talão',
+                stores,
+                user,
+                userDetails: {
+                    role: user.profile?.name_profile || 'Usuário',
+                    storeId: user?.store?.number_store || null,
+                },
+            });
+        }catch(error){
+            console.error('Erro ao carregar a página de cadastro de Talão:', error);
+            res.status(500).send('Erro ao carregar a página.');
+        }
+    },
 }
 
 module.exports = talonViewController;

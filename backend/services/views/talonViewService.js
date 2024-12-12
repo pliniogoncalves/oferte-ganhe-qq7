@@ -1,6 +1,5 @@
 const talonService = require('../../services/talonService');
 const userService = require('../../services/userService');
-const profileService = require('../../services/profileService');
 const storeService = require('../../services/storeService');
 
 const talonViewService = {
@@ -15,6 +14,18 @@ const talonViewService = {
             return { talons, currentPage, totalPages };
         }catch(error){
             console.error('Erro ao buscar talões paginados:', error.message);
+            throw error;
+        }
+    },
+
+    getAddTalonData: async (userRegistration) => {
+        try{
+            const stores = await storeService.searchStore();
+            const user = await userService.searchUserRegistration(userRegistration)
+
+            return { stores, user };
+        }catch(error){
+            console.error('Erro ao buscar dados para adicionar novo Talão:', error.message);
             throw error;
         }
     },
