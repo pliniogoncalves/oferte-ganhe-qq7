@@ -90,4 +90,32 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    //Export CSV
+    document.addEventListener("click", async (event) => {
+        const exportTalonCsvBtn = event.target.closest("#exportTalonCsvBtn");
+        if(exportTalonCsvBtn){
+            try{
+                const response = await fetch('/api/talons/export-csv', { method: 'GET' });
+                if (!response.ok) throw new Error("Erro ao exportar CSV.");
+    
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'taloes.csv';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+
+                showModal('Sucesso', 'O arquivo CSV foi exportado com sucesso.');
+
+            }catch(error){
+                console.error('Erro ao exportar CSV:', error);
+                showModal('Erro', 'Erro inesperado ao exportar CSV.');
+            }
+        }
+    });
+
 });

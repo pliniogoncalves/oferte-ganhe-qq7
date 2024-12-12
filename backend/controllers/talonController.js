@@ -1,4 +1,5 @@
 const talonService = require('../services/talonService.js');
+const reportService = require('../services/reportService');
 
 // Controller for the Talon page
 const talonController = {
@@ -71,6 +72,17 @@ const talonController = {
             }
         }catch(err){
         res.status(500).json({ message: 'Error deleting talon', error: err.message });
+        }
+    },
+
+    //Function export CSV
+    exportTalonsCSV: async (req, res) =>{
+        try{
+            const csvFilePath = await reportService.exportTalonsReport();
+            res.download(csvFilePath, 'taloes.csv');
+        }catch(error){
+            console.error("Erro ao exportar CSV:", error);
+            res.status(500).json({ message: 'Error exporting CSV', error: error.message });
         }
     },
 

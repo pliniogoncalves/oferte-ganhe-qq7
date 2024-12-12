@@ -15,4 +15,7 @@ router.get('/talons/list/:id', authenticateToken, talonController.searchTalonId)
 router.put('/talons/update/:id', authenticateToken, talonController.updateTalon);
 router.delete('/talons/delete/:id', authenticateToken, talonController.removeTalon);
 
+//Export CSV
+router.get('/talons/export-csv', authenticateToken, talonController.exportTalonsCSV);
+
 module.exports = router;
