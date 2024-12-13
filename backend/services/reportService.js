@@ -240,6 +240,41 @@ async function exportTalonsReport() {
     });
 }
 
+async function exportIndividualTalonReport(talonId) {
+    const scriptPath = path.join(__dirname, '../reports/export_talon_individual.py');
+
+    return new Promise((resolve, reject) => {
+        const pythonProcess = new PythonShell(scriptPath, {
+            pythonOptions: ['-u'],
+            args: [talonId],
+        });
+
+        let stdout = [];
+        let stderr = [];
+
+        pythonProcess.on('message', (message) => {
+            stdout.push(message);
+        });
+
+        pythonProcess.on('stderr', (stderrMessage) => {
+            stderr.push(stderrMessage);
+        });
+
+        pythonProcess.end((err, code) => {
+            if(err){
+                console.error(`Erro no processo Python: ${err.message}`);
+                return reject(new Error(`Erro no processo Python: ${err.message}`));
+            }
+            const output = stdout.join('\n');
+            if(code === 0 && output.includes("STATUS: SUCCESS")) {
+                resolve(path.join(__dirname, '../../relatorios/talon_individual.csv'));
+            }else{
+                reject(new Error(`Erro ao exportar CSV individual: saída não reconhecida ou código de erro ${code}.`));
+            }
+        });
+    });
+}
+
 //Function get all reports
 const reports = [
     { name: "Relatório de Usuários Cadastrados", view: "showReportUsers", download: "exportUsersCSV" },
@@ -259,5 +294,6 @@ module.exports = {
     exportProfilesReport,
     exportStocksReport,
     exportTalonsReport,
+    exportIndividualTalonReport,
     getAllReports
 };

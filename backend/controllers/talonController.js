@@ -103,6 +103,19 @@ const talonController = {
         }
     },
 
+    // Function export individual Talon CSV
+    exportIndividualTalonCSV: async (req, res) => {
+        const talonId = req.params.id;
+    
+        try{
+            const csvFilePath = await reportService.exportIndividualTalonReport(talonId);
+            res.download(csvFilePath, `talon_${talonId}.csv`);
+        }catch(error){
+            console.error("Erro ao exportar CSV individual:", error);
+            res.status(500).json({ message: 'Error exporting individual Talon CSV', error: error.message });
+        }
+    },
+
     //details talon
     getTalonDetails: async (req, res) => {
         try {

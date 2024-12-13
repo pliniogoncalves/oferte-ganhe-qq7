@@ -230,6 +230,35 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    // Export individual Talon CSV
+    document.addEventListener("click", async (event) => {
+        const exportTalonBtn = event.target.closest(".exportTalon");
+        if (exportTalonBtn) {
+            const talonId = exportTalonBtn.dataset.id;
+    
+            try{
+                const response = await fetch(`/api/talons/export-csv/${talonId}`, { method: 'GET' });
+                if (!response.ok) throw new Error("Erro ao exportar CSV do talão.");
+    
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+    
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `talon_${talonId}.csv`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+    
+                showModal('Sucesso', 'O arquivo CSV do talão foi exportado com sucesso.');
+            }catch(error){
+                console.error('Erro ao exportar CSV do talão:', error);
+                showModal('Erro', 'Erro inesperado ao exportar CSV do talão.');
+            }
+        }
+    });
+
     //talon details
     document.addEventListener("click", async (event) => {
         const detailsTalonBtn = event.target.closest(".detailsTalon");
@@ -237,7 +266,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if(detailsTalonBtn){
             const talonId = detailsTalonBtn.dataset.id;
     
-            try {
+            try{
                 const response = await fetch(`/api/talons/details/${talonId}`);
                 if(!response.ok) throw new Error("Erro ao buscar os detalhes do talão.");
     
