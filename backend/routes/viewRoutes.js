@@ -5,6 +5,7 @@ const router = express.Router();
 const loginViewRoutes = require('./views/loginViewRoutes');
 const indexViewRoutes = require('./views/indexViewRoutes');
 const mainViewRoutes = require('./views/mainViewRoutes');
+const noPermissionViewRoutes = require('./views/noPermissionViewRoutes')
 const userViewRoutes = require('./views/userViewRoutes');
 const profileViewRoutes = require('./views/profileViewRoutes');
 const storeViewRoutes = require('./views/storeViewRoutes');
@@ -17,6 +18,7 @@ const configViewRoutes = require('./views/configViewRoutes');
 router.use('/login', loginViewRoutes);
 router.use('/index', indexViewRoutes);
 router.use('/main', mainViewRoutes);
+router.use('/nopermission', noPermissionViewRoutes);
 router.use('/users', userViewRoutes);
 router.use('/profiles', profileViewRoutes);
 router.use('/stores', storeViewRoutes);
