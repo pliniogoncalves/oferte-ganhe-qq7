@@ -5,6 +5,26 @@
     <button class="close-btn" onclick="closeSidebar()">
         <i class="fas fa-times"></i>
     </button>
+
+    <div class="user-info">
+        <div class="user-avatar">
+            <span class="user-initials">
+                <%= user && user.name_users ? user.name_users[0].toUpperCase() : '?' %> 
+            </span>
+        </div>
+        <div class="user-details">
+          <p class="user-perfil">
+            <strong>
+                <%= user && user.profile ? user.profile.name_profile : 'Perfil não definido' %>
+            </strong>
+        </p>
+          <p class="user-loja">
+            <strong>
+                <%= user && user.store ? user.store.name_store : 'Loja não definida' %>
+            </strong>
+        </p>
+        </div>
+    </div>
         
     <div class="menu">
         <ul class="nav flex-column">
@@ -73,15 +93,5 @@
             <i class="fas fa-sign-out-alt" style="margin-right: 8px"></i>
                 Sair
         </button>
-
-        <div class="user-info">
-            <div class="user-avatar">
-                <span class="user-initials"></span>
-            </div>
-            <div class="user-details">
-              <p class="user-perfil"><strong></strong></p>
-              <p class="user-loja"><strong></strong></p>
-            </div>
-        </div>
     </div>
 </nav>
