@@ -61,12 +61,4 @@ app.get('/', (req, res) => {
     }
 });
 
-app.use((req, res, next) => {
-    req.addMessage = (msg) => {
-        if (!res.locals.messages) res.locals.messages = [];
-        res.locals.messages.push(msg);
-    };
-    next();
-});
-
 module.exports = app;
