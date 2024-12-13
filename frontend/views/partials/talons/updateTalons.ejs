@@ -1,0 +1,61 @@
+<div class="container-fluid p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <%- include('../../components/backButton.ejs') %>
+        <div class="w-100 text-center me-4 me-md-5">
+            <h1 class="fw-bold">Registrar Recebimento</h1>
+            <p class="text-muted">Confirme o recebimento dos Talões enviados.</p>
+        </div>
+    </div>
+
+    <div id="userDetails" style="display: none;">
+        {
+            "id": "<%= userDetails.id ? userDetails.id : '' %>",
+            "role": "<%= userDetails.role ? userDetails.role : 'Usuário' %>",
+            "storeId": "<%= userDetails.storeId ? userDetails.storeId : null %>"
+        }
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Loja</th>
+                <th>Data</th>
+                <th>Hora</th>
+                <th>Quantidade</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if (talons.length > 0) { %>
+                <% talons.forEach(talon => { %>
+                    <tr>
+                        <td><%= talon.id_talon %></td>
+                        <td>
+                            <%= talon.Store.number_store === '000' ? 'Nenhuma' : talon.Store.number_store === '0' ? 'Matriz' : talon.Store.number_store %>
+                        </td>
+                        <td>
+                            <%= talon.date_send ? new Date(talon.date_send).toLocaleDateString('pt-BR') : '' %>
+                        </td>
+                        <td>
+                            <%= talon.date_send ? new Date(talon.date_send).toLocaleTimeString('pt-BR') : '' %>
+                        </td>
+                        <td><%= talon.quantity_talon %></td>
+                        <td>
+                            <button 
+                            class="btn btn-success confirm-receipt-btn" 
+                            data-id="<%= talon.id_talon %>">
+                            <i class="fas fa-check"></i> Confirmar
+                        </button>
+                        </td>
+                    </tr>
+                <% }); %>
+            <% } else { %>
+                <tr>
+                    <td colspan="6" class="text-center">Nenhum talão enviado encontrado.</td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+
+</div>

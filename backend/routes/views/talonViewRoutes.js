@@ -7,5 +7,6 @@ const authenticateToken = require('../../middlewares/authMiddleware.js');
 router.get('/page', authenticateToken, talonViewController.getTalonPage);
 router.get('/add', authenticateToken, talonViewController.getAddTalonPage);
 router.get('/edit/:id', authenticateToken, talonViewController.getEditTalonPage);
+router.get('/update', authenticateToken, talonViewController.getUpdateTalonPage);
 
 module.exports = router;

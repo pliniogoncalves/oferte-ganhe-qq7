@@ -42,6 +42,23 @@ const talonController = {
         }
     },
 
+    //Function to edit a Talon
+    editTalon: async (req, res) => {
+        const { id } = req.params;
+        const { storeId, dateSend, userSend, quantity, status } = req.body;
+    
+        try{
+            const updatedTalon = await talonService.editTalon(id, storeId, dateSend, userSend, quantity, status);
+            if(updatedTalon){
+                res.status(200).json({ message: 'Talon edited successfully!', talon: updatedTalon });
+            }else{
+                res.status(404).json({ message: 'Talon not found' });
+            }
+        }catch(err){
+            res.status(500).json({ message: 'Error edit talon', error: err.message });
+        }
+    },
+
     //Function to update a Talon
     updateTalon: async (req, res) => {
         const { id } = req.params;

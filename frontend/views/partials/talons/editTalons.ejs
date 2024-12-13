@@ -1,36 +1,57 @@
 <div class="container-fluid p-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <%- include('../../components/backButton.ejs') %>
+
         <div class="w-100 text-center me-4 me-md-5">
-            <h1 class="fw-bold">Editar Talão</h1>
-            <p class="text-muted">Atualize as informações do talão abaixo.</p>
+            <h1 class="fw-bold">Editar Informações do Talão</h1>
+            <p class="text-muted">Atualize os dados abaixo para salvar as alterações.</p>
         </div>
     </div>
 
     <form id="talonForm">
-        <div class="mb-3">
-            <label for="dateReceived" class="form-label">Data de Recebimento</label>
-            <input type="date" class="form-control" id="dateReceived" name="dateReceived" value="<%= talon.date_received %>" required>
-        </div>
 
         <div class="mb-3">
-            <label for="userReceived" class="form-label">Usuário Recebedor</label>
-            <select class="form-control" id="userReceived" name="userReceived" required>
-                <% users.forEach(user => { %>
-                    <option value="<%= user.registration_users %>" <%= user.registration_users === talon.user_received ? 'selected' : '' %>><%= user.name_users %></option>
+            <label for="store" class="form-label">Loja</label>
+            <select class="form-control" id="store" name="store" <%= userDetails.role !== 'Administrador' ? 'disabled' : '' %> required>
+                <% stores.forEach(store => { %>
+                    <option value="<%= store.number_store %>" data-id="<%= store.id_store %>" <%= talon.id_store === store.id_store ? 'selected' : '' %>>
+                        <%= store.id_store === 1 ? store.name_store : (store.number_store === '0' ? 'Matriz' : store.number_store) %>
+                    </option>
                 <% }); %>
             </select>
         </div>
 
         <div class="mb-3">
+            <label for="date" class="form-label">Data de Envio</label>
+            <input type="date" class="form-control" id="date" name="date" value="<%= talon.date_send.toISOString().split('T')[0] %>" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="time" class="form-label">Hora de Envio</label>
+            <input type="time" class="form-control" id="time" name="time" value="<%= talon.date_send.toISOString().split('T')[1].slice(0, 5) %>" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="quantity" class="form-label">Quantidade</label>
+            <input type="number" class="form-control" id="quantity" name="quantity" value="<%= talon.quantity_talon %>" required>
+        </div>
+
+        <div class="mb-3">
             <label for="status" class="form-label">Status</label>
-            <input type="text" class="form-control" id="status" name="status" value="<%= talon.status_talon %>" required>
+            <select class="form-control" id="status" name="status" required>
+                <option value="Enviado" <%= talon.status_talon === 'Enviado' ? 'selected' : '' %>>Enviado</option>
+                <option value="Recebido" <%= talon.status_talon === 'Recebido' ? 'selected' : '' %>>Recebido</option>
+            </select>
         </div>
 
         <div class="text-center mb-4">
-            <button type="submit" class="btn btn-custom w-100">
-                <i class="fas fa-save"></i> Salvar Alterações
-            </button>
+            <div class="row justify-content-center">
+                <div class="col-12 col-sm-6 col-md-3 mb-2">
+                    <button type="submit" id="saveChangesBtn" class="btn btn-custom w-100">
+                        <i class="fas fa-save"></i> Salvar Alterações
+                    </button>
+                </div>
+            </div>
         </div>
     </form>
 </div>

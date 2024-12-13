@@ -65,6 +65,31 @@ async function searchTalonId(talonId) {
     }
 }
 
+//Function to Edit Talon
+async function editTalon(talonId, storeId, dateSend, userSend, quantity, status) {
+    try{
+        const updatedTalon = await Talon.update(
+            {
+                id_store: storeId,
+                date_send: dateSend,
+                user_send: userSend,
+                quantity_talon: quantity,
+                status_talon: status,
+            },
+            {
+                where: { id_talon: talonId },
+                returning: true,
+            }
+        );
+
+        return updatedTalon[1][0];
+    }catch(err){
+        console.error('Error editing talon:', err);
+        throw err;
+    }
+}
+
+
 //Function to update a Talon
 async function updateTalon(talonId, dateReceived, userReceived, status = 'Recebido') {
     try{
@@ -115,6 +140,7 @@ module.exports = {
     insertTalon,
     searchTalons,
     searchTalonId,
+    editTalon,
     updateTalon,
     removeTalon,
     countTalons

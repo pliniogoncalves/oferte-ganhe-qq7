@@ -30,13 +30,37 @@ const talonViewService = {
         }
     },
 
+    getAllTalons: async (req) => {
+        try{
+            const talons = await talonService.searchTalons();
+            const user = req.user;
+            return { talons, user };
+        }catch(error){
+            console.error('Erro ao buscar todos os talões:', error.message);
+            throw error;
+        }
+    },
+
+    getUpdateTalonData: async (userRegistration) => {
+        try{
+            const talons = await talonService.searchTalons();
+            const user = await userService.searchUserRegistration(userRegistration);
+
+            return { talons, user };
+        }catch(error){
+            console.error(`Erro ao buscar dados para edição de talões:`, error.message);
+            throw error;
+        }
+    },
+
     getEditTalonData: async (talonId) => {
         try{
             const talon = await talonService.searchTalonId(talonId);
+            const stores = await storeService.searchStore();
             const users = await userService.searchUser();
-            return { talon, users };
+            return { talon, stores, users };
         }catch(error){
-            console.error(`Erro ao buscar dados para edição de talões:`, error.message);
+            console.error(`Erro ao buscar dados para edição completa do talão:`, error.message);
             throw error;
         }
     },
