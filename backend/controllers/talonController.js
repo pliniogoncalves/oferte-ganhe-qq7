@@ -103,6 +103,32 @@ const talonController = {
         }
     },
 
+    //details talon
+    getTalonDetails: async (req, res) => {
+        try {
+            const { id } = req.params;
+            const talon = await talonService.searchTalonId(id);
+    
+            if(!talon) return res.status(404).json({ message: "Talão não encontrado" });
+
+            const storeNameOrNumber = talon.Store?.number_store === '0' ? "Matriz" : talon.Store?.number_store || "Não disponível";
+    
+            res.json({
+                id_talon: talon.id_talon,
+                storeName: storeNameOrNumber,
+                dateSend: talon.date_send,
+                userSend: talon.Sender?.name_users,
+                dateReceived: talon.date_received,
+                userReceived: talon.Receiver?.name_users,
+                quantity_talon: talon.quantity_talon,
+                status_talon: talon.status_talon,
+            });
+        }catch(error){
+            console.error("Erro ao buscar detalhes do talão:", error);
+            res.status(500).json({ message: "Erro ao buscar detalhes do talão" });
+        }
+    },
+
 };
 
 module.exports = talonController;

@@ -53,9 +53,9 @@ async function searchTalonId(talonId) {
         const talon = await Talon.findOne({
             where: { id_talon: talonId },
             include: [
-                { model: Store, attributes: ['name_store'], required: false },
-                { model: User, as: 'Sender', attributes: ['name_users'], required: false },
-                { model: User, as: 'Receiver', attributes: ['name_users'], required: false },
+                { model: Store, as: 'Store', attributes: ['name_store', 'number_store'], required: false },
+                { model: User, as: 'Sender', attributes: ['id_users','name_users'], required: false },
+                { model: User, as: 'Receiver', attributes: ['id_users','name_users'], required: false },
             ],
         });
         return talon;

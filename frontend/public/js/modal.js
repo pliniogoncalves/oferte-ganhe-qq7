@@ -4,15 +4,15 @@ function showModal(title, message, confirmCallback = null) {
     const confirmButton = document.getElementById('modalConfirmButton');
 
     modalLabel.textContent = title;
-    modalMessage.textContent = message;
+    modalMessage.innerHTML = message;
 
-    if (confirmCallback) {
+    if(confirmCallback){
         confirmButton.style.display = 'inline-block';
         confirmButton.onclick = () => {
             confirmCallback();
             bootstrap.Modal.getInstance(document.getElementById('customModal')).hide();
         };
-    } else {
+    }else{
         confirmButton.style.display = 'none';
     }
 

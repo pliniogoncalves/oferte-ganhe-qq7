@@ -230,4 +230,44 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    //talon details
+    document.addEventListener("click", async (event) => {
+        const detailsTalonBtn = event.target.closest(".detailsTalon");
+    
+        if(detailsTalonBtn){
+            const talonId = detailsTalonBtn.dataset.id;
+    
+            try {
+                const response = await fetch(`/api/talons/details/${talonId}`);
+                if(!response.ok) throw new Error("Erro ao buscar os detalhes do talão.");
+    
+                const talon = await response.json();
+    
+                const dateSend = talon.dateSend
+                    ? new Date(talon.dateSend).toLocaleString("pt-BR")
+                    : "Não disponível";
+                const dateReceived = talon.dateReceived
+                    ? new Date(talon.dateReceived).toLocaleString("pt-BR")
+                    : "Não disponível";
+    
+                const detailsMessage = `
+                    <h4 class="mb-3">Detalhes do Talão</h4>
+                    <p><strong>ID:</strong> ${talon.id_talon}</p>
+                    <p><strong>Loja:</strong> ${talon.storeName}</p>
+                    <p><strong>Data de Envio:</strong> ${dateSend}</p>
+                    <p><strong>Funcionário que Enviou:</strong> ${talon.userSend || "Não disponível"}</p>
+                    <p><strong>Data de Recebimento:</strong> ${dateReceived}</p>
+                    <p><strong>Funcionário que Recebeu:</strong> ${talon.userReceived || "Não disponível"}</p>
+                    <p><strong>Quantidade:</strong> ${talon.quantity_talon}</p>
+                    <p><strong>Status:</strong> ${talon.status_talon}</p>
+                `;
+
+                showModal("Detalhes do Talão", detailsMessage);
+            }catch(error){
+                console.error("Erro ao carregar os detalhes do talão:", error);
+                showModal("Erro", "Erro ao carregar os detalhes do talão.");
+            }
+        }
+    });
+
 });
