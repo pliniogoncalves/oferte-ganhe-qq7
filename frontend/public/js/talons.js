@@ -64,6 +64,33 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    //Read
+    document.addEventListener("click", async (event) => {
+        if(event.target.closest("#searchTalonBtn")) {
+            const searchInput = document.getElementById("search");
+            const id = searchInput?.value.trim();
+    
+            try{
+                const response = id
+                    ? await fetch(`/talons/search?id=${encodeURIComponent(id)}`)
+                    : await fetch(`/talons/list`);
+    
+                if(response.ok){
+                    const tableHTML = await response.text();
+                    const tableBody = document.querySelector("table tbody");
+                    tableBody ? tableBody.innerHTML = tableHTML : console.error("Tabela de talões não encontrada.");
+                }else if(response.status === 404) {
+                    showModal('Aviso', id ? 'Talão não encontrado.' : 'Nenhum talão disponível.');
+                }else{
+                    showModal('Erro', 'Erro ao buscar talões.');
+                }
+            }catch(error){
+                console.error('Erro ao buscar talões:', error);
+                showModal('Erro', 'Erro inesperado ao buscar talões.');
+            }
+        }
+    });
+
      //Edit
      document.addEventListener('click', async (event) => {
         const editTalonBtn = event.target.closest('.editTalon');

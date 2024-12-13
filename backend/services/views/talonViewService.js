@@ -41,6 +41,15 @@ const talonViewService = {
         }
     },
 
+    getTalonById: async (id) => {
+        try{
+            return await talonService.searchTalonId(id);
+        }catch(error){
+            console.error(`Erro ao buscar talão com ID ${id}:`, error.message);
+            throw error;
+        }
+    },
+
     getUpdateTalonData: async (userRegistration) => {
         try{
             const talons = await talonService.searchTalons();

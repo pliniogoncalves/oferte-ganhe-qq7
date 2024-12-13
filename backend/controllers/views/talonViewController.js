@@ -19,6 +19,44 @@ const talonViewController = {
         }
     },
 
+    getAllTalons: async (req, res) => {
+        try{
+            const { talons, user } = await talonViewService.getAllTalons(req);
+            res.status(200).render("partials/talons/talonsTable", { 
+                layout: false,
+                talons: talons || [],
+                user,
+                cssFiles: [],
+            });
+        }catch(error){
+            console.error("Erro ao listar talões:", error);
+            res.status(500).send("Erro ao listar talões.");
+        }
+    },
+    
+    searchTalonById: async (req, res) => {
+        const { id } = req.query;
+    
+        try{
+            const talons = id
+                ? await talonViewService.getTalonById(id)
+                : await talonViewService.getAllTalons();
+    
+            if(id && !talons){
+                return res.status(404).send("Talão não encontrado");
+            }
+    
+            res.render("partials/talons/talonsTable", { 
+                layout: false,
+                talons: Array.isArray(talons) ? talons : [talons],
+                cssFiles: [],
+            });
+        }catch(error){
+            console.error("Erro ao buscar talão por ID:", error);
+            res.status(500).send("Erro ao buscar talão.");
+        }
+    },
+
     getAddTalonPage: async (req, res) => {
         try{
             const userRegistration = req.user?.registration;
