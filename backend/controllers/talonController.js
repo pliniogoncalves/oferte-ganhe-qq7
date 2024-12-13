@@ -118,7 +118,7 @@ const talonController = {
 
     //details talon
     getTalonDetails: async (req, res) => {
-        try {
+        try{
             const { id } = req.params;
             const talon = await talonService.searchTalonId(id);
     

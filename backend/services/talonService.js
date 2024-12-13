@@ -1,6 +1,7 @@
 const Talon = require('../models/Talon');
 const Store = require('../models/Store');
 const User = require('../models/User');
+const Stock = require('../models/Stock');
 
 //Function to insert a new Talon
 async function insertTalon(storeId = 1, dateSend, userSend, quantity, status = 'Enviado') {
@@ -34,9 +35,15 @@ async function searchTalons() {
                     attributes: ['name_users'], 
                     required: false 
                 },
-                { model: User, as: 'Receiver', 
+                { 
+                    model: User, as: 'Receiver', 
                     attributes: ['name_users'], 
                     required: false 
+                },
+                {
+                    model: Stock,
+                    attributes: ['id_stock', 'recommended_stock', 'current_stock'],
+                    required: false,
                 },
             ],
         });
@@ -56,6 +63,7 @@ async function searchTalonId(talonId) {
                 { model: Store, as: 'Store', attributes: ['name_store', 'number_store'], required: false },
                 { model: User, as: 'Sender', attributes: ['id_users','name_users'], required: false },
                 { model: User, as: 'Receiver', attributes: ['id_users','name_users'], required: false },
+                { model: Stock, attributes: ['id_stock', 'recommended_stock', 'current_stock'], required: false,}
             ],
         });
         return talon;
@@ -105,7 +113,24 @@ async function updateTalon(talonId, dateReceived, userReceived, status = 'Recebi
             }
         );
 
-        return talon[1][0];
+        if(!talon[1][0]){
+            return null;
+        }
+
+        const updatedTalon = talon[1][0];
+
+        if(status === 'Recebido'){
+            const stock = await Stock.findOne({ where: { id_store: updatedTalon.id_store } });
+
+            if (stock) {
+                await stock.update({
+                    id_talon: updatedTalon.id_talon,
+                    current_stock: stock.current_stock + updatedTalon.quantity_talon,
+                });
+            }
+        }
+
+        return updatedTalon;
     }catch(err){
         console.error('Error updating talon:', err);
         throw err;
@@ -127,10 +152,10 @@ async function removeTalon(talonId) {
 
 //Function counts all talons
 async function countTalons() {
-    try {
+    try{
         const count = await Talon.count();
         return count;
-    } catch (err) {
+    }catch(err){
         console.error('Error counting talons:', err);
         throw err;
     }
