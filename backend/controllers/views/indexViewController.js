@@ -2,7 +2,7 @@ const  User  = require('../../models/User');
 
 const indexViewController = {
     getIndexPage: async (req, res) => {
-        try {
+        try{
             const userId = req.user.id;
 
             const user = await User.findByPk(userId, {
@@ -29,7 +29,7 @@ const indexViewController = {
                 ],
                 user,
             });
-        } catch (error) {
+        }catch(error){
             console.error('Erro ao carregar a página inicial:', error);
             res.status(500).send('Erro ao carregar a página inicial.');
         }
