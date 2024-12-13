@@ -17,80 +17,82 @@
     </div>
 </div>
 
-<table class="table table-bordered table-hover table-striped">
-    <thead style="background-color: #269447; color: #fff;">
-        <tr>
-            <th>ID</th>
-            <th>Loja</th>
-            <th>Data de Envio</th>
-            <th>Funcionário que Enviou</th>
-            <th>Data de Recebimento</th>
-            <th>Funcionário que Recebeu</th>
-            <th>Quantidade</th>
-            <th>Status</th>
-            <th class="text-center">Ações</th>
-        </tr>
-    </thead>
-    <tbody>
-        <% if(talons && talons.length > 0){ %>
-            <% talons.forEach(talon => { %>
-                <tr>
-                    <td>
-                        <%= talon.id_talon %>
-                    </td>
-                    <td>
-                        <%= talon.Store.number_store === '000' ? 'Nenhuma' : talon.Store.number_store === '0' ? 'Matriz' : talon.Store.number_store %>
-                    </td>
-                    <td>
-                        <%= new Date(talon.date_send).toLocaleDateString('pt-BR') %>
-                    </td>
-                    <td>
-                        <%= talon.Sender ? talon.Sender.name_users : '' %>
-                    </td>
-                    <td>
-                        <%= talon.date_received ? new Date(talon.date_received).toLocaleDateString('pt-BR') : '' %>
-                    </td>
-                    <td>
-                        <%= talon.Receiver ? talon.Receiver.name_users : '' %>
-                    </td>
-                    <td>
-                        <%= talon.quantity_talon %>
-                    </td>
-                    <td>
-                        <%= talon.status_talon %>
-                    </td>
-                    <td class="text-center">
-                        <button 
-                            class="btn btn-sm btn-warning detailsTalon" 
-                            data-id="<%= talon.id_talon %>">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                        <button 
-                            class="btn btn-sm btn-warning editTalon" 
-                            data-id="<%= talon.id_talon %>" 
-                            data-url="/talons/edit">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button 
-                            class="btn btn-sm btn-warning exportTalon" 
-                            data-id="<%= talon.id_talon %>">
-                            <i class="fas fa-file-export"></i>
-                        </button>
-                        <button 
-                            class="btn btn-sm btn-danger deleteTalon" 
-                            data-id="<%= talon.id_talon %>">
-                            <i class="fas fa-trash"></i>
-                        </button>  
-                    </td>
-                </tr>
-            <% }) %>
-        <% }else{ %>
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-striped">
+        <thead style="background-color: #269447; color: #fff;">
             <tr>
-                <td colspan="5">Nenhum Talão encontrado.</td>
+                <th>ID</th>
+                <th>Loja</th>
+                <th>Data de Envio</th>
+                <th>Funcionário que Enviou</th>
+                <th>Data de Recebimento</th>
+                <th>Funcionário que Recebeu</th>
+                <th>Quantidade</th>
+                <th>Status</th>
+                <th class="text-center">Ações</th>
             </tr>
-        <% } %>   
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            <% if(talons && talons.length > 0){ %>
+                <% talons.forEach(talon => { %>
+                    <tr>
+                        <td>
+                            <%= talon.id_talon %>
+                        </td>
+                        <td>
+                            <%= talon.Store.number_store === '000' ? 'Nenhuma' : talon.Store.number_store === '0' ? 'Matriz' : talon.Store.number_store %>
+                        </td>
+                        <td>
+                            <%= new Date(talon.date_send).toLocaleDateString('pt-BR') %>
+                        </td>
+                        <td>
+                            <%= talon.Sender ? talon.Sender.name_users : '' %>
+                        </td>
+                        <td>
+                            <%= talon.date_received ? new Date(talon.date_received).toLocaleDateString('pt-BR') : '' %>
+                        </td>
+                        <td>
+                            <%= talon.Receiver ? talon.Receiver.name_users : '' %>
+                        </td>
+                        <td>
+                            <%= talon.quantity_talon %>
+                        </td>
+                        <td>
+                            <%= talon.status_talon %>
+                        </td>
+                        <td class="text-center">
+                            <button 
+                                class="btn btn-sm btn-warning detailsTalon" 
+                                data-id="<%= talon.id_talon %>">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button 
+                                class="btn btn-sm btn-warning editTalon" 
+                                data-id="<%= talon.id_talon %>" 
+                                data-url="/talons/edit">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button 
+                                class="btn btn-sm btn-warning exportTalon" 
+                                data-id="<%= talon.id_talon %>">
+                                <i class="fas fa-file-export"></i>
+                            </button>
+                            <button 
+                                class="btn btn-sm btn-danger deleteTalon" 
+                                data-id="<%= talon.id_talon %>">
+                                <i class="fas fa-trash"></i>
+                            </button>  
+                        </td>
+                    </tr>
+                <% }) %>
+            <% }else{ %>
+                <tr>
+                    <td colspan="5">Nenhum Talão encontrado.</td>
+                </tr>
+            <% } %>   
+        </tbody>
+    </table>
+</div>
 
 <div class="text-center">
         <%- include('../../components/pagination', { currentPage, totalPages }) %>
