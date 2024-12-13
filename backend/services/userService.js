@@ -1,6 +1,7 @@
 const Profile = require('../models/Profile');
 const Store = require('../models/Store');
 const User = require('../models/User');
+const bcrypt = require('bcrypt');
 
 //Funcition Insert new user
 async function insertUser(name, registration, email, password, profileName = 1, storeNumber = 1) {
@@ -8,7 +9,6 @@ async function insertUser(name, registration, email, password, profileName = 1, 
         let idProfile = 1;
         let idStore = 1;
 
-        //Fetch profile ID based on name
         if(profileName){
             const foundProfile = await Profile.findOne({
                 where: { name_profile: profileName },
@@ -25,7 +25,6 @@ async function insertUser(name, registration, email, password, profileName = 1, 
             }
         }
 
-        //Fetch store ID based on number
         if(storeNumber){
             storeNumber = storeNumber.toString();
             const foundStore = await Store.findOne({
@@ -38,7 +37,6 @@ async function insertUser(name, registration, email, password, profileName = 1, 
             }
         }
 
-        //Insert new user
         const user = await User.create({
             name_users: name,
             registration_users: registration,
@@ -170,6 +168,21 @@ async function countUsers() {
     }
 }
 
+//function update password
+async function updatePassword(registration, currentPassword, newPassword) {
+    const user = await User.findOne({ where: { registration_users: registration } });
+    if(!user) throw new Error('User not found.');
+
+    const isMatch = await bcrypt.compare(currentPassword, user.password_users);
+    if (!isMatch) throw new Error('Current password is incorrect.');
+
+    user.password_users = newPassword;
+    await user.save();
+
+    return { message: 'Password updated successfully.' };
+}
+
+
 module.exports = {
     insertUser,
     searchUser,
@@ -177,4 +190,5 @@ module.exports = {
     editUser,
     removeUser,
     countUsers,
+    updatePassword
 };

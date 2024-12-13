@@ -11,6 +11,7 @@ const storeViewRoutes = require('./views/storeViewRoutes');
 const stockViewRoutes = require('./views/stockViewRoutes');
 const talonViewRoutes = require('./views/talonViewRoutes');
 const reportViewRoutes = require('./views/reportViewRoutes');
+const configViewRoutes = require('./views/configViewRoutes');
 
 // Mount the view routes
 router.use('/login', loginViewRoutes);
@@ -22,5 +23,7 @@ router.use('/stores', storeViewRoutes);
 router.use('/stocks', stockViewRoutes);
 router.use('/talons', talonViewRoutes);
 router.use('/reports', reportViewRoutes);
+router.use('/config', configViewRoutes);
+
 
 module.exports = router;

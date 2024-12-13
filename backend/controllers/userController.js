@@ -104,6 +104,27 @@ const userController = {
             res.status(500).json({ message: 'Error exporting CSV', error: error.message });
         }
     },
+
+    //Update password
+    updatePassword: async (req, res) => {
+        const  registration  = req.params.registration;
+        const { currentPassword, newPassword } = req.body;
+
+        try{
+            if(!currentPassword || !newPassword) {
+                return res.status(400).json({ error: 'All fields are required.' });
+            }
+
+            const hashedPassword = await hashPassword(newPassword);
+
+            const result = await userService.updatePassword(registration, currentPassword, hashedPassword);
+
+            return res.status(200).json(result);
+        }catch(error){
+            console.error('Error updating password:', error.message);
+            return res.status(400).json({ error: error.message });
+        }
+    },
 };
 
 module.exports = userController;

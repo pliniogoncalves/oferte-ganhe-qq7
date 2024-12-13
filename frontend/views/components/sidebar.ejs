@@ -84,7 +84,10 @@
 
     <div class="bottom-links">
           
-        <button class="btn btn-custom w-100 mb-2 load-content" data-url="/configuracoes/page">
+        <button 
+            class="btn btn-custom w-100 mb-2 load-content editPassword"
+            data-registration="<%= user && user.registration_users ? user.registration_users : '' %>"
+            data-url="/config/password">
             <i class="fas fa-cog" style="margin-right: 8px"></i>
                 Configurações
         </button>

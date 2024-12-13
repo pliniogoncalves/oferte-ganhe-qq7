@@ -10,7 +10,7 @@ const indexViewController = {
                     { association: 'profile', attributes: ['name_profile'] },
                     { association: 'store', attributes: ['name_store'] },
                 ],
-                attributes: ['id_users', 'name_users'],
+                attributes: ['id_users', 'name_users', 'registration_users'],
             });
 
             res.render('index', {
