@@ -44,15 +44,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
-
-    // download csv
-    const downloadButtons = document.querySelectorAll('.btn-download');
-    downloadButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const downloadRoute = button.getAttribute('data-download');
+    // Download CSV
+    document.addEventListener('click', (event) => {
+        const downloadButton = event.target.closest('.btn-download');
+        if(downloadButton){
+            const downloadRoute = downloadButton.dataset.download;
             if (downloadRoute) {
-                window.location.href = `/relatorios/${downloadRoute}`;
+                const routes = {
+                    exportUsersCSV: '/api/users/export-csv',
+                    exportarProfilesCSV: '/api/profiles/export-csv',
+                    exportTalonsCSV: '/api/talons/export-csv',
+                    exportStockCSV: '/api/stock/export-csv',
+                    exportStoreCSV: '/api/store/export-csv',
+                };
+
+                const destination = routes[downloadRoute];
+                if(destination){
+                    window.location.href = destination;
+                }else{
+                    console.error(`Rota não encontrada para download: ${downloadRoute}`);
+                }
             }
-        });
+        }
     });
 });
