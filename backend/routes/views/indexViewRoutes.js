@@ -5,6 +5,6 @@ const authenticateToken = require('../../middlewares/authMiddleware.js');
 const authorizePermission = require('../../middlewares/authorizePermission.js');
 
 // Render the index page (protected by authentication)
-router.get('/', authenticateToken, authorizePermission('list_users'), indexViewController.getIndexPage);
+router.get('/', authenticateToken, authorizePermission('Conectar Aplicacao'), indexViewController.getIndexPage);
 
 module.exports = router;
