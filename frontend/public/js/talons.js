@@ -148,35 +148,33 @@ document.addEventListener("DOMContentLoaded", () => {
         if(confirmReceiptBtn){
             const talonId = confirmReceiptBtn.dataset.id;
     
-            const confirmed = confirm('Tem certeza que deseja confirmar o recebimento deste talão?');
-            if(!confirmed) return;
+            showModal('Confirmação', 'Tem certeza que deseja confirmar o recebimento deste talão?', async () => {
+                try{
+                    const dateReceived = new Date().toISOString();
     
-            try{
-                const dateReceived = new Date().toISOString();
-                
-                const userDetails = JSON.parse(document.getElementById('userDetails').textContent);
-                const userReceived = parseInt(userDetails.id, 10);
-
-                const updateResponse = await fetch(`/api/talons/update/${talonId}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ dateReceived, userReceived, status: 'Recebido' }),
-                });
+                    const userDetails = JSON.parse(document.getElementById('userDetails').textContent);
+                    const userReceived = parseInt(userDetails.id, 10);
     
-                if(!updateResponse.ok) throw new Error("Erro ao confirmar talão.");
+                    const updateResponse = await fetch(`/api/talons/update/${talonId}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ dateReceived, userReceived, status: 'Recebido' }),
+                    });
     
-                showModal('confimação','Talão confirmado com sucesso!');
+                    if(!updateResponse.ok) throw new Error("Erro ao confirmar talão.");
     
-                const talonsResponse = await fetch('/talons/update');
-                if(!talonsResponse.ok) throw new Error("Erro ao recarregar a lista de talões.");
-                document.getElementById("content").innerHTML = await talonsResponse.text();
-            }catch(error){
-                console.error("Erro ao confirmar o talão:", error);
-                alert("Erro ao confirmar o talão.");
-            }
+                    showModal('Sucesso', 'Talão confirmado com sucesso!');
+    
+                    const talonsResponse = await fetch('/talons/update');
+                    if(!talonsResponse.ok) throw new Error("Erro ao recarregar a lista de talões.");
+                    document.getElementById("content").innerHTML = await talonsResponse.text();
+                }catch(error){
+                    console.error("Erro ao confirmar o talão:", error);
+                    showModal('Erro', "Erro ao confirmar o talão.");
+                }
+            });
         }
     });
-    
     
      // Delete
      document.addEventListener("click", async (event) => {
