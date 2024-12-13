@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
      //Edit
      document.addEventListener('click', async (event) => {
         const editTalonBtn = event.target.closest('.editTalon');
-        if (editTalonBtn) {
+        if(editTalonBtn){
             const id = editTalonBtn.dataset.id;
     
             const url = `/talons/edit/${id}`;
@@ -85,12 +85,10 @@ document.addEventListener("DOMContentLoaded", () => {
                         const formData = new FormData(talonForm);
                         const data = Object.fromEntries(formData.entries());
     
-                        // Combine date and time into ISO format for the dateSend field
                         data.dateSend = `${data.date}T${data.time}:00`;
                         delete data.date;
                         delete data.time;
     
-                        // Get the selected store ID
                         const storeSelect = document.getElementById("store");
                         const selectedOption = storeSelect.options[storeSelect.selectedIndex];
                         data.storeId = selectedOption.getAttribute("data-id");

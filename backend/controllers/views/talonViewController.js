@@ -47,7 +47,7 @@ const talonViewController = {
     },
 
     getUpdateTalonPage: async (req, res) => {
-        try {
+        try{
             const userRegistration = req.user?.registration;
     
             if(!userRegistration){
@@ -68,7 +68,7 @@ const talonViewController = {
                     storeId: user?.store?.number_store || null,
                 },
             });
-        } catch (error) {
+        }catch(error){
             console.error('Erro ao carregar talões enviados:', error.message);
             res.status(500).send('Erro ao carregar a página de confirmar talões');
         }
@@ -82,15 +82,22 @@ const talonViewController = {
             if(!talon){
                 return res.status(404).send('Talão não encontrado');
             }
+
+            const userDetails = {
+                id: req.user?.id_users || 'ID não encontrado',
+                role: req.user?.profile?.name_profile || 'Usuário',
+                storeId: req.user?.store?.id_store || null,
+            };
     
             res.render('partials/talons/editTalons', {
                 layout: false,
                 talon,
                 stores,
                 users,
+                userDetails,
                 title: 'Editar Talão',
             });
-        } catch (error) {
+        }catch(error){
             console.error('Erro ao carregar edição completa de talão:', error.message);
             res.status(500).send('Erro ao carregar a página de edição completa do talão');
         }
